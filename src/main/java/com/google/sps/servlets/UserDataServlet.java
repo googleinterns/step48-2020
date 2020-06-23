@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /** Servlet to add user profile data to the Datastore */
 @WebServlet("/data")
-public class DataServlet extends HttpServlet {
+public class UserDataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html");
