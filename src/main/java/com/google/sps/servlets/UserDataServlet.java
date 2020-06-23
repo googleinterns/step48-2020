@@ -29,3 +29,4 @@ public class UserDataServlet extends HttpServlet {
     response.getWriter().println("Sample response.");
   }
 }
+
