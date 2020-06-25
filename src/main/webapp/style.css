@@ -18,11 +18,11 @@ h1 {
 }
 .nav-text-style {
     color: #303c6c;
-    font-size: 30px;
+    font-size: 1.875em;
 }
 #name {
-    align-self: center;
     align-content: center;
+    align-self: center;
     margin-left: auto;
     margin-right: auto;
     width: 30%;
