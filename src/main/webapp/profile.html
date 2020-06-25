@@ -3,11 +3,90 @@
   <head>
     <meta charset="UTF-8">
     <title>Friends of Friends</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
   <body>
-    <h1>Profile</h1>
+    <div class="container-fluid">
+      <nav class="navbar navbar-expand-sm justify-content-center navbar-background">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+              <img src="images/logo.jpg" class="rounded-circle" alt="logo" height="80" width="100">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-text-style" href="profile.html">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-text-style" href="feed.html">Feed</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-text-style" href="matches.html">Matches</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="content">
+        <h1>Profile</h1>
+        <form action="profile.html" method="post">
+          <div>
+            <img src="images/placeholder.jpg" class="rounded-circle" alt="placeholder" width="304" height="236">
+          </div>
+          <div>
+            <input type="file" accept="image/*" name="photo">
+          </div>
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" placeholder="Enter name" id="name" width="50">
+          </div>
+          <div class="form-group">
+            <label for="bio">Bio (max 300 characters):</label>
+            <textarea name="bio" class="form-control" placeholder="Enter a couple of words about yourself" id="bio" maxlength="300"></textarea>
+          </div>
+          <div class="d-flex image-upload">
+            <div class="p-2">
+              <div>
+                <img src="images/placeholder.jpg" class="rounded-circle" alt="placeholder" width="200" height="200">
+              </div>
+              <div>
+                <input type="file" accept="image/*" name="photo">
+              </div>
+            </div>
+            <div class="p-2">
+              <div>
+                <img src="images/placeholder.jpg" class="rounded-circle" alt="placeholder" width="200" height="200">
+              </div>
+              <div>
+                <input type="file" accept="image/*" name="photo">
+              </div>
+            </div>
+            <div class="p-2">
+              <div>
+                <img src="images/placeholder.jpg" class="rounded-circle" alt="placeholder" width="200" height="200">
+              </div>
+              <div>
+                <input type="file" accept="image/*" name="photo">
+              </div>
+            </div>
+            <div class="p-2">
+              <div>
+                <img src="images/placeholder.jpg" class="rounded-circle" alt="placeholder" width="200" height="200">
+              </div>
+              <div>
+                <input type="file" accept="image/*" name="photo">
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn button-background">Save Changes</button>
+        </form>
+      </div> <!--content-->
+    </div> <!--container-fluid-->
   </body>
 </html>
 
