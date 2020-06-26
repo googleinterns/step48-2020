@@ -40,3 +40,12 @@ h1 {
     align-self: center;
     margin-left: 625px;
 }
+.friend-me-btn {
+    background-color: #b4dfe5;
+}
+.pass-btn {
+    background-color: #fbe8a6;
+}
+.button-container {
+    justify-content: center;
+}
