@@ -43,4 +43,9 @@ public class MutualFriendship {
   public Set<String> getMutualFriends() {
     return this.mutualFriends;
   }
+
+  public void addMutualFriend(String mutualFriendID) {
+    this.mutualFriends.add(mutualFriendID);
+  }
 }
+

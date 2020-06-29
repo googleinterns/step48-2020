@@ -42,6 +42,12 @@ public class FriendRelationship {
     return this.friend2ID;
   }
 
+  /**
+  * Checks if current FriendRelationship is the same as another by checking
+  *  if the set of the two userIDs are the same.
+  *
+  * It should not be significant for an ID to be stored as friend 1 or 2.
+  */
   @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof FriendRelationship)) {
@@ -63,4 +69,5 @@ public class FriendRelationship {
   public String toString() {
     return "Friend 1: " + this.friend1ID + "\n" + "Friend 2: " + this.friend2ID;
   }
-} 
+}
+

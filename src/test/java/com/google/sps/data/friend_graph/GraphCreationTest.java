@@ -67,6 +67,12 @@ public final class GraphCreationTest {
     userE = new UserNode(USER_E_ID, userEFriends);
   }
 
+  /**
+  * Tests if graph is forming correctly when there is only one user with 0 friends.
+  *
+  * Should result in a UserFriendsGraph with a map that has a single key that maps
+  * to an empty friend set and with an empty FriendRelationship set.
+  */
   @Test
   public void oneUserGraphTest() {
     Set<UserNode> oneUserSet = new HashSet<>();
@@ -83,6 +89,12 @@ public final class GraphCreationTest {
     Assert.assertEquals(friendshipSet, emptyFriendshipSet);
   }
 
+  /**
+  * Tests if graph is forming correctly when there are two users with 0 friends.
+  *
+  * Should result in a UserFriendsGraph with a map that has two keys each of which
+  * map to an empty friend set and with an empty FriendshipRelationship set.
+  */
   @Test
   public void twoUsersNoConnectionsGraphTest() {
     Set<UserNode> twoUserSet = new HashSet<>();
@@ -101,6 +113,18 @@ public final class GraphCreationTest {
     Assert.assertEquals(friendshipSet, emptyFriendshipSet);
   }
 
+  /**
+  * Tests if graph is forming correctly when there are just 3 users, 2 of which are
+  * friends with the third user. There are no connections other than this.
+  *
+  * Should result in a UserFriendsGraph with three keys:
+  *    User C should map to a friend set with just User E
+  *    User D should map to a friend set with just User E
+  *    User E should map to a friend set with User C and User D.
+  * Resulting UserFriendsGraph should also have a FriendRelationship set with two relationships:
+  *    User C <--> User E
+  *    User D <--> User E
+  */
   @Test
   public void threeUsersOneConnectionGraphTest() {
     userC.addToUserFriends(USER_E_ID);
@@ -129,3 +153,4 @@ public final class GraphCreationTest {
     Assert.assertEquals(friendshipSet, expectedFriendshipSet);    
   }
 }
+
