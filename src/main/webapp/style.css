@@ -40,3 +40,18 @@ h1 {
     align-self: center;
     margin-left: 625px;
 }
+.card-container {
+    /* width: 30%; */
+    justify-content: center;
+    background-color: #fbe8a6;
+}
+.see-profile-btn {
+    background-color: #b4dfe5;
+}
+.card-container-two {
+    justify-content: center;
+    background-color: #b4dfe5;
+}
+.see-profile-btn-two {
+    background-color: #fbe8a6;
+}
