@@ -35,31 +35,36 @@ public final class GraphCreationTest {
   private static final Set<String> emptyStringSet = new HashSet<>();
   private static final Set<UserNode> emptyUserNodeSet = new HashSet<>();
   private static final Set<FriendRelationship> emptyFriendshipSet = new HashSet<>();
-  private UserFriendsGraph friendsGraph;
-  private Set<UserNode> userNodeSet;
-  private Set<FriendRelationship> smallFriendshipSet;
 
-  private static final UserNode userA = new UserNode("12345", new HashSet<String>());
-  private static final UserNode userB = new UserNode("23456", new HashSet<String>());
+  private static final String USER_A_ID = "12345";
+  private static final String USER_B_ID = "23456";
+  private static final String USER_C_ID = "34567";
+  private static final String USER_D_ID = "45678";
+  private static final String USER_E_ID = "56789";
+
+  private UserNode userA;
+  private UserNode userB;
   private UserNode userC;
   private UserNode userD;
   private UserNode userE;
+  private Set<String> userAFriends;
+  private Set<String> userBFriends;
   private Set<String> userCFriends;
   private Set<String> userDFriends;
   private Set<String> userEFriends;
 
   @Before
   public void setUp() {
+    userAFriends = new HashSet<>();
+    userBFriends = new HashSet<>();
     userCFriends = new HashSet<>();
     userDFriends = new HashSet<>();
     userEFriends = new HashSet<>();
-    userCFriends.add("56789");
-    userDFriends.add("56789");
-    userEFriends.add("34567");
-    userEFriends.add("45678");
-    userC = new UserNode("34567", userCFriends);
-    userD = new UserNode("45678", userDFriends);
-    userE = new UserNode("56789", userEFriends);
+    userA = new UserNode(USER_A_ID, userAFriends);
+    userB = new UserNode(USER_B_ID, userBFriends);
+    userC = new UserNode(USER_C_ID, userCFriends);
+    userD = new UserNode(USER_D_ID, userDFriends);
+    userE = new UserNode(USER_E_ID, userEFriends);
   }
 
   @Test
@@ -72,7 +77,7 @@ public final class GraphCreationTest {
     Set<FriendRelationship> friendshipSet = oneUserGraph.getFriendshipEdges();
 
     Map<String, Set<String>> expectedGraph = new HashMap<>();
-    expectedGraph.put("12345", emptyStringSet);
+    expectedGraph.put(USER_A_ID, emptyStringSet);
 
     Assert.assertEquals(friendGraph, expectedGraph);
     Assert.assertEquals(friendshipSet, emptyFriendshipSet);
@@ -89,8 +94,8 @@ public final class GraphCreationTest {
     Set<FriendRelationship> friendshipSet = twoUserGraph.getFriendshipEdges();
 
     Map<String, Set<String>> expectedGraph = new HashMap<>();
-    expectedGraph.put("12345", emptyStringSet);
-    expectedGraph.put("23456", emptyStringSet);
+    expectedGraph.put(USER_A_ID, emptyStringSet);
+    expectedGraph.put(USER_B_ID, emptyStringSet);
 
     Assert.assertEquals(friendGraph, expectedGraph);
     Assert.assertEquals(friendshipSet, emptyFriendshipSet);
@@ -98,6 +103,10 @@ public final class GraphCreationTest {
 
   @Test
   public void threeUsersOneConnectionGraphTest() {
+    userC.addToUserFriends(USER_E_ID);
+    userD.addToUserFriends(USER_E_ID);
+    userE.addToUserFriends(USER_C_ID);
+    userE.addToUserFriends(USER_D_ID);
     Set<UserNode> threeUsersOneConnectionSet = new HashSet<>();
     threeUsersOneConnectionSet.add(userC);
     threeUsersOneConnectionSet.add(userD);
@@ -108,13 +117,13 @@ public final class GraphCreationTest {
     Set<FriendRelationship> friendshipSet = threeUsersOneConnectionGraph.getFriendshipEdges();
     
     Map<String, Set<String>> expectedGraph = new HashMap<>();
-    expectedGraph.put("34567", userCFriends);
-    expectedGraph.put("45678", userDFriends);
-    expectedGraph.put("56789", userEFriends);
+    expectedGraph.put(USER_C_ID, userCFriends);
+    expectedGraph.put(USER_D_ID, userDFriends);
+    expectedGraph.put(USER_E_ID, userEFriends);
 
     Set<FriendRelationship> expectedFriendshipSet = new HashSet<>();
-    expectedFriendshipSet.add(new FriendRelationship("34567", "56789"));
-    expectedFriendshipSet.add(new FriendRelationship("45678", "56789"));
+    expectedFriendshipSet.add(new FriendRelationship(USER_C_ID, USER_E_ID));
+    expectedFriendshipSet.add(new FriendRelationship(USER_D_ID, USER_E_ID));
 
     Assert.assertEquals(friendGraph, expectedGraph);
     Assert.assertEquals(friendshipSet, expectedFriendshipSet);    
