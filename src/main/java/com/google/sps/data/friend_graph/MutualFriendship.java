@@ -17,28 +17,30 @@ package com.google.sps.data.friend_graph;
 import java.util.Set;
 import java.util.HashSet;
 
-
+/**
+* Class to represent a the mutual friends between two users
+*/
 public class MutualFriendship {
 
-  private UserNode friend1;
-  private UserNode friend2;
-  private Set<UserNode> mutualFriends;
+  private String friend1ID;
+  private String friend2ID;
+  private Set<String> mutualFriends;
 
-  public MutualFriendship(UserNode friend1, UserNode friend2, Set<UserNode> mutualFriends) {
-    this.friend1 = friend1;
-    this.friend2 = friend2;
+  public MutualFriendship(String friend1ID, String friend2ID, Set<String> mutualFriends) {
+    this.friend1ID = friend1ID;
+    this.friend2ID = friend2ID;
     this.mutualFriends = mutualFriends;
   }
 
-  public UserNode getFriend1() {
-    return this.friend1;
+  public String getFriend1() {
+    return this.friend1ID;
   }
 
-  public UserNode getFriend2() {
-    return this.friend2;
+  public String getFriend2() {
+    return this.friend2ID;
   }
 
-  public Set<UserNode> getMutualFriends() {
+  public Set<String> getMutualFriends() {
     return this.mutualFriends;
   }
 }

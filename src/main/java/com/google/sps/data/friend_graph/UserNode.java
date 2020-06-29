@@ -24,15 +24,15 @@ import java.util.HashSet;
 public class UserNode {
 
   private String userID;
-  private Set<UserNode> userFriends;
+  private Set<String> userFriends;
 
   /*
   * Constructs an instance of a UserNode
   *
   * @param userID The unique id number of each user (obtained from Facebook API)
-  * @param userFriends Set of all of the user's friends
+  * @param userFriends Set of all of the IDs of a user's friends
   */
-  public UserNode(String userID, Set<UserNode> userFriends) {
+  public UserNode(String userID, Set<String> userFriends) {
     this.userID = userID;
     this.userFriends = userFriends;
   }
@@ -41,12 +41,16 @@ public class UserNode {
     return this.userID;
   }
 
-  public Set<UserNode> getUserFriends() {
+  public Set<String> getUserFriends() {
     return this.userFriends;
   }
 
-  public void updateUserFriends(Set<UserNode> newUserFriends) {
+  public void updateUserFriends(Set<String> newUserFriends) {
     this.userFriends = newUserFriends;
+  }
+
+  public void addToUserFriends(String newFriend) {
+    this.userFriends.add(newFriend);
   }
 
   @Override
@@ -56,5 +60,14 @@ public class UserNode {
     }
     UserNode otherUser = (UserNode) obj;
     return this.userID.equals(otherUser.getUserID());
+  }
+
+  @Override
+  public int hashCode() {
+    int hashTotal = 0;
+    for (int i = 0; i < this.userID.length(); i++) {
+      hashTotal += (i * (int)this.userID.charAt(i));
+    }
+    return hashTotal;
   }
 }

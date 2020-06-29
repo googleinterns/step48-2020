@@ -16,25 +16,30 @@ package com.google.sps.data.friend_graph;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.lang.IllegalArgumentException;
 
 /**
-* Class to represent a Facebook friendship between two users.
+* Class to represent a single Facebook friendship between two users.
+* Represented by a pair of user IDs.
 */
 public class FriendRelationship {
-  private UserNode friend1;
-  private UserNode friend2;
+  private String friend1ID;
+  private String friend2ID;
 
-  public FriendRelationship(UserNode friend1, UserNode friend2) {
-    this.friend1 = friend1;
-    this.friend2 = friend2;
+  public FriendRelationship(String friend1ID, String friend2ID) {
+    if (friend1ID.equals(friend2ID)) {
+      throw new IllegalArgumentException("User IDs cannot be the same. Users must be different.");
+    }
+    this.friend1ID = friend1ID;
+    this.friend2ID = friend2ID;
   }
 
-  public UserNode getFriend1() {
-    return this.friend1;
+  public String getFriend1ID() {
+    return this.friend1ID;
   }
 
-  public UserNode getFriend2() {
-    return this.friend2;
+  public String getFriend2ID() {
+    return this.friend2ID;
   }
 
   @Override
@@ -45,7 +50,17 @@ public class FriendRelationship {
 
     FriendRelationship otherFriendship = (FriendRelationship) obj;
 
-    return (this.friend1.equals(otherFriendship.getFriend1()) && this.friend2.equals(otherFriendship.getFriend2())) ||
-      (this.friend1.equals(otherFriendship.getFriend2()) && this.friend2.equals(otherFriendship.getFriend1()));
+    return (this.friend1ID.equals(otherFriendship.getFriend1ID()) && this.friend2ID.equals(otherFriendship.getFriend2ID())) ||
+      (this.friend1ID.equals(otherFriendship.getFriend2ID()) && this.friend2ID.equals(otherFriendship.getFriend1ID()));
   }
-}
+
+  @Override
+  public int hashCode() {
+    return this.friend1ID.hashCode() + this.friend2ID.hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return "Friend 1: " + this.friend1ID + "\n" + "Friend 2: " + this.friend2ID;
+  }
+} 
