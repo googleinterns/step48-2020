@@ -19,38 +19,30 @@ import java.util.Set;
 import java.util.HashSet;
 
 /**
-* Class to represent a User in the graph data structure representing all user friendships
+* Class to represent a User in the map representing all user friendships
 */
 public class UserNode {
 
-  private String userID;
-  private Set<String> userFriends;
+  private final String userID;
+  private Set<String> currentUserFriendIDs;
 
-  /*
+  /**
   * Constructs an instance of a UserNode
   *
   * @param userID The unique id number of each user (obtained from Facebook API)
-  * @param userFriends Set of all of the IDs of a user's friends
+  * @param currentUserFriendIDs Set of all of the IDs of a user's friends
   */
-  public UserNode(String userID, Set<String> userFriends) {
+  public UserNode(String userID, Set<String> currentUserFriendIDs) {
     this.userID = userID;
-    this.userFriends = userFriends;
+    this.currentUserFriendIDs = currentUserFriendIDs;
   }
 
   public String getUserID() {
     return this.userID;
   }
 
-  public Set<String> getUserFriends() {
-    return this.userFriends;
-  }
-
-  public void updateUserFriends(Set<String> newUserFriends) {
-    this.userFriends = newUserFriends;
-  }
-
-  public void addToUserFriends(String newFriend) {
-    this.userFriends.add(newFriend);
+  public Set<String> getCurrentUserFriendIDs() {
+    return this.currentUserFriendIDs;
   }
 
   @Override
@@ -59,15 +51,16 @@ public class UserNode {
       return false;
     }
     UserNode otherUser = (UserNode) obj;
-    return this.userID.equals(otherUser.getUserID());
+    return this.userID.equals(otherUser.userID) &&
+      this.currentUserFriendIDs.equals(otherUser.currentUserFriendIDs);
   }
 
   @Override
   public int hashCode() {
     int hashTotal = 0;
-    for (int i = 0; i < this.userID.length(); i++) {
-      hashTotal += (i * (int)this.userID.charAt(i));
-    }
+    final int prime = 31;
+    hashTotal += prime * (this.userID == null ? 0 : this.userID.hashCode());
+    hashTotal += prime * (this.currentUserFriendIDs == null ? 0 : this.currentUserFriendIDs.hashCode());
     return hashTotal;
   }
 }

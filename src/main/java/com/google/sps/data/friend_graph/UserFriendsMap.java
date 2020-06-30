@@ -20,17 +20,16 @@ import java.util.Map;
 import java.util.HashMap;
 
 /*
-* A graph of all the friendships between users
+* A map of all the direct friendships between users
 */
-public class UserFriendsGraph {
+public class UserFriendsMap {
 
-  private Map<String, Set<String>> friendGraph;
+  private Map<String, Set<String>> friendMap;
 
   /**
-  * Constructor for the UserFriendsGraph class
+  * Constructor for the UserFriendsMap class
   *
-  * Forms the graph which is represented by a map of UserIDs to a set
-  * ID's of that user's friends.
+  * Forms a map of UserIDs to a set ID's of that user's friends.
   * 
   * Map created in this class will be used to find a user's set of potential
   * matches (2nd friends-> those who are friends with a user's current friend
@@ -38,27 +37,31 @@ public class UserFriendsGraph {
   *
   * @param userNodes A set of UserNodes that are used to form the graph structure
   */
-  public UserFriendsGraph (Set<UserNode> userNodes) {
-    this.friendGraph = new HashMap<>();
+  public UserFriendsMap (Set<UserNode> userNodes) {
+    this.friendMap = new HashMap<>();
 
     for (UserNode user: userNodes) {
       String userID = user.getUserID();
-      if (!friendGraph.containsKey(userID)) {
-        friendGraph.put(userID, new HashSet<String>());
+      if (!friendMap.containsKey(userID)) {
+        friendMap.put(userID, new HashSet<String>());
       }
 
       for (String friendID: user.getUserFriends()) {
-        friendGraph.get(userID).add(friendID);
+        friendMap.get(userID).add(friendID);
       }
     }
   }
 
-  public Map<String, Set<String>> getFriendGraph() {
-    return this.friendGraph;
+  public Map<String, Set<String>> getFriendMap() {
+    return this.friendMap;
   }
 
   public Set<String> getUserIDs() {
-    return this.friendGraph.keySet();
+    return this.friendMap.keySet();
+  }
+
+  public Set<String> getUserFriendIDs(String currentUser) {
+    return this.friendMap.get(currentUser);
   }
 }
 
