@@ -28,11 +28,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import com.google.common.collect.ImmutableSet;
 
 /** */
 @RunWith(JUnit4.class)
-public final class GraphCreationTest {
-  private static final Set<String> emptyStringSet = new HashSet<>();
+public final class FriendsMapCreationTest {
+  private static final ImmutableSet<String> emptyStringSet = ImmutableSet.of();
   private static final Set<UserNode> emptyUserNodeSet = new HashSet<>();
 
   private static final String USER_A_ID = "12345";
@@ -46,19 +47,19 @@ public final class GraphCreationTest {
   private UserNode userC;
   private UserNode userD;
   private UserNode userE;
-  private Set<String> userAFriends;
-  private Set<String> userBFriends;
-  private Set<String> userCFriends;
-  private Set<String> userDFriends;
-  private Set<String> userEFriends;
+  private ImmutableSet<String> userAFriends;
+  private ImmutableSet<String> userBFriends;
+  private ImmutableSet<String> userCFriends;
+  private ImmutableSet<String> userDFriends;
+  private ImmutableSet<String> userEFriends;
 
   @Before
   public void setUp() {
-    userAFriends = new HashSet<>();
-    userBFriends = new HashSet<>();
-    userCFriends = new HashSet<>();
-    userDFriends = new HashSet<>();
-    userEFriends = new HashSet<>();
+    userAFriends = ImmutableSet.of();
+    userBFriends = ImmutableSet.of();
+    userCFriends = ImmutableSet.of(USER_E_ID);
+    userDFriends = ImmutableSet.of(USER_E_ID);
+    userEFriends = ImmutableSet.of(USER_C_ID, USER_D_ID);
     userA = new UserNode(USER_A_ID, userAFriends);
     userB = new UserNode(USER_B_ID, userBFriends);
     userC = new UserNode(USER_C_ID, userCFriends);
@@ -76,14 +77,12 @@ public final class GraphCreationTest {
   public void oneUserGraphTest() {
     Set<UserNode> oneUserSet = new HashSet<>();
     oneUserSet.add(userA);
-    UserFriendsGraph oneUserGraph = new UserFriendsGraph(oneUserSet);
+    UserFriendsMap oneUserFriendsMap = new UserFriendsMap(oneUserSet);
 
-    Map<String, Set<String>> friendGraph = oneUserGraph.getFriendGraph();
+    Map<String, ImmutableSet<String>> expectedMap = new HashMap<>();
+    expectedMap.put(USER_A_ID, emptyStringSet);
 
-    Map<String, Set<String>> expectedGraph = new HashMap<>();
-    expectedGraph.put(USER_A_ID, emptyStringSet);
-
-    Assert.assertEquals(friendGraph, expectedGraph);
+    Assert.assertEquals(oneUserFriendsMap.getFriendMap(), expectedMap);
   }
 
   /**
@@ -97,15 +96,13 @@ public final class GraphCreationTest {
     Set<UserNode> twoUserSet = new HashSet<>();
     twoUserSet.add(userA);
     twoUserSet.add(userB);
-    UserFriendsGraph twoUserGraph = new UserFriendsGraph(twoUserSet);
+    UserFriendsMap twoUserFriendsMap = new UserFriendsMap(twoUserSet);
 
-    Map<String, Set<String>> friendGraph = twoUserGraph.getFriendGraph();
+    Map<String, ImmutableSet<String>> expectedMap = new HashMap<>();
+    expectedMap.put(USER_A_ID, emptyStringSet);
+    expectedMap.put(USER_B_ID, emptyStringSet);
 
-    Map<String, Set<String>> expectedGraph = new HashMap<>();
-    expectedGraph.put(USER_A_ID, emptyStringSet);
-    expectedGraph.put(USER_B_ID, emptyStringSet);
-
-    Assert.assertEquals(friendGraph, expectedGraph);
+    Assert.assertEquals(twoUserFriendsMap.getFriendMap(), expectedMap);
   }
 
   /**
@@ -118,25 +115,19 @@ public final class GraphCreationTest {
   *    User E should map to a friend set with User C and User D.
   */
   @Test
-  public void threeUsersOneConnectionGraphTest() {
-    userC.addToUserFriends(USER_E_ID);
-    userD.addToUserFriends(USER_E_ID);
-    userE.addToUserFriends(USER_C_ID);
-    userE.addToUserFriends(USER_D_ID);
-    Set<UserNode> threeUsersOneConnectionSet = new HashSet<>();
-    threeUsersOneConnectionSet.add(userC);
-    threeUsersOneConnectionSet.add(userD);
-    threeUsersOneConnectionSet.add(userE);
-    UserFriendsGraph threeUsersOneConnectionGraph = new UserFriendsGraph(threeUsersOneConnectionSet);
-
-    Map<String, Set<String>> friendGraph = threeUsersOneConnectionGraph.getFriendGraph();
+  public void threeUsersTwoConnectionGraphTest() {
+    Set<UserNode> threeUsersTwoConnectionSet = new HashSet<>();
+    threeUsersTwoConnectionSet.add(userC);
+    threeUsersTwoConnectionSet.add(userD);
+    threeUsersTwoConnectionSet.add(userE);
+    UserFriendsMap threeUsersTwoConnectionMap = new UserFriendsMap(threeUsersTwoConnectionSet);
     
-    Map<String, Set<String>> expectedGraph = new HashMap<>();
-    expectedGraph.put(USER_C_ID, userCFriends);
-    expectedGraph.put(USER_D_ID, userDFriends);
-    expectedGraph.put(USER_E_ID, userEFriends);
+    Map<String, ImmutableSet<String>> expectedMap = new HashMap<>();
+    expectedMap.put(USER_C_ID, userCFriends);
+    expectedMap.put(USER_D_ID, userDFriends);
+    expectedMap.put(USER_E_ID, userEFriends);
 
-    Assert.assertEquals(friendGraph, expectedGraph);
+    Assert.assertEquals(threeUsersTwoConnectionMap.getFriendMap(), expectedMap);
   }
 }
 
