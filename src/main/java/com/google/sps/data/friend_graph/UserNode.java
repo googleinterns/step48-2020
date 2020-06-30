@@ -15,8 +15,7 @@
 package com.google.sps.data.friend_graph;
 
 import java.util.Collection;
-import java.util.Set;
-import java.util.HashSet;
+import com.google.common.collect.ImmutableSet;
 
 /**
 * Class to represent a User in the map representing all user friendships
@@ -24,24 +23,24 @@ import java.util.HashSet;
 public class UserNode {
 
   private final String userID;
-  private Set<String> currentUserFriendIDs;
+  private ImmutableSet<String> currentUserFriendIDs;
 
   /**
   * Constructs an instance of a UserNode
   *
   * @param userID The unique id number of each user (obtained from Facebook API)
-  * @param currentUserFriendIDs Set of all of the IDs of a user's friends
+  * @param currentUserFriendIDs Immutable set of all of the IDs of a user's friends
   */
-  public UserNode(String userID, Set<String> currentUserFriendIDs) {
+  public UserNode(String userID, Collection<String> currentUserFriendIDs) {
     this.userID = userID;
-    this.currentUserFriendIDs = currentUserFriendIDs;
+    this.currentUserFriendIDs = ImmutableSet.copyOf(currentUserFriendIDs);
   }
 
   public String getUserID() {
     return this.userID;
   }
 
-  public Set<String> getCurrentUserFriendIDs() {
+  public ImmutableSet<String> getCurrentUserFriendIDs() {
     return this.currentUserFriendIDs;
   }
 

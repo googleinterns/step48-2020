@@ -14,17 +14,19 @@
 
 package com.google.sps.data.friend_graph;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
+import com.google.common.collect.ImmutableSet;
 
 /*
 * A map of all the direct friendships between users
 */
 public class UserFriendsMap {
 
-  private Map<String, Set<String>> friendMap;
+  private Map<String, ImmutableSet<String>> friendMap;
 
   /**
   * Constructor for the UserFriendsMap class
@@ -42,17 +44,12 @@ public class UserFriendsMap {
 
     for (UserNode user: userNodes) {
       String userID = user.getUserID();
-      if (!friendMap.containsKey(userID)) {
-        friendMap.put(userID, new HashSet<String>());
-      }
-
-      for (String friendID: user.getUserFriends()) {
-        friendMap.get(userID).add(friendID);
-      }
+      ImmutableSet<String> userFriendIDs = user.getCurrentUserFriendIDs();
+      friendMap.put(userID, userFriendIDs);
     }
   }
 
-  public Map<String, Set<String>> getFriendMap() {
+  public Map<String, ImmutableSet<String>> getFriendMap() {
     return this.friendMap;
   }
 
