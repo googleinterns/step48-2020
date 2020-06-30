@@ -1,0 +1,42 @@
+.navbar-background{
+    background-color: #d2fdff;
+}
+body {
+    background-color: hsl(19, 86%, 69%);
+}
+h1 {
+    padding: 10px;
+}
+.content {
+    align-content: center;
+    color: #303c6c;
+    text-align: center;
+}
+.button-background {
+    background-color: #303c6c;
+    color: white;
+}
+.nav-text-style {
+    color: #303c6c;
+    font-size: 1.875em;
+}
+#name {
+    align-content: center;
+    align-self: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+}
+#bio {
+    align-content: center;
+    align-self: center;
+    height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+}
+.image-upload {
+    align-content: center;
+    align-self: center;
+    margin-left: 625px;
+}
