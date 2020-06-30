@@ -34,7 +34,6 @@ import org.junit.runners.JUnit4;
 public final class GraphCreationTest {
   private static final Set<String> emptyStringSet = new HashSet<>();
   private static final Set<UserNode> emptyUserNodeSet = new HashSet<>();
-  private static final Set<FriendRelationship> emptyFriendshipSet = new HashSet<>();
 
   private static final String USER_A_ID = "12345";
   private static final String USER_B_ID = "23456";
@@ -71,7 +70,7 @@ public final class GraphCreationTest {
   * Tests if graph is forming correctly when there is only one user with 0 friends.
   *
   * Should result in a UserFriendsGraph with a map that has a single key that maps
-  * to an empty friend set and with an empty FriendRelationship set.
+  * to an empty friend set.
   */
   @Test
   public void oneUserGraphTest() {
@@ -80,20 +79,18 @@ public final class GraphCreationTest {
     UserFriendsGraph oneUserGraph = new UserFriendsGraph(oneUserSet);
 
     Map<String, Set<String>> friendGraph = oneUserGraph.getFriendGraph();
-    Set<FriendRelationship> friendshipSet = oneUserGraph.getFriendshipEdges();
 
     Map<String, Set<String>> expectedGraph = new HashMap<>();
     expectedGraph.put(USER_A_ID, emptyStringSet);
 
     Assert.assertEquals(friendGraph, expectedGraph);
-    Assert.assertEquals(friendshipSet, emptyFriendshipSet);
   }
 
   /**
   * Tests if graph is forming correctly when there are two users with 0 friends.
   *
   * Should result in a UserFriendsGraph with a map that has two keys each of which
-  * map to an empty friend set and with an empty FriendshipRelationship set.
+  * map to an empty friend set.
   */
   @Test
   public void twoUsersNoConnectionsGraphTest() {
@@ -103,14 +100,12 @@ public final class GraphCreationTest {
     UserFriendsGraph twoUserGraph = new UserFriendsGraph(twoUserSet);
 
     Map<String, Set<String>> friendGraph = twoUserGraph.getFriendGraph();
-    Set<FriendRelationship> friendshipSet = twoUserGraph.getFriendshipEdges();
 
     Map<String, Set<String>> expectedGraph = new HashMap<>();
     expectedGraph.put(USER_A_ID, emptyStringSet);
     expectedGraph.put(USER_B_ID, emptyStringSet);
 
     Assert.assertEquals(friendGraph, expectedGraph);
-    Assert.assertEquals(friendshipSet, emptyFriendshipSet);
   }
 
   /**
@@ -121,9 +116,6 @@ public final class GraphCreationTest {
   *    User C should map to a friend set with just User E
   *    User D should map to a friend set with just User E
   *    User E should map to a friend set with User C and User D.
-  * Resulting UserFriendsGraph should also have a FriendRelationship set with two relationships:
-  *    User C <--> User E
-  *    User D <--> User E
   */
   @Test
   public void threeUsersOneConnectionGraphTest() {
@@ -138,19 +130,13 @@ public final class GraphCreationTest {
     UserFriendsGraph threeUsersOneConnectionGraph = new UserFriendsGraph(threeUsersOneConnectionSet);
 
     Map<String, Set<String>> friendGraph = threeUsersOneConnectionGraph.getFriendGraph();
-    Set<FriendRelationship> friendshipSet = threeUsersOneConnectionGraph.getFriendshipEdges();
     
     Map<String, Set<String>> expectedGraph = new HashMap<>();
     expectedGraph.put(USER_C_ID, userCFriends);
     expectedGraph.put(USER_D_ID, userDFriends);
     expectedGraph.put(USER_E_ID, userEFriends);
 
-    Set<FriendRelationship> expectedFriendshipSet = new HashSet<>();
-    expectedFriendshipSet.add(new FriendRelationship(USER_C_ID, USER_E_ID));
-    expectedFriendshipSet.add(new FriendRelationship(USER_D_ID, USER_E_ID));
-
     Assert.assertEquals(friendGraph, expectedGraph);
-    Assert.assertEquals(friendshipSet, expectedFriendshipSet);    
   }
 }
 

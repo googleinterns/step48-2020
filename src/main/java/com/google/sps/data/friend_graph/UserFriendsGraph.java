@@ -25,20 +25,21 @@ import java.util.HashMap;
 public class UserFriendsGraph {
 
   private Map<String, Set<String>> friendGraph;
-  private Set<FriendRelationship> friendshipEdges;
 
   /**
   * Constructor for the UserFriendsGraph class
   *
   * Forms the graph which is represented by a map of UserIDs to a set
-  * ID's of that user's friends and a set of all the direct relationships
-  * ('edges') in the graph.
+  * ID's of that user's friends.
+  * 
+  * Map created in this class will be used to find a user's set of potential
+  * matches (2nd friends-> those who are friends with a user's current friend
+  * who is not already friends with the user).
   *
   * @param userNodes A set of UserNodes that are used to form the graph structure
   */
   public UserFriendsGraph (Set<UserNode> userNodes) {
     this.friendGraph = new HashMap<>();
-    this.friendshipEdges = new HashSet<>();
 
     for (UserNode user: userNodes) {
       String userID = user.getUserID();
@@ -48,17 +49,12 @@ public class UserFriendsGraph {
 
       for (String friendID: user.getUserFriends()) {
         friendGraph.get(userID).add(friendID);
-        friendshipEdges.add(new FriendRelationship(userID, friendID));
       }
     }
   }
 
   public Map<String, Set<String>> getFriendGraph() {
     return this.friendGraph;
-  }
-
-  public Set<FriendRelationship> getFriendshipEdges() {
-    return this.friendshipEdges;
   }
 
   public Set<String> getUserIDs() {
