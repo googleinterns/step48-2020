@@ -16,18 +16,40 @@ const FacebookAPI = require("../FacebookAPI.js");
 
 // Test the function that wraps the API call that collects Facebook user info
 test("Test getUserFacebookInfoAndRedirect function", () => {
-  const mockCallback = jest.fn(() => "/profile?name=Tod&id=123&email=tod@abcd.com");
+  FacebookAPI.getUserFacebookInfoAndRedirect = jest.fn((callback) => {
+    // Mock API response
+    const response = {
+      name: "Tim",
+      id: "123",
+      email: "tim123@abcd.com"
+    };
+    return callback(response);
+  });
+
+  const mockCallback = jest.fn((response) => {
+    // Create mock redirect URL
+    return "/profile?name=" + response.name + "&id=" + response.id + "&email=" + response.email;
+  });
+
   let result = FacebookAPI.getUserFacebookInfoAndRedirect(mockCallback);
-  expect(result).toEqual("/profile?name=Tod&id=123&email=tod@abcd.com");
+  expect(result).toEqual("/profile?name=Tim&id=123&email=tim123@abcd.com");
 });
 
 // Test the function that responds to the logged in state of the user 
 test("Test checkLoginState function", () => {
-  const mockCallback = jest.fn((loggedIn) => {
-    if (loggedIn) return "connected";
-    else return "not_authorized";
+  FacebookAPI.checkLoginStatus = jest.fn((callback) => {
+    // Mock FB login status
+    const response = {
+      login_status: "connected"
+    };
+    return callback(response);
   });
+
+  const mockCallback = jest.fn((response) => {
+    return response.login_status === "connected";
+  });
+
   let result = FacebookAPI.checkLoginStatus(mockCallback);
-  expect(result).toEqual('not_authorized');
+  expect(result).toBe(true);
 });
 
