@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.sps.data.friend_graph;
+package com.google.sps.data.friend_map;
 
 import java.util.Set;
 import java.util.Map;
