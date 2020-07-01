@@ -58,7 +58,7 @@ function statusChangeCallback(response) {
     // For now, redirect to the profile page
     // Query Facebook Graph API for user information
     FacebookAPI.getUserFacebookInfoAndRedirect(
-      FB.api('/me?fields=id,name,email,friends', function(response) {
+      function(response) {
         let userInfo = new URLSearchParams({
           name: response.name,
           id: response.id,
@@ -68,18 +68,15 @@ function statusChangeCallback(response) {
         // Store user information in Datastore
         // TODO: Add post request
         // Redirect to the profile page, and pass the user's info in the URL
-        window.location.href = "./profile.html?" + userInfo.toString();
-      })
-    );
+      window.location.href = "./profile.html?" + userInfo.toString();
+    });
   }
 }
 
 // Called after the user logs in with Facebook
 function checkLoginState() {
-  FacebookAPI.checkLoginStatus(
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    })
-  );
+  FacebookAPI.checkLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
 }
 
