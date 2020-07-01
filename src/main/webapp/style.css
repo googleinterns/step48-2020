@@ -40,17 +40,18 @@ h1 {
     align-self: center;
     margin-left: 625px;
 }
-.card-container {
-    background-color: #fbe8a6;
-    justify-content: center;
-}
-.see-profile-btn {
-    background-color: #b4dfe5;
-}
-.card-container-two {
+.card-container:nth-child(even) {
     background-color: #b4dfe5;
     justify-content: center;
 }
-.see-profile-btn-two {
+.card-container:nth-child(even) a{
     background-color: #fbe8a6;
 }
+.card-container:nth-child(odd) {
+    background-color: #fbe8a6;
+    justify-content: center;
+}
+.card-container:nth-child(odd) a{
+    background-color: #b4dfe5;
+}
+
