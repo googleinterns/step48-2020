@@ -32,6 +32,10 @@ public class UserFriendsMap {
   * Constructor for the UserFriendsMap class
   *
   * Forms a map of UserIDs to a set ID's of that user's friends.
+  *
+  * Map keys are the UserIDs which are unique identifiers for each user (reprsented
+  * as a string here) and the map values are the set of IDs of each friend of the 
+  * current user (represented here as an ImmutableSet of Strings).
   * 
   * Map created in this class will be used to find a user's set of potential
   * matches (2nd friends-> those who are friends with a user's current friend

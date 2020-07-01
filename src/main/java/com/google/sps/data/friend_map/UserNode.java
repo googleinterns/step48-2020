@@ -57,7 +57,7 @@ public class UserNode {
   @Override
   public int hashCode() {
     int hashTotal = 0;
-    final int prime = 31;
+    final int prime = 31; // use of prime number to create more unique hash values
     hashTotal += prime * (this.userID == null ? 0 : this.userID.hashCode());
     hashTotal += prime * (this.currentUserFriendIDs == null ? 0 : this.currentUserFriendIDs.hashCode());
     return hashTotal;
