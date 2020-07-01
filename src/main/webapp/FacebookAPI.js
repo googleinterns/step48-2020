@@ -15,11 +15,21 @@
 // Handles calls to the Facebook API, provides wrapper methods with callbacks
 class FacebookAPI {
   static getUserFacebookInfoAndRedirect(callback) {
-    return callback();
+    try {
+      FB.api('/me?fields=id,name,email,friends', callback);
+    }
+    catch (error) {
+      console.log(error + "\nFacebook SDK failed to load.");
+    }
   }
 
   static checkLoginStatus(callback) {
-    return callback();
+    try {
+      FB.getLoginStatus(callback);
+    }
+    catch (error) {
+      console.log(error + "\nFacebook SDK failed to load.");
+    }
   }
 }
 
