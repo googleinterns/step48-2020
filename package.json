@@ -11,7 +11,7 @@
     "webpack": "^4.43.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --passWithNoTests"
   },
   "repository": {
     "type": "git",
