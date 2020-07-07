@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableMap;
 
 /**
-* <p>A map of all the direct friendships between users which will be used
+* A map of all the direct friendships between users which will be used
 * to find a user's set of potential matches (2nd friends-> those who are
 * friends with a user's current friend* who is not already friends with the user).
 */
@@ -37,7 +37,7 @@ public class UserFriendsMap {
   * <p>Map keys are the user IDs for each user and the map values are
   * {@code ImmutableSet<String>} holding the user IDs of their friends.
   *
-  * @param userNodes A set of {@code UserNodes} that are used to form the map
+  * @param userNodes A set of UserNodes that are used to form the map
   */
   public UserFriendsMap (Set<UserNode> userNodes) {
     this.friendMap = userNodes.stream().collect(

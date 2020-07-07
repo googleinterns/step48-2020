@@ -29,7 +29,7 @@ public class UserNode {
   private final ImmutableSet<String> friendIDs;
 
   /**
-  * Creates a node to represent a user with their set of friends
+  * Create a node to represent a user with their set of friends
   *
   * @param userID The unique id number of each user (obtained from Facebook API)
   * @param currentUserFriendIDs Immutable set of all of the IDs of a user's friends
