@@ -16,6 +16,7 @@ package com.google.sps.data.friend_map;
 
 import java.util.Collection;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 
 /**
 * Class to represent a User in the map representing all user friendships

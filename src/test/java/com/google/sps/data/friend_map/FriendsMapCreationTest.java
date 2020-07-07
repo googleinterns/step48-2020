@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 
 /** */
 @RunWith(JUnit4.class)
@@ -82,7 +83,7 @@ public final class FriendsMapCreationTest {
     Map<String, ImmutableSet<String>> expectedMap = new HashMap<>();
     expectedMap.put(USER_A_ID, emptyStringSet);
 
-    Assert.assertEquals(oneUserFriendsMap.getFriendMap(), expectedMap);
+    Assert.assertEquals(oneUserFriendsMap.getFriendMap(), ImmutableMap.copyOf(expectedMap));
   }
 
   /**
@@ -102,7 +103,7 @@ public final class FriendsMapCreationTest {
     expectedMap.put(USER_A_ID, emptyStringSet);
     expectedMap.put(USER_B_ID, emptyStringSet);
 
-    Assert.assertEquals(twoUserFriendsMap.getFriendMap(), expectedMap);
+    Assert.assertEquals(twoUserFriendsMap.getFriendMap(), ImmutableMap.copyOf(expectedMap));
   }
 
   /**
@@ -127,7 +128,7 @@ public final class FriendsMapCreationTest {
     expectedMap.put(USER_D_ID, userDFriends);
     expectedMap.put(USER_E_ID, userEFriends);
 
-    Assert.assertEquals(threeUsersTwoConnectionMap.getFriendMap(), expectedMap);
+    Assert.assertEquals(threeUsersTwoConnectionMap.getFriendMap(), ImmutableMap.copyOf(expectedMap));
   }
 }
 

@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 
 /**
 * <p>A map of all the direct friendships between users which will be used
@@ -28,7 +29,7 @@ import com.google.common.collect.ImmutableSet;
 */
 public class UserFriendsMap {
 
-  private Map<String, ImmutableSet<String>> friendMap;
+  private ImmutableMap<String, ImmutableSet<String>> friendMap;
 
   /**
   * Form a map of UserIDs to a set ID's of that user's friends.
@@ -39,16 +40,12 @@ public class UserFriendsMap {
   * @param userNodes A set of {@code UserNodes} that are used to form the map
   */
   public UserFriendsMap (Set<UserNode> userNodes) {
-    this.friendMap = new HashMap<>();
+    this.friendMap = userNodes.stream().collect(
+      ImmutableMap.toImmutableMap(UserNode::getID, UserNode::getFriendIDs));
 
-    for (UserNode user: userNodes) {
-      String userID = user.getID();
-      ImmutableSet<String> userFriendIDs = user.getFriendIDs();
-      friendMap.put(userID, userFriendIDs);
-    }
   }
 
-  public Map<String, ImmutableSet<String>> getFriendMap() {
+  public ImmutableMap<String, ImmutableSet<String>> getFriendMap() {
     return friendMap;
   }
 
