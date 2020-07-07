@@ -15,8 +15,10 @@
 package com.google.sps.data.friend_map;
 
 import java.util.Collection;
+import javax.annotation.Nonnull;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Preconditions;
 
 /**
 * Class to represent a User in the map representing all user friendships
@@ -32,9 +34,9 @@ public class UserNode {
   * @param userID The unique id number of each user (obtained from Facebook API)
   * @param currentUserFriendIDs Immutable set of all of the IDs of a user's friends
   */
-  public UserNode(String userID, Collection<String> friendIDs) {
-    this.userID = userID;
-    this.friendIDs = ImmutableSet.copyOf(friendIDs);
+  public UserNode(@Nonnull String userID, @Nonnull Collection<String> friendIDs) {
+    this.userID = Preconditions.checkNotNull(userID);
+    this.friendIDs = ImmutableSet.copyOf(Preconditions.checkNotNull(friendIDs));
   }
 
   public String getID() {
@@ -58,8 +60,8 @@ public class UserNode {
   public int hashCode() {
     int hashTotal = 0;
     final int prime = 31; // use of prime number to create more unique hash values
-    hashTotal += prime * (userID == null ? 0 : userID.hashCode());
-    hashTotal += prime * (friendIDs == null ? 0 : friendIDs.hashCode());
+    hashTotal += prime * userID.hashCode();
+    hashTotal += prime * friendIDs.hashCode();
     return hashTotal;
   }
 }
