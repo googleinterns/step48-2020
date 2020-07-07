@@ -44,6 +44,7 @@ function getCurrentUser() {
    FB.getLoginStatus(function(response) {
      if (response.status === 'connected') {
       let uid = response.authResponse.userID;
+      console.log(uid);
       return uid;
      }
   });
