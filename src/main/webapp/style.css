@@ -36,9 +36,7 @@ h1 {
     width: 30%;
 }
 .image-upload {
-    align-content: center;
-    align-self: center;
-    margin-left: 625px;
+    justify-content: center;
 }
 .card-container:nth-child(even) {
     background-color: #b4dfe5;
