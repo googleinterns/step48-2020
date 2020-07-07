@@ -42,22 +42,22 @@ public class UserFriendsMap {
     this.friendMap = new HashMap<>();
 
     for (UserNode user: userNodes) {
-      String userID = user.getUserID();
-      ImmutableSet<String> userFriendIDs = user.getCurrentUserFriendIDs();
+      String userID = user.getID();
+      ImmutableSet<String> userFriendIDs = user.getFriendIDs();
       friendMap.put(userID, userFriendIDs);
     }
   }
 
   public Map<String, ImmutableSet<String>> getFriendMap() {
-    return this.friendMap;
+    return friendMap;
   }
 
   public Set<String> getUserIDs() {
-    return this.friendMap.keySet();
+    return friendMap.keySet();
   }
 
   public ImmutableSet<String> getUserFriendIDs(String currentUser) {
-    return this.friendMap.get(currentUser);
+    return friendMap.get(currentUser);
   }
 }
 

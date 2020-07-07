@@ -23,25 +23,25 @@ import com.google.common.collect.ImmutableSet;
 public class UserNode {
 
   private final String userID;
-  private ImmutableSet<String> currentUserFriendIDs;
+  private final ImmutableSet<String> friendIDs;
 
   /**
-  * Constructs an instance of a UserNode
+  * Creates a node to represent a user with their set of friends
   *
   * @param userID The unique id number of each user (obtained from Facebook API)
   * @param currentUserFriendIDs Immutable set of all of the IDs of a user's friends
   */
-  public UserNode(String userID, Collection<String> currentUserFriendIDs) {
+  public UserNode(String userID, Collection<String> friendIDs) {
     this.userID = userID;
-    this.currentUserFriendIDs = ImmutableSet.copyOf(currentUserFriendIDs);
+    this.friendIDs = ImmutableSet.copyOf(friendIDs);
   }
 
-  public String getUserID() {
-    return this.userID;
+  public String getID() {
+    return userID;
   }
 
-  public ImmutableSet<String> getCurrentUserFriendIDs() {
-    return this.currentUserFriendIDs;
+  public ImmutableSet<String> getFriendIDs() {
+    return friendIDs;
   }
 
   @Override
@@ -50,16 +50,15 @@ public class UserNode {
       return false;
     }
     UserNode otherUser = (UserNode) obj;
-    return this.userID.equals(otherUser.userID) &&
-      this.currentUserFriendIDs.equals(otherUser.currentUserFriendIDs);
+    return userID.equals(otherUser.userID) && friendIDs.equals(otherUser.friendIDs);
   }
 
   @Override
   public int hashCode() {
     int hashTotal = 0;
     final int prime = 31; // use of prime number to create more unique hash values
-    hashTotal += prime * (this.userID == null ? 0 : this.userID.hashCode());
-    hashTotal += prime * (this.currentUserFriendIDs == null ? 0 : this.currentUserFriendIDs.hashCode());
+    hashTotal += prime * (userID == null ? 0 : userID.hashCode());
+    hashTotal += prime * (friendIDs == null ? 0 : friendIDs.hashCode());
     return hashTotal;
   }
 }
