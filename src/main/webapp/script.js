@@ -13,8 +13,24 @@
 // limitations under the License.
 
 function getCurrentUser() {
-    const params = new URLSearchParams(window.location.search);
-    uid = params.get('id');
-    console.log(uid);
-    return uid;
+  const params = new URLSearchParams(window.location.search);
+  uid = params.get('id');
+  console.log(uid);
+  return uid;
 }
+function setProfileLink() {
+  let uid = getCurrentUser();
+  var link = document.getElementById("profileLink");
+  link.setAttribute('href', 'profile.html?id=' + uid);
+}
+function setFeedLink() {
+  let uid = getCurrentUser();
+  var link = document.getElementById("feedLink");
+  link.setAttribute('href', 'feed.html?id=' + uid);
+}
+function setMatchesLink() {
+  let uid = getCurrentUser();
+  var link = document.getElementById("matchesLink");
+  link.setAttribute('href', 'matches.html?id=' + uid);
+}
+
