@@ -13,39 +13,8 @@
 // limitations under the License.
 
 function getCurrentUser() {
-  // Async initialization of Facebook Javascript SDK
-  window.fbAsyncInit = function() {
-    FB.init({
-    // Connect Javascript SDK to the Friends of Friends Facebook App
-    appId      : '313886196298676',
-    // Parse social plugins on this webpage
-    xfbml      : true,
-    // Use the most recent version of the Facebook Graph API
-    version    : 'v7.0'
-    });
-
-    // Returns the user login 'status'
-    FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-    });
-  };
-
-  // Async load of Facebook Javascript SDK
-  // Provided by Facebook to load Javascript SDK
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-
-   FB.getLoginStatus(function(response) {
-     if (response.status === 'connected') {
-      let uid = response.authResponse.userID;
-      console.log(uid);
-      return uid;
-     }
-  });
-} 
+    const params = new URLSearchParams(window.location.search);
+    uid = params.get('id');
+    console.log(uid);
+    return uid;
+}
