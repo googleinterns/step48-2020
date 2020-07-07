@@ -21,27 +21,22 @@ import java.util.Map;
 import java.util.HashMap;
 import com.google.common.collect.ImmutableSet;
 
-/*
-* A map of all the direct friendships between users
+/**
+* <p>A map of all the direct friendships between users which will be used
+* to find a user's set of potential matches (2nd friends-> those who are
+* friends with a user's current friend* who is not already friends with the user).
 */
 public class UserFriendsMap {
 
   private Map<String, ImmutableSet<String>> friendMap;
 
   /**
-  * Constructor for the UserFriendsMap class
+  * Form a map of UserIDs to a set ID's of that user's friends.
   *
-  * Forms a map of UserIDs to a set ID's of that user's friends.
+  * <p>Map keys are the user IDs for each user and the map values are
+  * {@code ImmutableSet<String>} holding the user IDs of their friends.
   *
-  * Map keys are the UserIDs which are unique identifiers for each user (reprsented
-  * as a string here) and the map values are the set of IDs of each friend of the 
-  * current user (represented here as an ImmutableSet of Strings).
-  * 
-  * Map created in this class will be used to find a user's set of potential
-  * matches (2nd friends-> those who are friends with a user's current friend
-  * who is not already friends with the user).
-  *
-  * @param userNodes A set of UserNodes that are used to form the graph structure
+  * @param userNodes A set of {@code UserNodes} that are used to form the map
   */
   public UserFriendsMap (Set<UserNode> userNodes) {
     this.friendMap = new HashMap<>();
