@@ -34,9 +34,6 @@ import com.google.common.collect.ImmutableMap;
 /** */
 @RunWith(JUnit4.class)
 public final class FriendsMapCreationTest {
-  private static final ImmutableSet<String> emptyStringSet = ImmutableSet.of();
-  private static final Set<UserNode> emptyUserNodeSet = new HashSet<>();
-
   private static final String USER_A_ID = "12345";
   private static final String USER_B_ID = "23456";
   private static final String USER_C_ID = "34567";
@@ -48,75 +45,65 @@ public final class FriendsMapCreationTest {
   private UserNode userC;
   private UserNode userD;
   private UserNode userE;
-  private ImmutableSet<String> userAFriends;
-  private ImmutableSet<String> userBFriends;
-  private ImmutableSet<String> userCFriends;
-  private ImmutableSet<String> userDFriends;
-  private ImmutableSet<String> userEFriends;
-
-  @Before
-  public void setUp() {
-    userAFriends = ImmutableSet.of();
-    userBFriends = ImmutableSet.of();
-    userCFriends = ImmutableSet.of(USER_E_ID);
-    userDFriends = ImmutableSet.of(USER_E_ID);
-    userEFriends = ImmutableSet.of(USER_C_ID, USER_D_ID);
-    userA = new UserNode(USER_A_ID, userAFriends);
-    userB = new UserNode(USER_B_ID, userBFriends);
-    userC = new UserNode(USER_C_ID, userCFriends);
-    userD = new UserNode(USER_D_ID, userDFriends);
-    userE = new UserNode(USER_E_ID, userEFriends);
-  }
 
   /**
-  * Tests if graph is forming correctly when there is only one user with 0 friends.
+  * Tests if map is forming correctly when there is only one user with 0 friends.
   *
-  * Should result in a UserFriendsGraph with a map that has a single key that maps
+  * <p>Should result in a UserFriendsMap that has a single key that maps
   * to an empty friend set.
   */
   @Test
   public void oneUserGraphTest() {
+    userA = new UserNode(USER_A_ID, ImmutableSet.of());
+
     Set<UserNode> oneUserSet = new HashSet<>();
     oneUserSet.add(userA);
     UserFriendsMap oneUserFriendsMap = new UserFriendsMap(oneUserSet);
 
     Map<String, ImmutableSet<String>> expectedMap = new HashMap<>();
-    expectedMap.put(USER_A_ID, emptyStringSet);
+    expectedMap.put(USER_A_ID, ImmutableSet.of());
 
     Assert.assertEquals(oneUserFriendsMap.getFriendMap(), ImmutableMap.copyOf(expectedMap));
   }
 
   /**
-  * Tests if graph is forming correctly when there are two users with 0 friends.
+  * Tests if map is forming correctly when there are two users with 0 friends.
   *
-  * Should result in a UserFriendsGraph with a map that has two keys each of which
+  * <p>Should result in a UserFriendsMap that has two keys each of which
   * map to an empty friend set.
   */
   @Test
   public void twoUsersNoConnectionsGraphTest() {
+    userA = new UserNode(USER_A_ID, ImmutableSet.of());
+    userB = new UserNode(USER_B_ID, ImmutableSet.of());
+
     Set<UserNode> twoUserSet = new HashSet<>();
     twoUserSet.add(userA);
     twoUserSet.add(userB);
     UserFriendsMap twoUserFriendsMap = new UserFriendsMap(twoUserSet);
 
     Map<String, ImmutableSet<String>> expectedMap = new HashMap<>();
-    expectedMap.put(USER_A_ID, emptyStringSet);
-    expectedMap.put(USER_B_ID, emptyStringSet);
+    expectedMap.put(USER_A_ID, ImmutableSet.of());
+    expectedMap.put(USER_B_ID, ImmutableSet.of());
 
     Assert.assertEquals(twoUserFriendsMap.getFriendMap(), ImmutableMap.copyOf(expectedMap));
   }
 
   /**
-  * Tests if graph is forming correctly when there are just 3 users, 2 of which are
+  * Tests if map is forming correctly when there are just 3 users, 2 of which are
   * friends with the third user. There are no connections other than this.
   *
-  * Should result in a UserFriendsGraph with three keys:
+  * <p>Should result in a UserFriendsMap with three keys:
   *    User C should map to a friend set with just User E
   *    User D should map to a friend set with just User E
   *    User E should map to a friend set with User C and User D.
   */
   @Test
   public void threeUsersTwoConnectionGraphTest() {
+    userC = new UserNode(USER_C_ID, ImmutableSet.of(USER_E_ID));
+    userD = new UserNode(USER_D_ID, ImmutableSet.of(USER_E_ID));
+    userE = new UserNode(USER_E_ID, ImmutableSet.of(USER_C_ID, USER_D_ID));
+    
     Set<UserNode> threeUsersTwoConnectionSet = new HashSet<>();
     threeUsersTwoConnectionSet.add(userC);
     threeUsersTwoConnectionSet.add(userD);
@@ -124,9 +111,9 @@ public final class FriendsMapCreationTest {
     UserFriendsMap threeUsersTwoConnectionMap = new UserFriendsMap(threeUsersTwoConnectionSet);
     
     Map<String, ImmutableSet<String>> expectedMap = new HashMap<>();
-    expectedMap.put(USER_C_ID, userCFriends);
-    expectedMap.put(USER_D_ID, userDFriends);
-    expectedMap.put(USER_E_ID, userEFriends);
+    expectedMap.put(USER_C_ID, ImmutableSet.of(USER_E_ID));
+    expectedMap.put(USER_D_ID, ImmutableSet.of(USER_E_ID));
+    expectedMap.put(USER_E_ID, ImmutableSet.of(USER_C_ID, USER_D_ID));
 
     Assert.assertEquals(threeUsersTwoConnectionMap.getFriendMap(), ImmutableMap.copyOf(expectedMap));
   }
