@@ -12,27 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-function getCurrentUser() {
+function getCurrentUserId() {
   const params = new URLSearchParams(window.location.search);
   uid = params.get('id');
   return uid;
 }
 
-function setProfileLink() {
-  let uid = getCurrentUser();
+function updateProfileLinkForCurrentUser() {
+  let uid = getCurrentUserId();
   var link = document.getElementById("profileLink");
   link.setAttribute('href', 'profile.html?id=' + uid);
 }
 
-function setFeedLink() {
-  let uid = getCurrentUser();
+function updateFeedLinkForCurrentUser() {
+  let uid = getCurrentUserId();
   var link = document.getElementById("feedLink");
   link.setAttribute('href', 'feed.html?id=' + uid);
 }
 
-function setMatchesLink() {
-  let uid = getCurrentUser();
+function updateMatchesLinkForCurrentUser() {
+  let uid = getCurrentUserId();
   var link = document.getElementById("matchesLink");
   link.setAttribute('href', 'matches.html?id=' + uid);
 }
+
+function loadAllUpdatedLinks() {
+    updateProfileLinkForCurrentUser();
+    updateFeedLinkForCurrentUser();
+    updateMatchesLinkForCurrentUser();
+}
+window.addEventListener("load", function(){
+   updateProfileLinkForCurrentUser();
+    updateFeedLinkForCurrentUser();
+    updateMatchesLinkForCurrentUser();
+});
 
