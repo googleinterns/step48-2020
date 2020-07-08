@@ -12,6 +12,17 @@ h1 {
     color: #303c6c;
     text-align: center;
 }
+.home-page-content-header {
+    background-color: #b4dfe5;
+    justify-content: center;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+.home-page-content {
+    background-color: #fbe8a6;
+    padding-left: 100px;
+    padding-right: 100px;
+}
 .button-background {
     background-color: #303c6c;
     color: white;

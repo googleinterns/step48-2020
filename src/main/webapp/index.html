@@ -3,14 +3,33 @@
   <head>
     <meta charset="UTF-8">
     <title>Friends of Friends</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
+  </head>
     <script src="facebook-login.js"></script>
   </head>
   <body>
-    <div class="fb-login-button" data-size="large" data-button-type="continue_with"
-        data-layout="default" data-auto-logout-link="true" data-use-continue-as="false"
-        data-scope="public_profile,email,user_friends"></div>
+    <div class="container-fluid">
+      <div class="content">
+        <div class="home-page-content-header">
+          <h1>Friends of Friends</h1>
+          <img src="images/logo.jpg" class="rounded-circle" alt="logo" height="180" width="200">
+        </div>
+        <div class="home-page-content">
+          <p>Friends of Friends is a friend finding app! Simply log in with Facebook, and we will look at your friends lists and the friends lists of other users on the app 
+              and show you all of the users whom you have a mutual friend with! Friends of Friends aims to build that added aspect of trust, as you already will be friends with someone
+              who knows this new potential friend.
+          </p>
+          <div class="fb-login-button" data-size="large" data-button-type="continue_with"
+            data-layout="default" data-auto-logout-link="true" data-use-continue-as="false"
+            data-scope="public_profile,email,user_friends"></div>
+        </div>
+      </div> <!--content-->
+    </div> <!--container-fluid-->
   </body>
 </html>
 
