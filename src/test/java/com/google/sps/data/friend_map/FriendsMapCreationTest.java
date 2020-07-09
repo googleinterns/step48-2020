@@ -78,10 +78,12 @@ public final class FriendsMapCreationTest {
   * Tests if map is forming correctly when there are just 3 users, 2 of which are
   * friends with the third user. There are no connections other than this.
   *
-  * <p>Should result in a UserFriendsMap with three keys:
-  *    User A should map to a set with just User C
-  *    User B should map to a set with just User C
-  *    User C should map to a set with User A and User B.
+  * <p>Should result in a {@code UserFriendsMap} with three keys:
+  * <ul>
+  *    <li>User A should map to a set with just User C
+  *    <li>User B should map to a set with just User C
+  *    <li>User C should map to a set with User A and User B
+  * </ul>
   */
   @Test
   public void threeUsersTwoConnectionGraphTest() {
