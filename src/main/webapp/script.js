@@ -27,3 +27,31 @@ function getCurrentUser() {
   return uid;
 }
 
+function getCurrentUserId() {
+  const params = new URLSearchParams(window.location.search);
+  uid = params.get('id');
+  return uid;
+}
+
+function updateProfileLinkForCurrentUser() {
+  let uid = getCurrentUserId();
+  var link = document.getElementById("profileLink");
+  link.setAttribute('href', 'profile.html?id=' + uid);
+}
+
+function updateFeedLinkForCurrentUser() {
+  let uid = getCurrentUserId();
+  var link = document.getElementById("feedLink");
+  link.setAttribute('href', 'feed.html?id=' + uid);
+}
+
+function updateMatchesLinkForCurrentUser() {
+  let uid = getCurrentUserId();
+  var link = document.getElementById("matchesLink");
+  link.setAttribute('href', 'matches.html?id=' + uid);
+}
+
+window.addEventListener("load", function(){
+  function a(a,b){var c=/^(?:file):/,d=new XMLHttpRequest,e=0;d.onreadystatechange=function(){4==d.readyState&&(e=d.status),c.test(location.href)&&d.responseText&&(e=200),4==d.readyState&&200==e&&(a.outerHTML=d.responseText)};try{d.open("GET",b,!0),d.send()}catch(f){}}var b,c=document.getElementsByTagName("*");for(b in c)c[b].hasAttribute&&c[b].hasAttribute("data-include")&&a(c[b],c[b].getAttribute("data-include"));
+});
+
