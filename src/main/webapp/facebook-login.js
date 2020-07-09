@@ -58,3 +58,4 @@ function checkLoginState() {
     statusChangeCallback(response);
   });
 }
+
