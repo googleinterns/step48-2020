@@ -92,8 +92,8 @@ public class UserDataServlet extends HttpServlet {
 
     // Check if a user entity with userId already exists
     PreparedQuery results = datastore.prepare(new Query(userId));
-    Entity userEntity = new Entity(USER_ENTITY);
-    if (results.countEntities() == 0) {
+    Entity userEntity = results.asSingleEntity();
+    if (userEntity == null) {
       // User entity needs to be created
       userEntity = new Entity(userId);
       userEntity.setProperty(USER_ID_PROPERTY, userId);
@@ -104,8 +104,6 @@ public class UserDataServlet extends HttpServlet {
     }
     else {
       // User entity needs to be updated
-      userEntity = results.asSingleEntity();
-
       // Set the properties of the user entity without overriding any values with the default string
       setPropertyIfNotDefault(userEntity, USER_ID_PROPERTY, userId, DEFAULT_STRING);
       setPropertyIfNotDefault(userEntity, USER_NAME_PROPERTY, userName, DEFAULT_STRING);
