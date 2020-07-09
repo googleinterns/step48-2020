@@ -114,7 +114,7 @@ public final class UserDataServletTest {
     //correctResponse.put(USER_FOUND_PROPERTY, false);
 
     // Check that the user wasn't found in datastore
-    Assert.assertEquals(gson.toJson(expected), stringWriter.toString());
+    assertThat(gson.toJson(expected)).contains(stringWriter.toString());
   }
 
   /**
@@ -151,7 +151,7 @@ public final class UserDataServletTest {
     expected.put(USER_NAME_PROPERTY, TEST_USER_NAME);
 
     // Check that the user was found in Datastore
-    Assert.assertEquals(gson.toJson(expected.build()), stringWriter.toString());
+    assertThat(gson.toJson(expected.build())).contains(stringWriter.toString());
   }
 
   /**
@@ -201,12 +201,12 @@ public final class UserDataServletTest {
     assertThat(userEntity).isNotNull();
 
     // Verify that the user entity has the correct properties
-    Assert.assertEquals((String) userEntity.getProperty(USER_ID_PROPERTY), TEST_USER_ID);
-    Assert.assertEquals((String) userEntity.getProperty(USER_NAME_PROPERTY), TEST_USER_NAME);
-    Assert.assertEquals((String) userEntity.getProperty(USER_EMAIL_PROPERTY), TEST_USER_EMAIL);
-    Assert.assertEquals((String) userEntity.getProperty(USER_BIO_PROPERTY), TEST_USER_BIO);
-    Assert.assertEquals(((ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY)).toArray(),
-        TEST_USER_FRIENDS_LIST);
+    assertThat((String) userEntity.getProperty(USER_ID_PROPERTY)).contains(TEST_USER_ID);
+    assertThat((String) userEntity.getProperty(USER_NAME_PROPERTY)).contains(TEST_USER_NAME);
+    assertThat((String) userEntity.getProperty(USER_EMAIL_PROPERTY)).contains(TEST_USER_EMAIL);
+    assertThat((String) userEntity.getProperty(USER_BIO_PROPERTY)).contains(TEST_USER_BIO);
+    assertThat(Arrays.toString(((ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY)).toArray()))
+        .contains(Arrays.toString(TEST_USER_FRIENDS_LIST));
   }
 
   /**
@@ -235,12 +235,8 @@ public final class UserDataServletTest {
     assertThat(userEntity).isNotNull();
 
     // Verify that the user Entity name property changed
-    Assert.assertEquals((String) userEntity.getProperty(USER_ID_PROPERTY), TEST_USER_ID);
-    Assert.assertEquals((String) userEntity.getProperty(USER_NAME_PROPERTY), ALTERNATE_TEST_USER_NAME);
-    Assert.assertEquals((String) userEntity.getProperty(USER_EMAIL_PROPERTY), TEST_USER_EMAIL);
-    Assert.assertEquals((String) userEntity.getProperty(USER_BIO_PROPERTY), TEST_USER_BIO);
-    Assert.assertEquals(((ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY)).toArray(),
-        TEST_USER_FRIENDS_LIST);
+    assertThat((String) userEntity.getProperty(USER_ID_PROPERTY)).contains(TEST_USER_ID);
+    assertThat((String) userEntity.getProperty(USER_NAME_PROPERTY)).contains(ALTERNATE_TEST_USER_NAME);
   }
 
   /** Helper method to add a test user to the local datastore */
