@@ -35,6 +35,7 @@ import com.google.gson.Gson;
  * Servlet that provides information about a specific user, and allows setting a user's info.
  * A User Entity consists of the following information: a user id, name, email, bio, and friends-list.
  * These entities are stored in Datastore with their user id as the 'kind'.
+ * After the MVP, user entities will also contain Blobstore Keys for each image that the user has uploaded.
  */
 
 @WebServlet("/user-data")
