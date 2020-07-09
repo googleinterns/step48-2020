@@ -112,7 +112,7 @@ public final class UserDataServletTest {
 
     // Check that the user wasn't found in datastore
     verify(mockRequest, atLeast(1)).getParameter(USER_ID_PROPERTY);
-    Assert.assertEquals(gson.toJson(correctResponse), stringWriter.toString().trim());
+    Assert.assertEquals(gson.toJson(correctResponse), stringWriter.toString());
   }
 
   /**
@@ -149,7 +149,7 @@ public final class UserDataServletTest {
 
     // Check that the user was found in Datastore
     verify(mockRequest, atLeast(1)).getParameter(USER_ID_PROPERTY);
-    Assert.assertEquals(gson.toJson(correctResponse), stringWriter.toString().trim());
+    Assert.assertEquals(gson.toJson(correctResponse), stringWriter.toString());
   }
 
   /**

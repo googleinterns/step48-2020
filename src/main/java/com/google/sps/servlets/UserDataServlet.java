@@ -85,7 +85,7 @@ public class UserDataServlet extends HttpServlet {
 
     // Send the user's json data as the response
     response.setContentType("application/json");
-    response.getWriter().println(gson.toJson(userData));
+    response.getWriter().print(gson.toJson(userData));
   }
 
   @Override
