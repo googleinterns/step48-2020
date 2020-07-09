@@ -31,7 +31,12 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.gson.Gson;
 
-/** Servlet that provides information about a specific user, and allows setting a user's info */
+/**
+ * Servlet that provides information about a specific user, and allows setting a user's info.
+ * A User Entity consists of the following information: a user id, name, email, bio, and friends-list.
+ * These entities are stored in Datastore with their user id as the 'kind'.
+ */
+
 @WebServlet("/user-data")
 public class UserDataServlet extends HttpServlet {
   private static final String DEFAULT_STRING = "";
