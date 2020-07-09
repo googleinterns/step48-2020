@@ -86,7 +86,8 @@ public final class UserDataServletTest {
 
   /**
    * Tests the doGet method, where the datastore doesn't contain the test user id.
-   * Expected output: JSON response with "user-found" property as false.
+   *
+   * <p>Expected output: JSON response with "user-found" property as false.
    */
   @Test
   public void testGetMethodWithInvalidId() throws Exception {
@@ -117,7 +118,8 @@ public final class UserDataServletTest {
 
   /**
    * Tests the doGet method, where datastore does contain the test user id.
-   * Expected output: JSON response with "user-found" property as true,
+   *
+   * <p>Expected output: JSON response with "user-found" property as true,
    * and the user properties filled in with the test user properties.
    */
   @Test
@@ -153,7 +155,8 @@ public final class UserDataServletTest {
 
   /**
    * Tests the doPost method, making sure it redirects correctly.
-   * Expected response: Redirects to the profile page with the user id.
+   *
+   * <p>Expected response: Redirects to the profile page with the user id.
    */
 
   @Test
@@ -176,7 +179,8 @@ public final class UserDataServletTest {
 
   /**
    * Tests the doPost method, making sure that a new user entity is added to Datastore.
-   * Expected response: Creates a test user entity and adds it to the local datastore.
+   *
+   * <p>Expected response: Creates a test user entity and adds it to the local datastore.
    */
   @Test
   public void testPostCreateUserInfo() throws Exception {
@@ -208,7 +212,8 @@ public final class UserDataServletTest {
 
   /**
    * Tests the doPost method, making sure that a user entity is updated in Datastore.
-   * Expected response: Updates the user entity already in the local datastore, and
+   *
+   * <p>Expected response: Updates the user entity already in the local datastore, and
    * changes the user's name from "Tim" to "John".
    */
   @Test
