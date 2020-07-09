@@ -68,18 +68,12 @@ public class UserDataServlet extends HttpServlet {
       Entity userEntity = results.asSingleEntity();
 
       // Get the user's information
-      String name = (String) userEntity.getProperty(USER_NAME_PROPERTY);
-      String id = (String) userEntity.getProperty(USER_ID_PROPERTY);
-      String email = (String) userEntity.getProperty(USER_EMAIL_PROPERTY);
-      String bio = (String) userEntity.getProperty(USER_BIO_PROPERTY);
-      ArrayList<String> friendsIds = (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY);
-
       userDataBuilder.put(USER_FOUND_PROPERTY, true);
-      userDataBuilder.put(USER_BIO_PROPERTY, bio);
-      userDataBuilder.put(USER_EMAIL_PROPERTY, email);
-      userDataBuilder.put(USER_FRIENDS_LIST_PROPERTY, friendsIds);
-      userDataBuilder.put(USER_ID_PROPERTY, id);
-      userDataBuilder.put(USER_NAME_PROPERTY, name);
+      userDataBuilder.put(USER_BIO_PROPERTY, (String) userEntity.getProperty(USER_BIO_PROPERTY));
+      userDataBuilder.put(USER_EMAIL_PROPERTY, userEntity.getProperty(USER_EMAIL_PROPERTY));
+      userDataBuilder.put(USER_FRIENDS_LIST_PROPERTY, (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY));
+      userDataBuilder.put(USER_ID_PROPERTY, userEntity.getProperty(USER_ID_PROPERTY));
+      userDataBuilder.put(USER_NAME_PROPERTY, userEntity.getProperty(USER_NAME_PROPERTY));
     }
 
     // Send the user's json data as the response
