@@ -112,7 +112,6 @@ public final class UserDataServletTest {
     //correctResponse.put(USER_FOUND_PROPERTY, false);
 
     // Check that the user wasn't found in datastore
-    verify(mockRequest, atLeast(1)).getParameter(USER_ID_PROPERTY);
     Assert.assertEquals(gson.toJson(expected), stringWriter.toString());
   }
 
@@ -149,7 +148,6 @@ public final class UserDataServletTest {
     expected.put(USER_NAME_PROPERTY, TEST_USER_NAME);
 
     // Check that the user was found in Datastore
-    verify(mockRequest, atLeast(1)).getParameter(USER_ID_PROPERTY);
     Assert.assertEquals(gson.toJson(expected.build()), stringWriter.toString());
   }
 
@@ -173,7 +171,6 @@ public final class UserDataServletTest {
     servletUnderTest.doPostWrapper(datastore, mockRequest, mockResponse);
 
     // Check that the mockResponse redirected property
-    verify(mockRequest, atLeast(1)).getParameter(USER_ID_PROPERTY);
     verify(mockResponse).sendRedirect("/profile.html?id=" + TEST_USER_ID);
   }
 
