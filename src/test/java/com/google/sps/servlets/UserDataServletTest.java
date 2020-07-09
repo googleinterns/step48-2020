@@ -14,6 +14,7 @@
 
 package com.google.sps.servlets;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -196,9 +197,8 @@ public final class UserDataServletTest {
     servletUnderTest.doPostWrapper(datastore, mockRequest, mockResponse);
 
     // Query the local datastore for the newly created user entity
-    PreparedQuery results = datastore.prepare(new Query(TEST_USER_ID));
-    Assert.assertEquals(1, results.countEntities());
-    Entity userEntity = results.asSingleEntity();
+    Entity userEntity = datastore.prepare(new Query(TEST_USER_ID)).asSingleEntity();
+    assertThat(userEntity).isNotNull();
 
     // Verify that the user entity has the correct properties
     Assert.assertEquals((String) userEntity.getProperty(USER_ID_PROPERTY), TEST_USER_ID);
@@ -231,9 +231,8 @@ public final class UserDataServletTest {
     servletUnderTest.doPostWrapper(datastore, mockRequest, mockResponse);
 
     // Query the local datastore for the newly created user entity
-    PreparedQuery results = datastore.prepare(new Query(TEST_USER_ID));
-    Assert.assertEquals(1, results.countEntities());
-    Entity userEntity = results.asSingleEntity();
+    Entity userEntity = datastore.prepare(new Query(TEST_USER_ID)).asSingleEntity();
+    assertThat(userEntity).isNotNull();
 
     // Verify that the user Entity name property changed
     Assert.assertEquals((String) userEntity.getProperty(USER_ID_PROPERTY), TEST_USER_ID);
