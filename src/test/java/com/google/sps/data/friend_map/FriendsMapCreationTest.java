@@ -14,25 +14,14 @@
 
 package com.google.sps.data.friend_map;
 
+import static com.google.common.truth.Truth.assertThat;
+
 import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableMap;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /** */
 @RunWith(JUnit4.class)
@@ -45,14 +34,13 @@ public final class FriendsMapCreationTest {
   * Tests if map is forming correctly when there is only one user with 0 friends.
   *
   * <p>Should result in a UserFriendsMap that has a single key that maps
-  * to an empty friend set.
+  * to an empty set.
   */
   @Test
   public void oneUserGraphTest() {
     UserNode userA = new UserNode(USER_A_ID, ImmutableSet.of());
 
-    Set<UserNode> oneUserSet = new HashSet<>();
-    oneUserSet.add(userA);
+    Set<UserNode> oneUserSet = ImmutableSet.of(userA);
     UserFriendsMap oneUserFriendsMap = new UserFriendsMap(oneUserSet);
 
     ImmutableMap<String, ImmutableSet<String>> expectedMap =
@@ -60,23 +48,21 @@ public final class FriendsMapCreationTest {
           USER_A_ID, ImmutableSet.of()
       );
 
-    assertThat(oneUserFriendsMap.getFriendMap(), is(expectedMap));
+    assertThat(oneUserFriendsMap.getFriendMap()).containsExactlyEntriesIn(expectedMap);
   }
 
   /**
   * Tests if map is forming correctly when there are two users with 0 friends.
   *
   * <p>Should result in a UserFriendsMap that has two keys each of which
-  * map to an empty friend set.
+  * map to an empty set.
   */
   @Test
   public void twoUsersNoConnectionsGraphTest() {
     UserNode userA = new UserNode(USER_A_ID, ImmutableSet.of());
     UserNode userB = new UserNode(USER_B_ID, ImmutableSet.of());
 
-    Set<UserNode> twoUserSet = new HashSet<>();
-    twoUserSet.add(userA);
-    twoUserSet.add(userB);
+    Set<UserNode> twoUserSet = ImmutableSet.of(userA, userB);
     UserFriendsMap twoUserFriendsMap = new UserFriendsMap(twoUserSet);
 
     ImmutableMap<String, ImmutableSet<String>> expectedMap =
@@ -85,7 +71,7 @@ public final class FriendsMapCreationTest {
         USER_B_ID, ImmutableSet.of()
       );
 
-    assertThat(twoUserFriendsMap.getFriendMap(), is(expectedMap));
+    assertThat(twoUserFriendsMap.getFriendMap()).containsExactlyEntriesIn(expectedMap);
   }
 
   /**
@@ -93,9 +79,9 @@ public final class FriendsMapCreationTest {
   * friends with the third user. There are no connections other than this.
   *
   * <p>Should result in a UserFriendsMap with three keys:
-  *    User A should map to a friend set with just User C
-  *    User B should map to a friend set with just User C
-  *    User C should map to a friend set with User A and User B.
+  *    User A should map to a set with just User C
+  *    User B should map to a set with just User C
+  *    User C should map to a set with User A and User B.
   */
   @Test
   public void threeUsersTwoConnectionGraphTest() {
@@ -103,10 +89,7 @@ public final class FriendsMapCreationTest {
     UserNode userB = new UserNode(USER_B_ID, ImmutableSet.of(USER_C_ID));
     UserNode userC = new UserNode(USER_C_ID, ImmutableSet.of(USER_A_ID, USER_B_ID));
     
-    Set<UserNode> threeUsersTwoConnectionSet = new HashSet<>();
-    threeUsersTwoConnectionSet.add(userA);
-    threeUsersTwoConnectionSet.add(userB);
-    threeUsersTwoConnectionSet.add(userC);
+    Set<UserNode> threeUsersTwoConnectionSet = ImmutableSet.of(userA, userB, userC);
     UserFriendsMap threeUsersTwoConnectionMap = new UserFriendsMap(threeUsersTwoConnectionSet);
     
     ImmutableMap<String, ImmutableSet<String>> expectedMap =
@@ -116,7 +99,7 @@ public final class FriendsMapCreationTest {
         USER_C_ID, ImmutableSet.of(USER_A_ID, USER_B_ID)
       );
     
-    assertThat(threeUsersTwoConnectionMap.getFriendMap(), is(expectedMap));
+    assertThat(threeUsersTwoConnectionMap.getFriendMap()).containsExactlyEntriesIn(expectedMap);
   }
 }
 
