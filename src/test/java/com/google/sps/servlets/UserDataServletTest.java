@@ -85,7 +85,10 @@ public final class UserDataServletTest {
     helper.tearDown();
   }
 
-  /** Tests the doGet method, where the datastore doesn't contain the test user id */
+  /**
+   * Tests the doGet method, where the datastore doesn't contain the test user id.
+   * Expected output: JSON response with "user-found" property as false.
+   */
   @Test
   public void testGetMethodWithInvalidId() throws Exception {
     // Mock the getParameter call
@@ -112,7 +115,11 @@ public final class UserDataServletTest {
     Assert.assertEquals(gson.toJson(correctResponse), stringWriter.toString().trim());
   }
 
-  /** Tests the doGet method, where datastore does contain the test user id */
+  /**
+   * Tests the doGet method, where datastore does contain the test user id.
+   * Expected output: JSON response with "user-found" property as true,
+   * and the user properties filled in with the test user properties.
+   */
   @Test
   public void testGetMethodWithValidId() throws Exception {
     // Mock the getParameter call
@@ -145,7 +152,11 @@ public final class UserDataServletTest {
     Assert.assertEquals(gson.toJson(correctResponse), stringWriter.toString().trim());
   }
 
-  /** Tests the doPost method, making sure it redirects correctly */
+  /**
+   * Tests the doPost method, making sure it redirects correctly.
+   * Expected response: Redirects to the profile page with the user id.
+   */
+
   @Test
   public void testPostMethodRedirect() throws Exception {
     // Mock the getParameter and getParameterValues calls
@@ -165,7 +176,10 @@ public final class UserDataServletTest {
     verify(mockResponse).sendRedirect("/profile.html?id=" + TEST_USER_ID);
   }
 
-  /** Tests the doPost method, making sure that a new user entity is added to Datastore */
+  /**
+   * Tests the doPost method, making sure that a new user entity is added to Datastore.
+   * Expected response: Creates a test user entity and adds it to the local datastore.
+   */
   @Test
   public void testPostCreateUserInfo() throws Exception {
     // Mock the getParameter and getParameterValues calls
@@ -194,7 +208,11 @@ public final class UserDataServletTest {
         TEST_USER_FRIENDS_LIST);
   }
 
-  /** Tests the doPost method, making sure that a user entity is updated in Datastore */
+  /**
+   * Tests the doPost method, making sure that a user entity is updated in Datastore.
+   * Expected response: Updates the user entity already in the local datastore, and
+   * changes the user's name from "Tim" to "John".
+   */
   @Test
   public void testPostUpdateUserInfo() throws Exception {
     // Mock the getParameter and getParameterValues calls
