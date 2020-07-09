@@ -158,7 +158,6 @@ public final class UserDataServletTest {
    *
    * <p>Expected response: Redirects to the profile page with the user id.
    */
-
   @Test
   public void testPostMethodRedirect() throws Exception {
     // Mock the getParameter and getParameterValues calls
