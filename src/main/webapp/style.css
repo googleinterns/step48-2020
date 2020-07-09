@@ -36,7 +36,29 @@ h1 {
     width: 30%;
 }
 .image-upload {
-    align-content: center;
-    align-self: center;
-    margin-left: 625px;
+    justify-content: center;
 }
+.card-container:nth-child(even) {
+    background-color: #b4dfe5;
+    justify-content: center;
+}
+.card-container:nth-child(even) a{
+    background-color: #fbe8a6;
+}
+.card-container:nth-child(odd) {
+    background-color: #fbe8a6;
+    justify-content: center;
+}
+.card-container:nth-child(odd) a{
+    background-color: #b4dfe5;
+}
+.friend-me-btn {
+    background-color: #b4dfe5;
+}
+.pass-btn {
+    background-color: #fbe8a6;
+}
+.button-container {
+    justify-content: center;
+}
+
