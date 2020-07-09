@@ -17,8 +17,6 @@ package com.google.sps.servlets;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +26,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
 /**
@@ -59,10 +58,10 @@ public class UserDataServlet extends HttpServlet {
     String userId = getStringParameter(request, USER_ID_PROPERTY, DEFAULT_STRING);
     PreparedQuery results = datastore.prepare(new Query(userId));
 
-    Map<String, Object> userData = new HashMap<>();
+    ImmutableMap.Builder<String, Object> userDataBuilder = ImmutableMap.builder();
     if (results.countEntities() == 0) {
       // If a user entity was not found
-      userData.put(USER_FOUND_PROPERTY, false);
+      userDataBuilder.put(USER_FOUND_PROPERTY, false);
     }
     else {
       // If a user entity was found (a single entity)
@@ -75,17 +74,17 @@ public class UserDataServlet extends HttpServlet {
       String bio = (String) userEntity.getProperty(USER_BIO_PROPERTY);
       ArrayList<String> friendsIds = (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY);
 
-      userData.put(USER_FOUND_PROPERTY, true);
-      userData.put(USER_NAME_PROPERTY, name);
-      userData.put(USER_ID_PROPERTY, id);
-      userData.put(USER_EMAIL_PROPERTY, email);
-      userData.put(USER_BIO_PROPERTY, bio);
-      userData.put(USER_FRIENDS_LIST_PROPERTY, friendsIds);
+      userDataBuilder.put(USER_FOUND_PROPERTY, true);
+      userDataBuilder.put(USER_BIO_PROPERTY, bio);
+      userDataBuilder.put(USER_EMAIL_PROPERTY, email);
+      userDataBuilder.put(USER_FRIENDS_LIST_PROPERTY, friendsIds);
+      userDataBuilder.put(USER_ID_PROPERTY, id);
+      userDataBuilder.put(USER_NAME_PROPERTY, name);
     }
 
     // Send the user's json data as the response
     response.setContentType("application/json");
-    response.getWriter().print(gson.toJson(userData));
+    response.getWriter().print(gson.toJson(userDataBuilder.build()));
   }
 
   @Override

@@ -26,13 +26,12 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
@@ -107,12 +106,14 @@ public final class UserDataServletTest {
     writer.flush();
 
     // Build the correct response output
-    Map<String, Object> correctResponse = new HashMap<>();
-    correctResponse.put(USER_FOUND_PROPERTY, false);
+    ImmutableMap<String, Object> expected = ImmutableMap.of(
+        USER_FOUND_PROPERTY, false);
+    //Map<String, Object> correctResponse = new HashMap<>();
+    //correctResponse.put(USER_FOUND_PROPERTY, false);
 
     // Check that the user wasn't found in datastore
     verify(mockRequest, atLeast(1)).getParameter(USER_ID_PROPERTY);
-    Assert.assertEquals(gson.toJson(correctResponse), stringWriter.toString());
+    Assert.assertEquals(gson.toJson(expected), stringWriter.toString());
   }
 
   /**
@@ -139,17 +140,17 @@ public final class UserDataServletTest {
     writer.flush();
 
     // Build the correct response output
-    Map<String, Object> correctResponse = new HashMap<>();
-    correctResponse.put(USER_FOUND_PROPERTY, true);
-    correctResponse.put(USER_NAME_PROPERTY, TEST_USER_NAME);
-    correctResponse.put(USER_ID_PROPERTY, TEST_USER_ID);
-    correctResponse.put(USER_EMAIL_PROPERTY, TEST_USER_EMAIL);
-    correctResponse.put(USER_BIO_PROPERTY, TEST_USER_BIO);
-    correctResponse.put(USER_FRIENDS_LIST_PROPERTY, Arrays.asList(TEST_USER_FRIENDS_LIST));
+    ImmutableMap.Builder<String, Object> expected = ImmutableMap.builder();
+    expected.put(USER_FOUND_PROPERTY, true);
+    expected.put(USER_BIO_PROPERTY, TEST_USER_BIO);
+    expected.put(USER_EMAIL_PROPERTY, TEST_USER_EMAIL);
+    expected.put(USER_FRIENDS_LIST_PROPERTY, Arrays.asList(TEST_USER_FRIENDS_LIST));
+    expected.put(USER_ID_PROPERTY, TEST_USER_ID);
+    expected.put(USER_NAME_PROPERTY, TEST_USER_NAME);
 
     // Check that the user was found in Datastore
     verify(mockRequest, atLeast(1)).getParameter(USER_ID_PROPERTY);
-    Assert.assertEquals(gson.toJson(correctResponse), stringWriter.toString());
+    Assert.assertEquals(gson.toJson(expected.build()), stringWriter.toString());
   }
 
   /**
