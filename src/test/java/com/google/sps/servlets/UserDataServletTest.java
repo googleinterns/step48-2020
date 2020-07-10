@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,8 +69,6 @@ public final class UserDataServletTest {
   @Mock private HttpServletRequest mockRequest;
   @Mock private HttpServletResponse mockResponse;
   private UserDataServlet servletUnderTest;
-  private StringWriter stringWriter;
-  private PrintWriter writer;
 
   @Before
   public void setUp() {
@@ -96,10 +93,9 @@ public final class UserDataServletTest {
     when(mockRequest.getParameter(USER_ID_PROPERTY)).thenReturn(TEST_USER_ID);
 
     // Store output given by mockResponse
-    stringWriter = new StringWriter();
-    writer = new PrintWriter(stringWriter);
+    StringWriter stringWriter = new StringWriter();
+    PrintWriter writer = new PrintWriter(stringWriter);
     when(mockResponse.getWriter()).thenReturn(writer);
-    when(mockResponse.getContentType()).thenReturn("application/json");
 
     // Create a local datastore
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -129,10 +125,9 @@ public final class UserDataServletTest {
     when(mockRequest.getParameter(USER_ID_PROPERTY)).thenReturn(TEST_USER_ID);
 
     // Store output given by mockResponse
-    stringWriter = new StringWriter();
-    writer = new PrintWriter(stringWriter);
+    StringWriter stringWriter = new StringWriter();
+    PrintWriter writer = new PrintWriter(stringWriter);
     when(mockResponse.getWriter()).thenReturn(writer);
-    when(mockResponse.getContentType()).thenReturn("application/json");
 
     // Create a local datastore
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
