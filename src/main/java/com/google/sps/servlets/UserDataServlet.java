@@ -56,17 +56,15 @@ public class UserDataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the userId, and query Datastore for the corresponding entity
     String userId = getStringParameter(request, USER_ID_PROPERTY, DEFAULT_STRING);
-    PreparedQuery results = datastore.prepare(new Query(userId));
+    Entity userEntity = datastore.prepare(new Query(userId)).asSingleEntity();
 
     ImmutableMap.Builder<String, Object> userDataBuilder = ImmutableMap.builder();
-    if (results.countEntities() == 0) {
+    if (userEntity == null) {
       // If a user entity was not found
       userDataBuilder.put(USER_FOUND_PROPERTY, false);
     }
     else {
       // If a user entity was found (a single entity)
-      Entity userEntity = results.asSingleEntity();
-
       // Get the user's information
       userDataBuilder.put(USER_FOUND_PROPERTY, true);
       userDataBuilder.put(USER_BIO_PROPERTY, (String) userEntity.getProperty(USER_BIO_PROPERTY));
@@ -91,8 +89,7 @@ public class UserDataServlet extends HttpServlet {
     String[] friends = getStringArrayParameter(request, USER_FRIENDS_LIST_PROPERTY, new String[]{});
 
     // Check if a user entity with userId already exists
-    PreparedQuery results = datastore.prepare(new Query(userId));
-    Entity userEntity = results.asSingleEntity();
+    Entity userEntity = datastore.prepare(new Query(userId)).asSingleEntity();
     if (userEntity == null) {
       // User entity needs to be created
       userEntity = new Entity(userId);
