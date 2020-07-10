@@ -23,7 +23,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableMap;
-import com.google.sps.data.friend_map.*;
+import com.google.sps.data.friend_map.UserFriendsMap;
+import com.google.sps.data.friend_map.UserNode;
 import com.google.sps.data.potentialMatchAlgorithm;
 
 /* NOTE: PM = Potential Match .*/
@@ -37,6 +38,11 @@ public class potentialMatchAlgorithmTest {
   private static final String USER_D_ID = "45678";
   private static final String USER_E_ID = "56789";
 
+  /**
+  * Tests if correct potential matches are found for a single user with zero friends
+  *
+  * <p>Should result in a map with a single key that maps to an empty set.
+  */
   @Test
   public void oneUserNoFriendsPMTest() {
     UserNode userA = new UserNode(USER_A_ID, ImmutableSet.of());
@@ -53,6 +59,12 @@ public class potentialMatchAlgorithmTest {
     assertThat(resultingPotentialMatches).containsExactlyEntriesIn(expectedMap);
   }
 
+  /**
+  * Tests if correct potential matches are found for three users where only two of
+  * them are friends with eachother.
+  *
+  *<p>Should result in a map with three keys (User A, B, & C) that all map to empty sets.
+  */
   @Test
   public void threeUsersOneFriendshipPMTest() {
     UserNode userA = new UserNode(USER_A_ID, ImmutableSet.of());
@@ -74,6 +86,17 @@ public class potentialMatchAlgorithmTest {
     assertThat(resultingPotentialMatches).containsExactlyEntriesIn(expectedMap);
   }
 
+  /**
+  * Tests if correct potential matches are found for three users where one user is friends with
+  * both of the other users, and the other two users are only friends with that first user.
+  *
+  * <p>Should result in a map with three keys:
+  * <ul>
+  *    <li>User A should map to an empty set
+  *    <li>User B should map to a set with just User C
+  *    <li>User C should map to a set with just User B
+  * </ul>
+  */
   @Test
   public void threeUsersTwoFriendshipPMTest() {
     UserNode userA = new UserNode(USER_A_ID, ImmutableSet.of(USER_B_ID, USER_C_ID));
@@ -95,6 +118,19 @@ public class potentialMatchAlgorithmTest {
     assertThat(resultingPotentialMatches).containsExactlyEntriesIn(expectedMap);
   }
 
+  /**
+  * Tests if correct potential matches are found for five users who have several friendships
+  * between each other.
+  *
+  * <p>Should reuslt in a map with five keys:
+  * <ul>
+  *    <li>User A maps to a set with just User E
+  *    <li>User B maps to a set with User C and User D
+  *    <li>User C maps to a set with User B and User D
+  *    <li>User D maps to a set with User B and User C
+  *    <li>User E maps to a set with just User A
+  * </ul> 
+  */
   @Test
   public void fiveUsersSeveralConnectionsTest() {
     UserNode userA = new UserNode(USER_A_ID, ImmutableSet.of(USER_B_ID, USER_C_ID, USER_D_ID));
@@ -120,6 +156,12 @@ public class potentialMatchAlgorithmTest {
     assertThat(resultingPotentialMatches).containsExactlyEntriesIn(expectedMap);
   }
 
+  /**
+  * Tests is correct potential matches are found for three users who are all friends
+  * with eachother.
+  *
+  * <p>Should result in a map with three keys (Users A, B, and C) that all map to empty sets.
+  */
   @Test
   public void threeUsersAllConnectedTest() {
     UserNode userA = new UserNode(USER_A_ID, ImmutableSet.of(USER_B_ID, USER_C_ID));
