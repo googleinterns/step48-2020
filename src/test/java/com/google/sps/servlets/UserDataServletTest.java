@@ -192,8 +192,7 @@ public final class UserDataServletTest {
     assertThat((String) userEntity.getProperty(USER_NAME_PROPERTY)).contains(TEST_USER_NAME);
     assertThat((String) userEntity.getProperty(USER_EMAIL_PROPERTY)).contains(TEST_USER_EMAIL);
     assertThat((String) userEntity.getProperty(USER_BIO_PROPERTY)).contains(TEST_USER_BIO);
-    assertThat(Arrays.toString(((ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY)).toArray()))
-        .contains(Arrays.toString(TEST_USER_FRIENDS_LIST));
+    assertThat((ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY)).containsExactly(TEST_USER_FRIENDS_LIST);
   }
 
   /**
