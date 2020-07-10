@@ -28,7 +28,6 @@ import com.google.sps.data.friend_map.UserNode;
 import com.google.sps.data.PotentialMatchAlgorithm;
 
 /* NOTE: PM = Potential Match .*/
-
 @RunWith(JUnit4.class)
 public class PotentialMatchAlgorithmTest {
 
