@@ -26,6 +26,9 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
@@ -56,7 +59,9 @@ public class UserDataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the userId, and query Datastore for the corresponding entity
     String userId = getStringParameter(request, USER_ID_PROPERTY, DEFAULT_STRING);
-    Entity userEntity = datastore.prepare(new Query(userId)).asSingleEntity();
+
+    Entity userEntity = datastore.prepare(new Query(USER_ENTITY).setFilter(
+        new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userId))).asSingleEntity();
 
     ImmutableMap.Builder<String, Object> userDataBuilder = ImmutableMap.builder();
     if (userEntity == null) {
@@ -89,10 +94,11 @@ public class UserDataServlet extends HttpServlet {
     String[] friends = getStringArrayParameter(request, USER_FRIENDS_LIST_PROPERTY, new String[]{});
 
     // Check if a user entity with userId already exists
-    Entity userEntity = datastore.prepare(new Query(userId)).asSingleEntity();
+    Entity userEntity = datastore.prepare(new Query(USER_ENTITY).setFilter(
+        new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userId))).asSingleEntity();
     if (userEntity == null) {
       // User entity needs to be created
-      userEntity = new Entity(userId);
+      userEntity = new Entity(USER_ENTITY);
       userEntity.setProperty(USER_ID_PROPERTY, userId);
       userEntity.setProperty(USER_NAME_PROPERTY, userName);
       userEntity.setProperty(USER_EMAIL_PROPERTY, userEmail);

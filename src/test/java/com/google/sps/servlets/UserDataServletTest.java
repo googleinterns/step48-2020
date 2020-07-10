@@ -47,6 +47,7 @@ import org.mockito.MockitoAnnotations;
 /** Tests the User Data Servlet */
 @RunWith(JUnit4.class)
 public final class UserDataServletTest {
+  private static final String USER_ENTITY = "User";
   private static final String USER_BIO_PROPERTY = "bio";
   private static final String USER_EMAIL_PROPERTY = "email";
   private static final String USER_FOUND_PROPERTY = "user-found";
@@ -175,7 +176,7 @@ public final class UserDataServletTest {
     servletUnderTest.doPostWrapper(datastore, mockRequest, mockResponse);
 
     // Query the local datastore for the newly created user entity
-    Entity userEntity = datastore.prepare(new Query(TEST_USER_ID)).asSingleEntity();
+    Entity userEntity = datastore.prepare(new Query(USER_ENTITY)).asSingleEntity();
     assertThat(userEntity).isNotNull();
 
     // Verify that the user entity has the correct properties
@@ -206,7 +207,7 @@ public final class UserDataServletTest {
     servletUnderTest.doPostWrapper(datastore, mockRequest, mockResponse);
 
     // Query the local datastore for the newly created user entity
-    Entity userEntity = datastore.prepare(new Query(TEST_USER_ID)).asSingleEntity();
+    Entity userEntity = datastore.prepare(new Query(USER_ENTITY)).asSingleEntity();
     assertThat(userEntity).isNotNull();
 
     // Verify that the user Entity name property changed
@@ -216,7 +217,8 @@ public final class UserDataServletTest {
 
   /** Helper method to add a test user to the local datastore */
   private void addTestUserEntityToDatastore(DatastoreService datastore) {
-    Entity userEntity = new Entity(TEST_USER_ID);
+    //Entity userEntity = new Entity(TEST_USER_ID);
+    Entity userEntity = new Entity("User");
     userEntity.setProperty(USER_ID_PROPERTY, TEST_USER_ID);
     userEntity.setProperty(USER_NAME_PROPERTY, TEST_USER_NAME);
     userEntity.setProperty(USER_EMAIL_PROPERTY, TEST_USER_EMAIL);
