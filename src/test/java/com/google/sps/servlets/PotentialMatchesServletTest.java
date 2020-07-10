@@ -18,13 +18,10 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
-import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.sps.servlets.PotentialMatchesServlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,13 +32,17 @@ import org.junit.runners.JUnit4;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
- 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.sps.servlets.PotentialMatchesServlet;
 
 @RunWith(JUnit4.class)
 public class PotentialMatchesServletTest {
+  private static final String NO_POTENTIAL_MATCH_RESULT = "NO_POTENTIAL_MATCHES";
+
   private static final String USER_ENTITY = "User";
   private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
   private static final String USER_ID_PROPERTY = "id";
@@ -113,7 +114,7 @@ public class PotentialMatchesServletTest {
     servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
     writer.flush();
 
-    String expectedOutput = "NO_POTENTIAL_MATCHES";
+    String expectedOutput = NO_POTENTIAL_MATCH_RESULT;
     String actualOutput = stringWriter.toString();
 
     assertThat(actualOutput).isEqualTo(expectedOutput);
@@ -143,7 +144,7 @@ public class PotentialMatchesServletTest {
     servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
     writer.flush();
 
-    String expectedOutput = "NO_POTENTIAL_MATCHES";
+    String expectedOutput = NO_POTENTIAL_MATCH_RESULT;
     String actualOutput = stringWriter.toString();
 
     assertThat(actualOutput).isEqualTo(expectedOutput);

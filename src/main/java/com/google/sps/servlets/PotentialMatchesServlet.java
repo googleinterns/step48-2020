@@ -14,32 +14,33 @@
 
 package com.google.sps.servlets;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.data.friend_map.UserNode;
-import com.google.sps.data.friend_map.UserFriendsMap;
-import com.google.sps.data.PotentialMatchAlgorithm;
+import com.google.common.collect.ImmutableSet;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Entity;
-import com.google.common.collect.ImmutableSet;
+import com.google.sps.data.friend_map.UserNode;
+import com.google.sps.data.friend_map.UserFriendsMap;
+import com.google.sps.data.PotentialMatchAlgorithm;
 
 /**
-* Handles requests for getting the next potential match for a user's feed page.
- */
+*  Handles requests for getting the next potential match for a user's feed page.
+*/
 @WebServlet("/potential-matches")
 public class PotentialMatchesServlet extends HttpServlet {
   private static final String USER_ENTITY = "User";
   private static final String USER_ID_PROPERTY = "id";
   private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
+  private static final String NO_POTENTIAL_MATCH_RESULT = "NO_POTENTIAL_MATCHES";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -69,7 +70,7 @@ public class PotentialMatchesServlet extends HttpServlet {
     ImmutableSet<String> potentialMatches = PotentialMatchAlgorithm.findPotentialMatchesForUser(userID, friendsMap);
   
     String nextPotentialMatchID = potentialMatches.size() > 0 ?
-      potentialMatches.iterator().next() : "NO_POTENTIAL_MATCHES";
+      potentialMatches.iterator().next() : NO_POTENTIAL_MATCH_RESULT;
     
     return nextPotentialMatchID;
   }
