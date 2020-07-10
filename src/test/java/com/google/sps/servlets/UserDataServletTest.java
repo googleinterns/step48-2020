@@ -68,6 +68,7 @@ public final class UserDataServletTest {
 
   @Mock private HttpServletRequest mockRequest;
   @Mock private HttpServletResponse mockResponse;
+  private DatastoreService datastore;
   private UserDataServlet servletUnderTest;
 
   @Before
@@ -75,6 +76,7 @@ public final class UserDataServletTest {
     MockitoAnnotations.initMocks(this);
     helper.setUp();
     servletUnderTest = new UserDataServlet();
+    datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
   @After
@@ -97,8 +99,6 @@ public final class UserDataServletTest {
     PrintWriter writer = new PrintWriter(stringWriter);
     when(mockResponse.getWriter()).thenReturn(writer);
 
-    // Create a local datastore
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     // Test the doGet method by calling the wrapper method
     servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
     writer.flush();
@@ -106,8 +106,6 @@ public final class UserDataServletTest {
     // Build the correct response output
     ImmutableMap<String, Object> expected = ImmutableMap.of(
         USER_FOUND_PROPERTY, false);
-    //Map<String, Object> correctResponse = new HashMap<>();
-    //correctResponse.put(USER_FOUND_PROPERTY, false);
 
     // Check that the user wasn't found in datastore
     assertThat(gson.toJson(expected)).contains(stringWriter.toString());
@@ -129,8 +127,6 @@ public final class UserDataServletTest {
     PrintWriter writer = new PrintWriter(stringWriter);
     when(mockResponse.getWriter()).thenReturn(writer);
 
-    // Create a local datastore
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     addTestUserEntityToDatastore(datastore);
     // Test the doGet method by calling the wrapper method
     servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
@@ -163,8 +159,6 @@ public final class UserDataServletTest {
     when(mockRequest.getParameter(USER_BIO_PROPERTY)).thenReturn(TEST_USER_BIO);
     when(mockRequest.getParameterValues(USER_FRIENDS_LIST_PROPERTY)).thenReturn(TEST_USER_FRIENDS_LIST);
 
-    // Create a local datastore
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     // Test the doPost method by calling the wrapper method
     servletUnderTest.doPostWrapper(datastore, mockRequest, mockResponse);
 
@@ -186,8 +180,6 @@ public final class UserDataServletTest {
     when(mockRequest.getParameter(USER_BIO_PROPERTY)).thenReturn(TEST_USER_BIO);
     when(mockRequest.getParameterValues(USER_FRIENDS_LIST_PROPERTY)).thenReturn(TEST_USER_FRIENDS_LIST);
 
-    // Create a local datastore
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     // Test the doPost method by calling the wrapper method
     servletUnderTest.doPostWrapper(datastore, mockRequest, mockResponse);
 
@@ -219,8 +211,6 @@ public final class UserDataServletTest {
     when(mockRequest.getParameter(USER_BIO_PROPERTY)).thenReturn(TEST_USER_BIO);
     when(mockRequest.getParameterValues(USER_FRIENDS_LIST_PROPERTY)).thenReturn(TEST_USER_FRIENDS_LIST);
 
-    // Create a local datastore
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     addTestUserEntityToDatastore(datastore);
     // Test the doPost method by calling the wrapper method
     servletUnderTest.doPostWrapper(datastore, mockRequest, mockResponse);
