@@ -41,7 +41,7 @@ import java.io.StringWriter;
  
 
 @RunWith(JUnit4.class)
-public class potentialMatchesServletTest {
+public class PotentialMatchesServletTest {
   private static final String USER_ENTITY = "User";
   private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
   private static final String USER_ID_PROPERTY = "id";

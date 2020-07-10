@@ -25,12 +25,12 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableMap;
 import com.google.sps.data.friend_map.UserFriendsMap;
 import com.google.sps.data.friend_map.UserNode;
-import com.google.sps.data.potentialMatchAlgorithm;
+import com.google.sps.data.PotentialMatchAlgorithm;
 
 /* NOTE: PM = Potential Match .*/
 
 @RunWith(JUnit4.class)
-public class potentialMatchAlgorithmTest {
+public class PotentialMatchAlgorithmTest {
 
   private static final String USER_A_ID = "12345";
   private static final String USER_B_ID = "23456";
@@ -50,7 +50,7 @@ public class potentialMatchAlgorithmTest {
     Set<UserNode> oneUserNodeSet = ImmutableSet.of(userA);
     UserFriendsMap resultingFriendsMap = new UserFriendsMap(oneUserNodeSet);
     ImmutableMap<String, ImmutableSet<String>> resultingPotentialMatches = 
-      potentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
+      PotentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
     
     ImmutableMap<String, ImmutableSet<String>> expectedMap = ImmutableMap.of(
       USER_A_ID, ImmutableSet.of()
@@ -74,7 +74,7 @@ public class potentialMatchAlgorithmTest {
     Set<UserNode> threeUserNodeSet = ImmutableSet.of(userA, userB, userC);
     UserFriendsMap resultingFriendsMap = new UserFriendsMap(threeUserNodeSet);
     ImmutableMap<String, ImmutableSet<String>> resultingPotentialMatches = 
-      potentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
+      PotentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
 
     ImmutableMap<String, ImmutableSet<String>> expectedMap =
       ImmutableMap.of(
@@ -106,7 +106,7 @@ public class potentialMatchAlgorithmTest {
     Set<UserNode> threeUserNodeSet = ImmutableSet.of(userA, userB, userC);
     UserFriendsMap resultingFriendsMap = new UserFriendsMap(threeUserNodeSet);
     ImmutableMap<String, ImmutableSet<String>> resultingPotentialMatches = 
-      potentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
+      PotentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
 
     ImmutableMap<String, ImmutableSet<String>> expectedMap =
       ImmutableMap.of(
@@ -142,7 +142,7 @@ public class potentialMatchAlgorithmTest {
     Set<UserNode> fiveUserNodeSet = ImmutableSet.of(userA, userB, userC, userD, userE);
     UserFriendsMap resultingFriendsMap = new UserFriendsMap(fiveUserNodeSet);
     ImmutableMap<String, ImmutableSet<String>> resultingPotentialMatches = 
-      potentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
+      PotentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
 
     ImmutableMap<String, ImmutableSet<String>> expectedMap =
       ImmutableMap.of(
@@ -171,7 +171,7 @@ public class potentialMatchAlgorithmTest {
     Set<UserNode> threeUserNodeSet = ImmutableSet.of(userA, userB, userC);
     UserFriendsMap resultingFriendsMap = new UserFriendsMap(threeUserNodeSet);
     ImmutableMap<String, ImmutableSet<String>> resultingPotentialMatches = 
-      potentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
+      PotentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
 
     ImmutableMap<String, ImmutableSet<String>> expectedMap =
       ImmutableMap.of(

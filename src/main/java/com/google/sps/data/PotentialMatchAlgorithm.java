@@ -25,7 +25,7 @@ import com.google.sps.data.friend_map.UserNode;
 *
 * <p>Potential matches are users with who a particular user shares at least one friend with.
 */
-public class potentialMatchAlgorithm {
+public class PotentialMatchAlgorithm {
 
   /**
   * Finds all of the potential matches for each user

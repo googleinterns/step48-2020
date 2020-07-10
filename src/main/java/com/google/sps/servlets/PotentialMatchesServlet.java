@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.sps.data.friend_map.UserNode;
 import com.google.sps.data.friend_map.UserFriendsMap;
-import com.google.sps.data.potentialMatchAlgorithm;
+import com.google.sps.data.PotentialMatchAlgorithm;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
@@ -66,7 +66,7 @@ public class PotentialMatchesServlet extends HttpServlet {
     ImmutableSet<UserNode> userNodes = createUserNodes();
     UserFriendsMap friendsMap = new UserFriendsMap(userNodes);
     
-    ImmutableSet<String> potentialMatches = potentialMatchAlgorithm.findPotentialMatchesForUser(userID, friendsMap);
+    ImmutableSet<String> potentialMatches = PotentialMatchAlgorithm.findPotentialMatchesForUser(userID, friendsMap);
   
     String nextPotentialMatchID = potentialMatches.size() > 0 ?
       potentialMatches.iterator().next() : "NO_POTENTIAL_MATCHES";
