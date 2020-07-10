@@ -36,6 +36,8 @@ import com.google.gson.Gson;
  * These entities are stored in Datastore with their user id as the 'kind'.
  *
  * <p>After the MVP, user entities will also contain Blobstore Keys for each image that the user has uploaded.
+ *
+ * <p>TODO(#15): Add Blobstore Keys for each image that the user uploads.
  */
 
 @WebServlet("/user-data")
