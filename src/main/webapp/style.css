@@ -20,8 +20,8 @@ h1 {
 }
 .home-page-content {
     background-color: #fbe8a6;
-    padding-left: 100px;
-    padding-right: 100px;
+    margin-left: 100px;
+    margin-right: 100px;
 }
 .button-background {
     background-color: #303c6c;
