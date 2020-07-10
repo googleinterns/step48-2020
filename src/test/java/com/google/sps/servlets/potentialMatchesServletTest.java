@@ -62,19 +62,21 @@ public class potentialMatchesServletTest {
   private static final String TEST_USER_1_ID = "5555";
   private static final String TEST_USER_1_EMAIL = "targaryen@gmail.com";
   private static final String TEST_USER_1_BIO = "dragons <3";
-  private static final String[] TEST_USER_1_FRIENDS_LIST = new String[]{"1234", "1776"};
 
   private static final String TEST_USER_2_NAME = "Eliza";
   private static final String TEST_USER_2_ID = "1776";
   private static final String TEST_USER_2_EMAIL = "elizaHam@gmail.com";
   private static final String TEST_USER_2_BIO = "hamilFam";
-  private static final String[] TEST_USER_2_FRIENDS_LIST = new String[]{"5555"};
 
   private static final String TEST_USER_3_NAME = "Rory";
   private static final String TEST_USER_3_ID = "1234";
   private static final String TEST_USER_3_EMAIL = "gilmore@gmail.com";
   private static final String TEST_USER_3_BIO = "Stars Hallow :)";
-  private static final String[] TEST_USER_3_FRIENDS_LIST = new String[]{"5555"};
+
+  private static final String TEST_USER_4_NAME = "Steve";
+  private static final String TEST_USER_4_ID = "1964";
+  private static final String TEST_USER_4_EMAIL = "capAmerica@gmail.com";
+  private static final String TEST_USER_4_BIO = "Avengers, assemble";
 
   private final LocalServiceTestHelper helper =
     new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
@@ -101,27 +103,36 @@ public class potentialMatchesServletTest {
     helper.tearDown();
   }
 
+  /**
+  * Tests scenario where there is only one user in datastore
+  *
+  * <p>Should result in no next potential match found
+  */
   @Test
   public void oneUserNoPotentialMatches() throws Exception {
-    when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_2_ID);
+    when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_1_ID);
 
     StringWriter stringWriter = new StringWriter();
     PrintWriter writer = new PrintWriter(stringWriter);
     when(mockResponse.getWriter()).thenReturn(writer);
 
     addTestUserEntityToDatastore(datastore, TEST_USER_1_ID, TEST_USER_1_NAME,
-      TEST_USER_1_EMAIL, TEST_USER_1_BIO, TEST_USER_1_FRIENDS_LIST);
-    addTestUserEntityToDatastore(datastore, TEST_USER_2_ID, TEST_USER_2_NAME,
-      TEST_USER_2_EMAIL, TEST_USER_2_BIO, TEST_USER_2_FRIENDS_LIST);
+      TEST_USER_1_EMAIL, TEST_USER_1_BIO, new String[]{});
     
     servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
     writer.flush();
 
     String expectedOutput = "NO_POTENTIAL_MATCHES";
+    String actualOutput = stringWriter.toString();
 
-    assertThat(expectedOutput.contains(stringWriter.toString()));
+    assertThat(actualOutput).isEqualTo(expectedOutput);
   }
 
+  /**
+  * Tests scenario with two users who are friends with each other
+  *
+  * <p>Should result in no next potential match found
+  */
   @Test
   public void twoUsersNoPotentialMatches() throws Exception {
     when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_2_ID);
@@ -130,17 +141,29 @@ public class potentialMatchesServletTest {
     PrintWriter writer = new PrintWriter(stringWriter);
     when(mockResponse.getWriter()).thenReturn(writer);
 
+    String[] testUser1FriendsList = new String[]{TEST_USER_2_ID};
+    String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
+
     addTestUserEntityToDatastore(datastore, TEST_USER_1_ID, TEST_USER_1_NAME,
-      TEST_USER_1_EMAIL, TEST_USER_1_BIO, TEST_USER_1_FRIENDS_LIST);
+      TEST_USER_1_EMAIL, TEST_USER_1_BIO, testUser1FriendsList);
+    addTestUserEntityToDatastore(datastore, TEST_USER_2_ID, TEST_USER_2_NAME,
+      TEST_USER_2_EMAIL, TEST_USER_2_BIO, testUser1FriendsList);
     
     servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
     writer.flush();
 
     String expectedOutput = "NO_POTENTIAL_MATCHES";
+    String actualOutput = stringWriter.toString();
 
-    assertThat(expectedOutput.contains(stringWriter.toString()));
+    assertThat(actualOutput).isEqualTo(expectedOutput);
   }
 
+  /**
+  * Tests scenario with three users where User 1 is friends with User 2 and User 3,
+  * and User 2 and 3 are only friends with User 1. 
+  *
+  * <p>Should return that User 2's next potential match is User 3.
+  */
   @Test
   public void threeUsersOneMutualConnectionTest() throws Exception {
     when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_2_ID);
@@ -149,19 +172,60 @@ public class potentialMatchesServletTest {
     PrintWriter writer = new PrintWriter(stringWriter);
     when(mockResponse.getWriter()).thenReturn(writer);
 
+    String[] testUser1FriendsList = new String[]{TEST_USER_2_ID, TEST_USER_3_ID};
+    String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
+    String[] testUser3FriendsList = new String[]{TEST_USER_1_ID};
+
     addTestUserEntityToDatastore(datastore, TEST_USER_1_ID, TEST_USER_1_NAME,
-      TEST_USER_1_EMAIL, TEST_USER_1_BIO, TEST_USER_1_FRIENDS_LIST);
+      TEST_USER_1_EMAIL, TEST_USER_1_BIO, testUser1FriendsList);
     addTestUserEntityToDatastore(datastore, TEST_USER_2_ID, TEST_USER_2_NAME,
-      TEST_USER_2_EMAIL, TEST_USER_2_BIO, TEST_USER_2_FRIENDS_LIST);
+      TEST_USER_2_EMAIL, TEST_USER_2_BIO, testUser2FriendsList);
     addTestUserEntityToDatastore(datastore, TEST_USER_3_ID, TEST_USER_3_NAME,
-      TEST_USER_3_EMAIL, TEST_USER_3_BIO, TEST_USER_3_FRIENDS_LIST);
+      TEST_USER_3_EMAIL, TEST_USER_3_BIO, testUser3FriendsList);
 
     servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
     writer.flush();
 
     String expectedOutput = TEST_USER_3_ID;
+    String actualOutput = stringWriter.toString();
 
-    assertThat(expectedOutput.contains(stringWriter.toString()));
+    assertThat(actualOutput).isEqualTo(expectedOutput);
+  }
+
+  /**
+  * Tests scenario with four users where User 1 is friends with User 2, 3, and 4.
+  * Users 2, 3, and 4 are only friends with User 1.
+  *
+  * <p>Should return that User 4's next potential match is either User 2 or 3.
+  */
+  @Test
+  public void fourUsersOneMutualConnectionTest() throws Exception {
+    when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_4_ID);
+
+    StringWriter stringWriter = new StringWriter();
+    PrintWriter writer = new PrintWriter(stringWriter);
+    when(mockResponse.getWriter()).thenReturn(writer);
+
+    String[] testUser1FriendsList = new String[]{TEST_USER_2_ID, TEST_USER_3_ID, TEST_USER_4_ID};
+    String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
+    String[] testUser3FriendsList = new String[]{TEST_USER_1_ID};
+    String[] testUser4FriendsList = new String[]{TEST_USER_1_ID};
+
+    addTestUserEntityToDatastore(datastore, TEST_USER_1_ID, TEST_USER_1_NAME,
+      TEST_USER_1_EMAIL, TEST_USER_1_BIO, testUser1FriendsList);
+    addTestUserEntityToDatastore(datastore, TEST_USER_2_ID, TEST_USER_2_NAME,
+      TEST_USER_2_EMAIL, TEST_USER_2_BIO, testUser2FriendsList);
+    addTestUserEntityToDatastore(datastore, TEST_USER_3_ID, TEST_USER_3_NAME,
+      TEST_USER_3_EMAIL, TEST_USER_3_BIO, testUser3FriendsList);
+    addTestUserEntityToDatastore(datastore, TEST_USER_4_ID, TEST_USER_4_NAME,
+      TEST_USER_4_EMAIL, TEST_USER_4_BIO, testUser4FriendsList);
+
+    servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
+    writer.flush();
+
+    String actualOutput = stringWriter.toString();
+
+    assertThat(actualOutput).isIn(Arrays.asList(TEST_USER_2_ID, TEST_USER_3_ID));
   }
 
   private void addTestUserEntityToDatastore(DatastoreService datastore, String userID, String name, String email, String bio, String[] friendsList) {
