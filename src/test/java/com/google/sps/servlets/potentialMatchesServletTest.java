@@ -15,28 +15,19 @@
 package com.google.sps.servlets;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 
-import java.util.Set;
 import java.util.Arrays;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableMap;
-import com.google.sps.data.friend_map.UserFriendsMap;
-import com.google.sps.data.friend_map.UserNode;
-import com.google.sps.data.potentialMatchAlgorithm;
 import com.google.sps.servlets.PotentialMatchesServlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.After;
 import org.junit.runner.RunWith;

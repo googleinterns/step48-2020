@@ -17,7 +17,6 @@ package com.google.sps.data;
 import java.util.Set;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import com.google.sps.data.friend_map.UserFriendsMap;
 import com.google.sps.data.friend_map.UserNode;
 
