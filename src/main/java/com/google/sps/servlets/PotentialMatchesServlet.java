@@ -56,7 +56,7 @@ public class PotentialMatchesServlet extends HttpServlet {
   *
   * <p>Currently is just loading all the possible matches and obtaining one of them.
   *
-  * <p>TODO(#19): Obtain potential match results from datastore instead of running the 
+  * <p>TODO(#21): Obtain potential match results from datastore instead of running the 
   * potential match finding methods repeatedly.
   *
   * @param userID The userID of the user who's potential match is being found
