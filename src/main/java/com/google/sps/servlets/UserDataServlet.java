@@ -66,12 +66,12 @@ public class UserDataServlet extends HttpServlet {
     else {
       // If a user entity was found (a single entity)
       // Get the user's information
-      userDataBuilder.put(USER_FOUND_PROPERTY, true);
-      userDataBuilder.put(USER_BIO_PROPERTY, (String) userEntity.getProperty(USER_BIO_PROPERTY));
-      userDataBuilder.put(USER_EMAIL_PROPERTY, userEntity.getProperty(USER_EMAIL_PROPERTY));
-      userDataBuilder.put(USER_FRIENDS_LIST_PROPERTY, (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY));
-      userDataBuilder.put(USER_ID_PROPERTY, userEntity.getProperty(USER_ID_PROPERTY));
-      userDataBuilder.put(USER_NAME_PROPERTY, userEntity.getProperty(USER_NAME_PROPERTY));
+      userDataBuilder.put(USER_FOUND_PROPERTY, true)
+          .put(USER_BIO_PROPERTY, (String) userEntity.getProperty(USER_BIO_PROPERTY))
+          .put(USER_EMAIL_PROPERTY, userEntity.getProperty(USER_EMAIL_PROPERTY))
+          .put(USER_FRIENDS_LIST_PROPERTY, (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY))
+          .put(USER_ID_PROPERTY, userEntity.getProperty(USER_ID_PROPERTY))
+          .put(USER_NAME_PROPERTY, userEntity.getProperty(USER_NAME_PROPERTY));
     }
 
     // Send the user's json data as the response
