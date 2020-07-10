@@ -33,6 +33,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
@@ -108,7 +109,8 @@ public final class UserDataServletTest {
         USER_FOUND_PROPERTY, false);
 
     // Check that the user wasn't found in datastore
-    assertThat(gson.toJson(expected)).isEqualTo(stringWriter.toString());
+    Map<String, Object> actual = gson.fromJson(stringWriter.toString(), Map.class);
+    assertThat(expected).containsEntry(USER_FOUND_PROPERTY, actual.get(USER_FOUND_PROPERTY));
   }
 
   /**
@@ -142,7 +144,9 @@ public final class UserDataServletTest {
     expected.put(USER_NAME_PROPERTY, TEST_USER_NAME);
 
     // Check that the user was found in Datastore
-    assertThat(gson.toJson(expected.build())).isEqualTo(stringWriter.toString());
+    Map<String, Object> actual = gson.fromJson(stringWriter.toString(), Map.class);
+    assertThat(expected.build()).containsEntry(USER_FOUND_PROPERTY, actual.get(USER_FOUND_PROPERTY));
+    assertThat(expected.build()).containsEntry(USER_ID_PROPERTY, actual.get(USER_ID_PROPERTY));
   }
 
   /**
