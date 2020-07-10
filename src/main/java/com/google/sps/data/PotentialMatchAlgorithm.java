@@ -56,10 +56,10 @@ public class PotentialMatchAlgorithm {
     ImmutableSet<String> potentialMatchesIDs;
     if (userFriendIDs != null) {
       potentialMatchesIDs = userFriendIDs
-      .stream()
-      .flatMap(friendID -> friendsMap.getUserFriendIDs(friendID).stream())
-      .filter(potentialMatchID -> !potentialMatchID.equals(userID) && !userFriendIDs.contains(potentialMatchID))
-      .collect(ImmutableSet.toImmutableSet());
+        .stream()
+        .flatMap(friendID -> friendsMap.getUserFriendIDs(friendID).stream())
+        .filter(potentialMatchID -> !potentialMatchID.equals(userID) && !userFriendIDs.contains(potentialMatchID))
+        .collect(ImmutableSet.toImmutableSet());
     } else {
       potentialMatchesIDs = ImmutableSet.of();
     }
