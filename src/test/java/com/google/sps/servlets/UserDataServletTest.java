@@ -104,13 +104,9 @@ public final class UserDataServletTest {
     servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
     writer.flush();
 
-    // Build the correct response output
-    ImmutableMap<String, Object> expected = ImmutableMap.of(
-        USER_FOUND_PROPERTY, false);
-
     // Check that the user wasn't found in datastore
     Map<String, Object> actual = gson.fromJson(stringWriter.toString(), Map.class);
-    assertThat(expected).containsEntry(USER_FOUND_PROPERTY, actual.get(USER_FOUND_PROPERTY));
+    assertThat(actual).containsEntry(USER_FOUND_PROPERTY, false);
   }
 
   /**
@@ -134,19 +130,10 @@ public final class UserDataServletTest {
     servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
     writer.flush();
 
-    // Build the correct response output
-    ImmutableMap.Builder<String, Object> expected = ImmutableMap.builder();
-    expected.put(USER_FOUND_PROPERTY, true);
-    expected.put(USER_BIO_PROPERTY, TEST_USER_BIO);
-    expected.put(USER_EMAIL_PROPERTY, TEST_USER_EMAIL);
-    expected.put(USER_FRIENDS_LIST_PROPERTY, Arrays.asList(TEST_USER_FRIENDS_LIST));
-    expected.put(USER_ID_PROPERTY, TEST_USER_ID);
-    expected.put(USER_NAME_PROPERTY, TEST_USER_NAME);
-
     // Check that the user was found in Datastore
     Map<String, Object> actual = gson.fromJson(stringWriter.toString(), Map.class);
-    assertThat(expected.build()).containsEntry(USER_FOUND_PROPERTY, actual.get(USER_FOUND_PROPERTY));
-    assertThat(expected.build()).containsEntry(USER_ID_PROPERTY, actual.get(USER_ID_PROPERTY));
+    assertThat(actual).containsEntry(USER_FOUND_PROPERTY, true);
+    assertThat(actual).containsEntry(USER_ID_PROPERTY, TEST_USER_ID);
   }
 
   /**
