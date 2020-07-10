@@ -54,12 +54,16 @@ public class potentialMatchAlgorithm {
   public static ImmutableSet<String> findPotentialMatchesForUser(String userID, UserFriendsMap friendsMap) {
     ImmutableSet<String> userFriendIDs = friendsMap.getUserFriendIDs(userID);
 
-    ImmutableSet<String> potentialMatchesIDs = userFriendIDs
+    ImmutableSet<String> potentialMatchesIDs;
+    if (userFriendIDs != null) {
+      potentialMatchesIDs = userFriendIDs
       .stream()
       .flatMap(friendID -> friendsMap.getUserFriendIDs(friendID).stream())
       .filter(potentialMatchID -> !potentialMatchID.equals(userID) && !userFriendIDs.contains(potentialMatchID))
       .collect(ImmutableSet.toImmutableSet());
-
+    } else {
+      potentialMatchesIDs = ImmutableSet.of();
+    }
     return potentialMatchesIDs;
   }
 }
