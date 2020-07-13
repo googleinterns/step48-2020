@@ -11,6 +11,21 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+ 
+// Function that is called onLoad of the body tag
+function initializeProfilePage() {
+  addIdToPostRequest();
+}
+ 
+function addIdToPostRequest() {
+  document.getElementById('id-input').value = getCurrentUser();
+}
+ 
+function getCurrentUser() {
+  const params = new URLSearchParams(window.location.search);
+  uid = params.get('id');
+  return uid;
+}
 
 function getCurrentUserId() {
   const params = new URLSearchParams(window.location.search);
