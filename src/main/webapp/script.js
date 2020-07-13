@@ -62,25 +62,18 @@ function displayPotentialMatchInfo(pmID) {
     let bio = userinfo.bio;
     let carouselContainer = document.getElementById("carousel-inner");
     let numPhotos = 5; //hard coded value for now, once blobstore works, this will be the amount of images the user has uploaded
-    for (var i = 0; i < numPhotos; i++) {
-      if (i === 0) {
-        let slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", true, name, bio);
-        carouselContainer.appendChild(slideshowElement);
-      }
-      else {
-        let slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", false, name, bio);
-        carouselContainer.appendChild(slideshowElement);
-     }
+    for (let i = 0; i < numPhotos; i++) {
+      let first = i === 0;
+      let slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", first, name, bio);
+      carouselContainer.appendChild(slideshowElement);
     }
     addIndicators(numPhotos);
   });
 }
 
 function deletePotentialMatchInfo() {
-  let carouselContainer = document.getElementById("carousel-inner");
-  let carouselIndicators = document.getElementById("carousel-indicators");
-  carouselContainer.innerHTML = '';
-  carouselIndicators.innerHTML = '';
+  document.getElementById("carousel-inner").innerHTML = '';
+  document.getElementById("carousel-indicators").innerHTML = '';
 }
 
 function createSlideshowElement(blobkey, isFirst, name, bio) {
@@ -119,38 +112,35 @@ function addIndicators(numPhotos) {
     }
 }
 
-function getNextPM() {
+function getNextPotentialMatch() {
   deletePotentialMatchInfo();
   let currentUser = getCurrentUserId();
   fetch('/potential-matches?userid=' + currentUser).then(response => response.text()).then((pmID) => { 
-      console.log("'"+ pmID + "'");
       let noMatch = "NO_POTENTIAL_MATCHES";
       if (pmID === noMatch) {
-        console.log("I am here");
         noPotentialMatch();
         return;
       }
-      document.getElementById("passBtn").disabled = false;
-      document.getElementById("friendBtn").disabled = false;
+      document.getElementById("pass-btn").disabled = false;
+      document.getElementById("friend-btn").disabled = false;
       displayPotentialMatchInfo(pmID);
   }); 
 }
 
 function noPotentialMatch() {
-  document.getElementById("passBtn").disabled = true;
-  document.getElementById("friendBtn").disabled = true;
+  document.getElementById("pass-btn").disabled = true;
+  document.getElementById("friend-btn").disabled = true;
   let noMatchImg = createSlideshowElement("images/nomatches.png", true, "", "");
   let carouselContainer = document.getElementById("carousel-inner");
   carouselContainer.appendChild(noMatchImg);
 }
 
-
 function matchButtonPressed() {
-  getNextPM();  
+  getNextPotentialMatch();  
 }
 
 function passButtonPressed() {
-  getNextPM();
+  getNextPotentialMatch();
 }
 
 function loadProfile() {
@@ -181,14 +171,7 @@ function changeImgPath(blobKey, id) {
 function createImgElement(imageURL) {
   const imgElement = document.createElement('img');
   imgElement.src = imageURL;
-  imgElement.setAttribute("height","800");
+  imgElement.setAttribute("height", "800");
   imgElement.setAttribute("width", "1100");
   return imgElement;
 }
-
-
-
-
-
-
-
