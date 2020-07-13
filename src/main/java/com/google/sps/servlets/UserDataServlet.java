@@ -125,13 +125,13 @@ public class UserDataServlet extends HttpServlet {
   }
 
   /** Wrap the doGet method for jUnit testing */
-  public void doGetWrapper(DatastoreService datastoreService, HttpServletRequest request, HttpServletResponse response) throws IOException {
+  void doGetWrapper(DatastoreService datastoreService, HttpServletRequest request, HttpServletResponse response) throws IOException {
     datastore = datastoreService;
     doGet(request, response);
   }
 
   /** Wrap the doPost method for jUnit testing */
-  public void doPostWrapper(DatastoreService datastoreService, HttpServletRequest request, HttpServletResponse response) throws IOException {
+  void doPostWrapper(DatastoreService datastoreService, HttpServletRequest request, HttpServletResponse response) throws IOException {
     datastore = datastoreService;
     doPost(request, response);
   }
