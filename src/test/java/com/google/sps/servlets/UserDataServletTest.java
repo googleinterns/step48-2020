@@ -217,8 +217,7 @@ public final class UserDataServletTest {
 
   /** Helper method to add a test user to the local datastore */
   private void addTestUserEntityToDatastore(DatastoreService datastore) {
-    //Entity userEntity = new Entity(TEST_USER_ID);
-    Entity userEntity = new Entity("User");
+    Entity userEntity = new Entity(USER_ENTITY);
     userEntity.setProperty(USER_ID_PROPERTY, TEST_USER_ID);
     userEntity.setProperty(USER_NAME_PROPERTY, TEST_USER_NAME);
     userEntity.setProperty(USER_EMAIL_PROPERTY, TEST_USER_EMAIL);
