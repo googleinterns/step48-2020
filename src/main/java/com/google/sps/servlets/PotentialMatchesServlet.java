@@ -84,7 +84,7 @@ public class PotentialMatchesServlet extends HttpServlet {
   private ImmutableSet<UserNode> createUserNodes() {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(new Query(USER_ENTITY));
-    List<Entity> entityResults = results.asList(FetchOptions.Builder.withLimit(Integer.MAX_VALUE));
+    List<Entity> entityResults = results.asList(FetchOptions.Builder.withDefaults());
 
     ImmutableSet.Builder<UserNode> builder = ImmutableSet.builder();
     for (Entity userEntity: entityResults) {
