@@ -44,6 +44,7 @@ import com.google.sps.servlets.PotentialMatchesServlet;
 public class PotentialMatchesServletTest {
   private static final String NO_POTENTIAL_MATCH_RESULT = "NO_POTENTIAL_MATCHES";
   private static final String MATCHINFO_NEXT_MATCH_ID_FIELD = "nextPotentialMatchID";
+  private static final String USER_ID_REQUEST_PARAM = "userid";
 
   private static final String USER_ENTITY = "User";
   private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
@@ -111,7 +112,7 @@ public class PotentialMatchesServletTest {
   */
   @Test
   public void oneUserNoPotentialMatches() throws Exception {
-    when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_1_ID);
+    when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_1_ID);
     
     addTestUserEntityToDatastore(datastore, TEST_USER_1_ID, TEST_USER_1_NAME,
       TEST_USER_1_EMAIL, TEST_USER_1_BIO, new String[]{});
@@ -132,7 +133,7 @@ public class PotentialMatchesServletTest {
   */
   @Test
   public void twoUsersNoPotentialMatches() throws Exception {
-    when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_2_ID);
+    when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_2_ID);
 
     String[] testUser1FriendsList = new String[]{TEST_USER_2_ID};
     String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
@@ -159,7 +160,7 @@ public class PotentialMatchesServletTest {
   */
   @Test
   public void threeUsersOneMutualConnectionTest() throws Exception {
-    when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_2_ID);
+    when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_2_ID);
 
     String[] testUser1FriendsList = new String[]{TEST_USER_2_ID, TEST_USER_3_ID};
     String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
@@ -189,7 +190,7 @@ public class PotentialMatchesServletTest {
   */
   @Test
   public void fourUsersOneMutualConnectionTest() throws Exception {
-    when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_4_ID);
+    when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_4_ID);
 
     String[] testUser1FriendsList = new String[]{TEST_USER_2_ID, TEST_USER_3_ID, TEST_USER_4_ID};
     String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
