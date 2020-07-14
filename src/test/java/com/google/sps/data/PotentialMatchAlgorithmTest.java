@@ -43,19 +43,19 @@ public class PotentialMatchAlgorithmTest {
   * <p>Should result in a map with a single key that maps to an empty set.
   */
   @Test
-  public void oneUserNoFriendsPMTest() {
+  public void oneUserNoFriendsPM() {
     UserNode userA = new UserNode(USER_A_ID, ImmutableSet.of());
 
     Set<UserNode> oneUserNodeSet = ImmutableSet.of(userA);
     UserFriendsMap resultingFriendsMap = new UserFriendsMap(oneUserNodeSet);
-    ImmutableMap<String, ImmutableSet<String>> resultingPotentialMatches = 
+    ImmutableMap<String, ImmutableSet<String>> potentialMatches = 
       PotentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
     
-    ImmutableMap<String, ImmutableSet<String>> expectedMap = ImmutableMap.of(
+    ImmutableMap<String, ImmutableSet<String>> expectedPotentialMatches = ImmutableMap.of(
       USER_A_ID, ImmutableSet.of()
     );
 
-    assertThat(resultingPotentialMatches).containsExactlyEntriesIn(expectedMap);
+    assertThat(potentialMatches).containsExactlyEntriesIn(expectedPotentialMatches);
   }
 
   /**
@@ -65,24 +65,24 @@ public class PotentialMatchAlgorithmTest {
   *<p>Should result in a map with three keys (User A, B, & C) that all map to empty sets.
   */
   @Test
-  public void threeUsersOneFriendshipPMTest() {
+  public void threeUsersOneFriendshipPM() {
     UserNode userA = new UserNode(USER_A_ID, ImmutableSet.of());
     UserNode userB = new UserNode(USER_B_ID, ImmutableSet.of(USER_C_ID));
     UserNode userC = new UserNode(USER_C_ID, ImmutableSet.of(USER_B_ID));
 
     Set<UserNode> threeUserNodeSet = ImmutableSet.of(userA, userB, userC);
     UserFriendsMap resultingFriendsMap = new UserFriendsMap(threeUserNodeSet);
-    ImmutableMap<String, ImmutableSet<String>> resultingPotentialMatches = 
+    ImmutableMap<String, ImmutableSet<String>> potentialMatches = 
       PotentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
 
-    ImmutableMap<String, ImmutableSet<String>> expectedMap =
+    ImmutableMap<String, ImmutableSet<String>> expectedPotentialMatches =
       ImmutableMap.of(
         USER_A_ID, ImmutableSet.of(),
         USER_B_ID, ImmutableSet.of(),
         USER_C_ID, ImmutableSet.of()
       );
 
-    assertThat(resultingPotentialMatches).containsExactlyEntriesIn(expectedMap);
+    assertThat(potentialMatches).containsExactlyEntriesIn(expectedPotentialMatches);
   }
 
   /**
@@ -97,24 +97,24 @@ public class PotentialMatchAlgorithmTest {
   * </ul>
   */
   @Test
-  public void threeUsersTwoFriendshipPMTest() {
+  public void threeUsersTwoFriendshipPM() {
     UserNode userA = new UserNode(USER_A_ID, ImmutableSet.of(USER_B_ID, USER_C_ID));
     UserNode userB = new UserNode(USER_B_ID, ImmutableSet.of(USER_A_ID));
     UserNode userC = new UserNode(USER_C_ID, ImmutableSet.of(USER_A_ID));
     
     Set<UserNode> threeUserNodeSet = ImmutableSet.of(userA, userB, userC);
     UserFriendsMap resultingFriendsMap = new UserFriendsMap(threeUserNodeSet);
-    ImmutableMap<String, ImmutableSet<String>> resultingPotentialMatches = 
+    ImmutableMap<String, ImmutableSet<String>> potentialMatches = 
       PotentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
 
-    ImmutableMap<String, ImmutableSet<String>> expectedMap =
+    ImmutableMap<String, ImmutableSet<String>> expectedPotentialMatches =
       ImmutableMap.of(
         USER_A_ID, ImmutableSet.of(),
         USER_B_ID, ImmutableSet.of(USER_C_ID),
         USER_C_ID, ImmutableSet.of(USER_B_ID)
       );
 
-    assertThat(resultingPotentialMatches).containsExactlyEntriesIn(expectedMap);
+    assertThat(potentialMatches).containsExactlyEntriesIn(expectedPotentialMatches);
   }
 
   /**
@@ -131,7 +131,7 @@ public class PotentialMatchAlgorithmTest {
   * </ul> 
   */
   @Test
-  public void fiveUsersSeveralConnectionsTest() {
+  public void fiveUsersSeveralConnections() {
     UserNode userA = new UserNode(USER_A_ID, ImmutableSet.of(USER_B_ID, USER_C_ID, USER_D_ID));
     UserNode userB = new UserNode(USER_B_ID, ImmutableSet.of(USER_A_ID));
     UserNode userC = new UserNode(USER_C_ID, ImmutableSet.of(USER_A_ID));
@@ -140,10 +140,10 @@ public class PotentialMatchAlgorithmTest {
 
     Set<UserNode> fiveUserNodeSet = ImmutableSet.of(userA, userB, userC, userD, userE);
     UserFriendsMap resultingFriendsMap = new UserFriendsMap(fiveUserNodeSet);
-    ImmutableMap<String, ImmutableSet<String>> resultingPotentialMatches = 
+    ImmutableMap<String, ImmutableSet<String>> potentialMatches = 
       PotentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
 
-    ImmutableMap<String, ImmutableSet<String>> expectedMap =
+    ImmutableMap<String, ImmutableSet<String>> expectedPotentialMatches =
       ImmutableMap.of(
         USER_A_ID, ImmutableSet.of(USER_E_ID),
         USER_B_ID, ImmutableSet.of(USER_C_ID, USER_D_ID),
@@ -152,7 +152,7 @@ public class PotentialMatchAlgorithmTest {
         USER_E_ID, ImmutableSet.of(USER_A_ID)
       );
 
-    assertThat(resultingPotentialMatches).containsExactlyEntriesIn(expectedMap);
+    assertThat(potentialMatches).containsExactlyEntriesIn(expectedPotentialMatches);
   }
 
   /**
@@ -162,24 +162,24 @@ public class PotentialMatchAlgorithmTest {
   * <p>Should result in a map with three keys (Users A, B, and C) that all map to empty sets.
   */
   @Test
-  public void threeUsersAllConnectedTest() {
+  public void threeUsersAllConnected() {
     UserNode userA = new UserNode(USER_A_ID, ImmutableSet.of(USER_B_ID, USER_C_ID));
     UserNode userB = new UserNode(USER_B_ID, ImmutableSet.of(USER_A_ID, USER_C_ID));
     UserNode userC = new UserNode(USER_C_ID, ImmutableSet.of(USER_A_ID, USER_B_ID));
 
     Set<UserNode> threeUserNodeSet = ImmutableSet.of(userA, userB, userC);
     UserFriendsMap resultingFriendsMap = new UserFriendsMap(threeUserNodeSet);
-    ImmutableMap<String, ImmutableSet<String>> resultingPotentialMatches = 
+    ImmutableMap<String, ImmutableSet<String>> potentialMatches = 
       PotentialMatchAlgorithm.findAllPotentialMatches(resultingFriendsMap);
 
-    ImmutableMap<String, ImmutableSet<String>> expectedMap =
+    ImmutableMap<String, ImmutableSet<String>> expectedPotentialMatches =
       ImmutableMap.of(
         USER_A_ID, ImmutableSet.of(),
         USER_B_ID, ImmutableSet.of(),
         USER_C_ID, ImmutableSet.of()
       );
     
-    assertThat(resultingPotentialMatches).containsExactlyEntriesIn(expectedMap);
+    assertThat(potentialMatches).containsExactlyEntriesIn(expectedPotentialMatches);
   }
 }
 
