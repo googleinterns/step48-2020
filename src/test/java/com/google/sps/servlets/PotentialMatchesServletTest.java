@@ -83,13 +83,20 @@ public class PotentialMatchesServletTest {
 
   private PotentialMatchesServlet servletUnderTest;
   private DatastoreService datastore;
+  private StringWriter responseWriter;
  
   @Before
-  public void setUp() {
+  public void setUp() throws IOException {
     MockitoAnnotations.initMocks(this);
+
     helper.setUp();
+
     servletUnderTest = new PotentialMatchesServlet();
     datastore = DatastoreServiceFactory.getDatastoreService();
+
+    responseWriter = new StringWriter();
+    PrintWriter writer = new PrintWriter(responseWriter, true);
+    when(mockResponse.getWriter()).thenReturn(writer);
   }
 
   @After
@@ -105,18 +112,13 @@ public class PotentialMatchesServletTest {
   @Test
   public void oneUserNoPotentialMatches() throws Exception {
     when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_1_ID);
-
-    StringWriter stringWriter = new StringWriter();
-    PrintWriter writer = new PrintWriter(stringWriter);
-    when(mockResponse.getWriter()).thenReturn(writer);
-
+    
     addTestUserEntityToDatastore(datastore, TEST_USER_1_ID, TEST_USER_1_NAME,
       TEST_USER_1_EMAIL, TEST_USER_1_BIO, new String[]{});
     
     servletUnderTest.doGet(mockRequest, mockResponse);
-    writer.flush();
 
-    String result = stringWriter.toString();
+    String result = responseWriter.toString();
     JSONObject jsonResponse = new JSONObject(result);
     String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
 
@@ -132,10 +134,6 @@ public class PotentialMatchesServletTest {
   public void twoUsersNoPotentialMatches() throws Exception {
     when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_2_ID);
 
-    StringWriter stringWriter = new StringWriter();
-    PrintWriter writer = new PrintWriter(stringWriter);
-    when(mockResponse.getWriter()).thenReturn(writer);
-
     String[] testUser1FriendsList = new String[]{TEST_USER_2_ID};
     String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
 
@@ -145,9 +143,8 @@ public class PotentialMatchesServletTest {
       TEST_USER_2_EMAIL, TEST_USER_2_BIO, testUser1FriendsList);
     
     servletUnderTest.doGet(mockRequest, mockResponse);
-    writer.flush();
 
-    String result = stringWriter.toString();
+    String result = responseWriter.toString();
     JSONObject jsonResponse = new JSONObject(result);
     String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
 
@@ -164,10 +161,6 @@ public class PotentialMatchesServletTest {
   public void threeUsersOneMutualConnectionTest() throws Exception {
     when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_2_ID);
 
-    StringWriter stringWriter = new StringWriter();
-    PrintWriter writer = new PrintWriter(stringWriter);
-    when(mockResponse.getWriter()).thenReturn(writer);
-
     String[] testUser1FriendsList = new String[]{TEST_USER_2_ID, TEST_USER_3_ID};
     String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
     String[] testUser3FriendsList = new String[]{TEST_USER_1_ID};
@@ -180,9 +173,8 @@ public class PotentialMatchesServletTest {
       TEST_USER_3_EMAIL, TEST_USER_3_BIO, testUser3FriendsList);
 
     servletUnderTest.doGet(mockRequest, mockResponse);
-    writer.flush();
     
-    String result = stringWriter.toString();
+    String result = responseWriter.toString();
     JSONObject jsonResponse = new JSONObject(result);
     String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
 
@@ -199,10 +191,6 @@ public class PotentialMatchesServletTest {
   public void fourUsersOneMutualConnectionTest() throws Exception {
     when(mockRequest.getParameter("userid")).thenReturn(TEST_USER_4_ID);
 
-    StringWriter stringWriter = new StringWriter();
-    PrintWriter writer = new PrintWriter(stringWriter);
-    when(mockResponse.getWriter()).thenReturn(writer);
-
     String[] testUser1FriendsList = new String[]{TEST_USER_2_ID, TEST_USER_3_ID, TEST_USER_4_ID};
     String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
     String[] testUser3FriendsList = new String[]{TEST_USER_1_ID};
@@ -218,9 +206,8 @@ public class PotentialMatchesServletTest {
       TEST_USER_4_EMAIL, TEST_USER_4_BIO, testUser4FriendsList);
 
     servletUnderTest.doGet(mockRequest, mockResponse);
-    writer.flush();
 
-    String result = stringWriter.toString();
+    String result = responseWriter.toString();
     JSONObject jsonResponse = new JSONObject(result);
     String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
 
