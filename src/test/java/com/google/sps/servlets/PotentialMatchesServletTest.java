@@ -116,13 +116,11 @@ public class PotentialMatchesServletTest {
     servletUnderTest.doGet(mockRequest, mockResponse);
     writer.flush();
 
-    String expectedOutput = NO_POTENTIAL_MATCH_RESULT;
-
     String result = stringWriter.toString();
     JSONObject jsonResponse = new JSONObject(result);
     String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
 
-    assertThat(actualOutput).isEqualTo(expectedOutput);
+    assertThat(actualOutput).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
   }
 
   /**
@@ -149,13 +147,11 @@ public class PotentialMatchesServletTest {
     servletUnderTest.doGet(mockRequest, mockResponse);
     writer.flush();
 
-    String expectedOutput = NO_POTENTIAL_MATCH_RESULT;
-
     String result = stringWriter.toString();
     JSONObject jsonResponse = new JSONObject(result);
     String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
 
-    assertThat(actualOutput).isEqualTo(expectedOutput);
+    assertThat(actualOutput).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
   }
 
   /**
@@ -185,14 +181,12 @@ public class PotentialMatchesServletTest {
 
     servletUnderTest.doGet(mockRequest, mockResponse);
     writer.flush();
-
-    String expectedOutput = TEST_USER_3_ID;
     
     String result = stringWriter.toString();
     JSONObject jsonResponse = new JSONObject(result);
     String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
 
-    assertThat(actualOutput).isEqualTo(expectedOutput);
+    assertThat(actualOutput).isEqualTo(TEST_USER_3_ID);
   }
 
   /**
