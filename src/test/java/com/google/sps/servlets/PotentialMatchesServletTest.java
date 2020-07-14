@@ -18,6 +18,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.json.JSONObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -42,6 +43,7 @@ import com.google.sps.servlets.PotentialMatchesServlet;
 @RunWith(JUnit4.class)
 public class PotentialMatchesServletTest {
   private static final String NO_POTENTIAL_MATCH_RESULT = "NO_POTENTIAL_MATCHES";
+  private static final String MATCHINFO_NEXT_MATCH_ID_FIELD = "nextPotentialMatchID";
 
   private static final String USER_ENTITY = "User";
   private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
@@ -115,7 +117,10 @@ public class PotentialMatchesServletTest {
     writer.flush();
 
     String expectedOutput = NO_POTENTIAL_MATCH_RESULT;
-    String actualOutput = stringWriter.toString();
+
+    String result = stringWriter.toString();
+    JSONObject jsonResponse = new JSONObject(result);
+    String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
 
     assertThat(actualOutput).isEqualTo(expectedOutput);
   }
@@ -145,7 +150,10 @@ public class PotentialMatchesServletTest {
     writer.flush();
 
     String expectedOutput = NO_POTENTIAL_MATCH_RESULT;
-    String actualOutput = stringWriter.toString();
+
+    String result = stringWriter.toString();
+    JSONObject jsonResponse = new JSONObject(result);
+    String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
 
     assertThat(actualOutput).isEqualTo(expectedOutput);
   }
@@ -179,7 +187,10 @@ public class PotentialMatchesServletTest {
     writer.flush();
 
     String expectedOutput = TEST_USER_3_ID;
-    String actualOutput = stringWriter.toString();
+    
+    String result = stringWriter.toString();
+    JSONObject jsonResponse = new JSONObject(result);
+    String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
 
     assertThat(actualOutput).isEqualTo(expectedOutput);
   }
@@ -215,7 +226,9 @@ public class PotentialMatchesServletTest {
     servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
     writer.flush();
 
-    String actualOutput = stringWriter.toString();
+    String result = stringWriter.toString();
+    JSONObject jsonResponse = new JSONObject(result);
+    String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
 
     assertThat(actualOutput).isIn(Arrays.asList(TEST_USER_2_ID, TEST_USER_3_ID));
   }
