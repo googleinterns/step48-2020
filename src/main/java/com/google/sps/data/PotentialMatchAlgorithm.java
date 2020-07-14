@@ -14,6 +14,7 @@
 
 package com.google.sps.data;
 
+import java.util.function.Function;
 import java.util.Set;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableMap;
@@ -38,7 +39,7 @@ public class PotentialMatchAlgorithm {
 
     ImmutableMap<String, ImmutableSet<String>> allPotentialMatches = allUserIDs
       .stream()
-      .collect(ImmutableMap.toImmutableMap(id -> id, id -> findPotentialMatchesForUser(id, friendsMap)));
+      .collect(ImmutableMap.toImmutableMap(Function.identity(), id -> findPotentialMatchesForUser(id, friendsMap)));
 
     return allPotentialMatches;
   }
@@ -53,16 +54,13 @@ public class PotentialMatchAlgorithm {
   public static ImmutableSet<String> findPotentialMatchesForUser(String userID, UserFriendsMap friendsMap) {
     ImmutableSet<String> userFriendIDs = friendsMap.getUserFriendIDs(userID);
 
-    ImmutableSet<String> potentialMatchesIDs;
-    if (userFriendIDs != null) {
-      potentialMatchesIDs = userFriendIDs
-        .stream()
-        .flatMap(friendID -> friendsMap.getUserFriendIDs(friendID).stream())
-        .filter(potentialMatchID -> !potentialMatchID.equals(userID) && !userFriendIDs.contains(potentialMatchID))
-        .collect(ImmutableSet.toImmutableSet());
-    } else {
-      potentialMatchesIDs = ImmutableSet.of();
-    }
+    ImmutableSet<String> potentialMatchesIDs = userFriendIDs
+      .stream()
+      .flatMap(friendID -> friendsMap.getUserFriendIDs(friendID).stream())
+      .filter(potentialMatchID -> !potentialMatchID.equals(userID))
+      .filter(potentialMatchID -> !userFriendIDs.contains(potentialMatchID))
+      .collect(ImmutableSet.toImmutableSet());
+
     return potentialMatchesIDs;
   }
 }

@@ -54,7 +54,10 @@ public class UserFriendsMap {
   }
 
   public ImmutableSet<String> getUserFriendIDs(String currentUser) {
-    return friendMap.get(currentUser);
+    if (friendMap.containsKey(currentUser)) {
+      return friendMap.get(currentUser);
+    }
+    return ImmutableSet.of();
   }
 }
 
