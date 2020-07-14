@@ -113,7 +113,7 @@ public class PotentialMatchesServletTest {
     addTestUserEntityToDatastore(datastore, TEST_USER_1_ID, TEST_USER_1_NAME,
       TEST_USER_1_EMAIL, TEST_USER_1_BIO, new String[]{});
     
-    servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
+    servletUnderTest.doGet(mockRequest, mockResponse);
     writer.flush();
 
     String expectedOutput = NO_POTENTIAL_MATCH_RESULT;
@@ -146,7 +146,7 @@ public class PotentialMatchesServletTest {
     addTestUserEntityToDatastore(datastore, TEST_USER_2_ID, TEST_USER_2_NAME,
       TEST_USER_2_EMAIL, TEST_USER_2_BIO, testUser1FriendsList);
     
-    servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
+    servletUnderTest.doGet(mockRequest, mockResponse);
     writer.flush();
 
     String expectedOutput = NO_POTENTIAL_MATCH_RESULT;
@@ -183,7 +183,7 @@ public class PotentialMatchesServletTest {
     addTestUserEntityToDatastore(datastore, TEST_USER_3_ID, TEST_USER_3_NAME,
       TEST_USER_3_EMAIL, TEST_USER_3_BIO, testUser3FriendsList);
 
-    servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
+    servletUnderTest.doGet(mockRequest, mockResponse);
     writer.flush();
 
     String expectedOutput = TEST_USER_3_ID;
@@ -223,7 +223,7 @@ public class PotentialMatchesServletTest {
     addTestUserEntityToDatastore(datastore, TEST_USER_4_ID, TEST_USER_4_NAME,
       TEST_USER_4_EMAIL, TEST_USER_4_BIO, testUser4FriendsList);
 
-    servletUnderTest.doGetWrapper(datastore, mockRequest, mockResponse);
+    servletUnderTest.doGet(mockRequest, mockResponse);
     writer.flush();
 
     String result = stringWriter.toString();

@@ -107,11 +107,5 @@ public class PotentialMatchesServlet extends HttpServlet {
     
     return allUserNodes;
   }
-
-/** Wrap the doGet method for jUnit testing */
-  public void doGetWrapper(DatastoreService datastoreService, HttpServletRequest request, HttpServletResponse response) throws IOException {
-    DatastoreService datastore = datastoreService;
-    doGet(request, response);
-  }
 }
 
