@@ -63,8 +63,12 @@ function displayPotentialMatchInfo(pmID) {
     let carouselContainer = document.getElementById("carousel-inner");
     let numPhotos = 5; //hard coded value for now, once blobstore works, this will be the amount of images the user has uploaded
     for (let i = 0; i < numPhotos; i++) {
-      let first = i === 0;
-      let slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", first, name, bio);
+      if (i === 0) {
+        let slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item active", name, bio);
+      }
+      else {
+        let slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item", name, bio);
+      }
       carouselContainer.appendChild(slideshowElement);
     }
     addIndicators(numPhotos);
@@ -76,22 +80,17 @@ function deletePotentialMatchInfo() {
   document.getElementById("carousel-indicators").innerHTML = '';
 }
 
-function createSlideshowElement(blobkey, isFirst, name, bio) {
+function createSlideshowElement(blobkey, className, name, bio) {
   var slideshowImage = document.createElement("div"); 
-  if (isFirst) {
-    slideshowImage.className = "carousel-item active";
-  }
-  else {
-    slideshowImage.className = "carousel-item";
-  }
+  slideshowImage.className = className;
   slideshowImage.appendChild(createImgElement(blobkey));
   var caption = document.createElement("div");
   caption.className = "carousel-caption";
-  var header = document.createElement("H3");
+  var header = document.createElement("h3");
   var name = document.createTextNode(name); 
   header.appendChild(name);
   caption.appendChild(header);
-  var para = document.createElement("P");
+  var para = document.createElement("p");
   var bio = document.createTextNode(bio);
   para.appendChild(bio);
   caption.appendChild(para);
@@ -100,16 +99,24 @@ function createSlideshowElement(blobkey, isFirst, name, bio) {
 }
 
 function addIndicators(numPhotos) {
-    let indicators = document.getElementById('carousel-indicators');
-    for (var i = 0; i < numPhotos; i++) {
-      var singleIndicator = document.createElement("LI");
-      singleIndicator.setAttribute("data-target", "#feed");
-      singleIndicator.setAttribute("data-slide-to", i);
-      if (i === 0) {
-        singleIndicator.className = "active";
-      }
-      indicators.appendChild(singleIndicator);
+  let indicators = document.getElementById('carousel-indicators');
+  for (let i = 0; i < numPhotos; i++) {
+    if (i === 0) {
+      let indicator = createIndicator(i, "active");
     }
+    else {
+      let indicator = createIndicator(i, "");
+    }
+    indicators.appendChild(indicator);
+  }
+}
+
+function createIndicator(dataSlideNumber, className) {
+  var singleIndicator = document.createElement("li");
+  singleIndicator.setAttribute("data-target", "#feed");
+  singleIndicator.setAttribute("data-slide-to", dataSlideNumber);
+  singleIndicator.className = className;
+  return singleIndicator;
 }
 
 function getNextPotentialMatch() {
@@ -130,16 +137,18 @@ function getNextPotentialMatch() {
 function noPotentialMatch() {
   document.getElementById("pass-btn").disabled = true;
   document.getElementById("friend-btn").disabled = true;
-  let noMatchImg = createSlideshowElement("images/nomatches.png", true, "", "");
+  let noMatchImg = createSlideshowElement("images/nomatches.png", "carousel-item active", "", "");
   let carouselContainer = document.getElementById("carousel-inner");
   carouselContainer.appendChild(noMatchImg);
 }
 
 function matchButtonPressed() {
+  // TODO: send match info to matching servlet
   getNextPotentialMatch();  
 }
 
 function passButtonPressed() {
+  // TODO: send pass info to matching servlet
   getNextPotentialMatch();
 }
 
