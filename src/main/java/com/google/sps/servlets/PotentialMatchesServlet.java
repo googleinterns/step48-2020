@@ -21,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.gson.Gson;
 import com.google.common.collect.ImmutableSet;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -31,6 +32,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.sps.data.friend_map.UserNode;
 import com.google.sps.data.friend_map.UserFriendsMap;
 import com.google.sps.data.PotentialMatchAlgorithm;
+import com.google.sps.data.MatchInformation;
 
 /**
 *  Handles requests for getting the next potential match for a user's feed page.
@@ -48,8 +50,12 @@ public class PotentialMatchesServlet extends HttpServlet {
     
     String nextPotentialMatchID = loadUserPotentialMatch(currUserID);
 
-    response.setContentType("text/html");
-    response.getWriter().print(nextPotentialMatchID);
+    MatchInformation matchInfo = new MatchInformation(nextPotentialMatchID);
+    Gson gson = new Gson();
+    String json = gson.toJson(matchInfo);
+
+    response.setContentType("application/json");
+    response.getWriter().print(json);
   }
 
   /**
