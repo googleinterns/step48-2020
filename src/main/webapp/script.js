@@ -122,15 +122,15 @@ function createIndicator(dataSlideNumber, className) {
 function getNextPotentialMatch() {
   deletePotentialMatchInfo();
   let currentUser = getCurrentUserId();
-  fetch('/potential-matches?userid=' + currentUser).then(response => response.text()).then((pmID) => { 
+  fetch('/potential-matches?userid=' + currentUser).then(response => response.json()).then((pmID) => { 
       let noMatch = "NO_POTENTIAL_MATCHES";
-      if (pmID === noMatch) {
+      if (pmID.nextPotentialMatchID === noMatch) {
         noPotentialMatch();
         return;
       }
       document.getElementById("pass-btn").disabled = false;
       document.getElementById("friend-btn").disabled = false;
-      displayPotentialMatchInfo(pmID);
+      displayPotentialMatchInfo(pmID.nextPotentialMatchID);
   }); 
 }
 
