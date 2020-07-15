@@ -111,17 +111,11 @@ public class PotentialMatchesServletTest {
   * <p>Should result in no next potential match found
   */
   @Test
-  public void oneUserNoPotentialMatches() throws Exception {
-    when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_1_ID);
-    
+  public void oneUserNoPotentialMatches() throws Exception {    
     addTestUserEntityToDatastore(datastore, TEST_USER_1_ID, TEST_USER_1_NAME,
       TEST_USER_1_EMAIL, TEST_USER_1_BIO, new String[]{});
     
-    servletUnderTest.doGet(mockRequest, mockResponse);
-
-    String result = responseWriter.toString();
-    JSONObject jsonResponse = new JSONObject(result);
-    String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
+    String actualOutput = execute(TEST_USER_1_ID);
 
     assertThat(actualOutput).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
   }
@@ -133,8 +127,6 @@ public class PotentialMatchesServletTest {
   */
   @Test
   public void twoUsersNoPotentialMatches() throws Exception {
-    when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_2_ID);
-
     String[] testUser1FriendsList = new String[]{TEST_USER_2_ID};
     String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
 
@@ -143,11 +135,7 @@ public class PotentialMatchesServletTest {
     addTestUserEntityToDatastore(datastore, TEST_USER_2_ID, TEST_USER_2_NAME,
       TEST_USER_2_EMAIL, TEST_USER_2_BIO, testUser1FriendsList);
     
-    servletUnderTest.doGet(mockRequest, mockResponse);
-
-    String result = responseWriter.toString();
-    JSONObject jsonResponse = new JSONObject(result);
-    String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
+    String actualOutput = execute(TEST_USER_2_ID);
 
     assertThat(actualOutput).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
   }
@@ -160,8 +148,6 @@ public class PotentialMatchesServletTest {
   */
   @Test
   public void threeUsersOneMutualConnectionTest() throws Exception {
-    when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_2_ID);
-
     String[] testUser1FriendsList = new String[]{TEST_USER_2_ID, TEST_USER_3_ID};
     String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
     String[] testUser3FriendsList = new String[]{TEST_USER_1_ID};
@@ -172,12 +158,8 @@ public class PotentialMatchesServletTest {
       TEST_USER_2_EMAIL, TEST_USER_2_BIO, testUser2FriendsList);
     addTestUserEntityToDatastore(datastore, TEST_USER_3_ID, TEST_USER_3_NAME,
       TEST_USER_3_EMAIL, TEST_USER_3_BIO, testUser3FriendsList);
-
-    servletUnderTest.doGet(mockRequest, mockResponse);
     
-    String result = responseWriter.toString();
-    JSONObject jsonResponse = new JSONObject(result);
-    String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
+    String actualOutput = execute(TEST_USER_2_ID);
 
     assertThat(actualOutput).isEqualTo(TEST_USER_3_ID);
   }
@@ -190,8 +172,6 @@ public class PotentialMatchesServletTest {
   */
   @Test
   public void fourUsersOneMutualConnectionTest() throws Exception {
-    when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_4_ID);
-
     String[] testUser1FriendsList = new String[]{TEST_USER_2_ID, TEST_USER_3_ID, TEST_USER_4_ID};
     String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
     String[] testUser3FriendsList = new String[]{TEST_USER_1_ID};
@@ -206,13 +186,27 @@ public class PotentialMatchesServletTest {
     addTestUserEntityToDatastore(datastore, TEST_USER_4_ID, TEST_USER_4_NAME,
       TEST_USER_4_EMAIL, TEST_USER_4_BIO, testUser4FriendsList);
 
-    servletUnderTest.doGet(mockRequest, mockResponse);
-
-    String result = responseWriter.toString();
-    JSONObject jsonResponse = new JSONObject(result);
-    String actualOutput = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
+    String actualOutput = execute(TEST_USER_4_ID);
 
     assertThat(actualOutput).isIn(Arrays.asList(TEST_USER_2_ID, TEST_USER_3_ID));
+  }
+
+  /**
+  * Method that calls on the PotentialMatchesServlet and returns the ID of the next
+  * potential match for the specified user
+  *
+  * @param userIDToFetch The ID of the user whose next potential match is being found
+  */
+  private String execute(String userIDToFetch) throws IOException{
+    when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(userIDToFetch);
+
+    servletUnderTest.doGet(mockRequest, mockResponse);
+    
+    String result = responseWriter.toString();
+    JSONObject jsonResponse = new JSONObject(result);
+    String output = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
+
+    return output;
   }
 
   private void addTestUserEntityToDatastore(DatastoreService datastore, String userID, String name, String email, String bio, String[] friendsList) {
