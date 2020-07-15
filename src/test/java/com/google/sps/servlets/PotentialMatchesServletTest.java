@@ -111,7 +111,7 @@ public class PotentialMatchesServletTest {
   * <p>Should result in no next potential match found
   */
   @Test
-  public void oneUserNoPotentialMatches() throws Exception {    
+  public void oneUserNoMatches() throws Exception {    
     addTestUserEntityToDatastore(datastore, TEST_USER_1_ID, TEST_USER_1_NAME,
       TEST_USER_1_EMAIL, TEST_USER_1_BIO, new String[]{});
     
@@ -126,7 +126,7 @@ public class PotentialMatchesServletTest {
   * <p>Should result in no next potential match found
   */
   @Test
-  public void twoUsersNoPotentialMatches() throws Exception {
+  public void twoUsersNoMatches() throws Exception {
     String[] testUser1FriendsList = new String[]{TEST_USER_2_ID};
     String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
 
@@ -147,7 +147,7 @@ public class PotentialMatchesServletTest {
   * <p>Should return that User 2's next potential match is User 3.
   */
   @Test
-  public void threeUsersOneMutualConnectionTest() throws Exception {
+  public void threeUsersOneMutualConnection() throws Exception {
     String[] testUser1FriendsList = new String[]{TEST_USER_2_ID, TEST_USER_3_ID};
     String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
     String[] testUser3FriendsList = new String[]{TEST_USER_1_ID};
@@ -171,7 +171,7 @@ public class PotentialMatchesServletTest {
   * <p>Should return that User 4's next potential match is either User 2 or 3.
   */
   @Test
-  public void fourUsersOneMutualConnectionTest() throws Exception {
+  public void fourUsersOneMutualConnection() throws Exception {
     String[] testUser1FriendsList = new String[]{TEST_USER_2_ID, TEST_USER_3_ID, TEST_USER_4_ID};
     String[] testUser2FriendsList = new String[]{TEST_USER_1_ID};
     String[] testUser3FriendsList = new String[]{TEST_USER_1_ID};
