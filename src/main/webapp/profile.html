@@ -10,20 +10,22 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
+  <body onload="initializeProfilePage()">
     <div class="container-fluid">
       <div data-include="nav.html"></div>
       <div class="content">
         <h1>Profile</h1>
-        <form action="profile.html" method="post">
+        <form action="/user-data" method="post">
+          <input type="hidden" id="id-input" name="id">
           <div>
             <img src="images/placeholder.jpg" class="rounded-circle" alt="placeholder" width="304" height="236">
           </div>
           <div>
-            <input type="file" accept="image/*" name="photo-profile">
+            <input type="file" accept="image/*" name="profile-photo-1">
           </div>
           <div class="form-group">
             <label for="name">Name:</label>
-            <input type="text" class="form-control" placeholder="Enter name" id="name" width="50">
+            <input name="name" type="text" class="form-control" placeholder="Enter name" id="name" width="50" maxlength="300" required>
           </div>
           <div class="form-group">
             <label for="bio">Bio (max 300 characters):</label>
@@ -36,7 +38,7 @@
                 <img src="images/placeholder.jpg" class="rounded-circle" alt="placeholder" width="200" height="200">
               </div>
               <div>
-                <input type="file" accept="image/*" name="photo-placeholder1">
+                <input type="file" accept="image/*" name="profile-photo-2">
               </div>
             </div>
             <div class="p-2">
@@ -44,7 +46,7 @@
                 <img src="images/placeholder.jpg" class="rounded-circle" alt="placeholder" width="200" height="200">
               </div>
               <div>
-                <input type="file" accept="image/*" name="photo-placeholder2">
+                <input type="file" accept="image/*" name="profile-photo-3">
               </div>
             </div>
             <div class="p-2">
@@ -52,7 +54,7 @@
                 <img src="images/placeholder.jpg" class="rounded-circle" alt="placeholder" width="200" height="200">
               </div>
               <div>
-                <input type="file" accept="image/*" name="photo-placeholder3">
+                <input type="file" accept="image/*" name="profile-photo-4">
               </div>
             </div>
             <div class="p-2">
@@ -60,7 +62,7 @@
                 <img src="images/placeholder.jpg" class="rounded-circle" alt="placeholder" width="200" height="200">
               </div>
               <div>
-                <input type="file" accept="image/*" name="photo-placeholder4">
+                <input type="file" accept="image/*" name="profile-photo-5">
               </div>
             </div>
           </div>
