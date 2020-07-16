@@ -43,11 +43,11 @@ public class PotentialMatchesServlet extends HttpServlet {
   private static final String USER_ID_PROPERTY = "id";
   private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
   private static final String NO_POTENTIAL_MATCH_RESULT = "NO_POTENTIAL_MATCHES";
-  private static final String USER_ID_REQUEST_PARAM = "userid";
+  private static final String USER_ID_REQUEST_URL_PARAM = "userid";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String currUserID = request.getParameter(USER_ID_REQUEST_PARAM);
+    String currUserID = request.getParameter(USER_ID_REQUEST_URL_PARAM);
     
     String nextPotentialMatchID = loadUserPotentialMatch(currUserID);
 
@@ -79,7 +79,9 @@ public class PotentialMatchesServlet extends HttpServlet {
     String nextPotentialMatchID = potentialMatches.iterator().hasNext() ?
       potentialMatches.iterator().next() : NO_POTENTIAL_MATCH_RESULT;
     
-    return nextPotentialMatchID;
+    return potentialMatches.iterator().hasNext()
+      ? potentialMatches.iterator().next()
+      : NO_POTENTIAL_MATCH_RESULT;
   }
 
   /**
@@ -102,10 +104,8 @@ public class PotentialMatchesServlet extends HttpServlet {
         friendsIds != null ? ImmutableSet.copyOf(friendsIds) : ImmutableSet.of());
       builder.add(userNode);
     }
-
-    ImmutableSet<UserNode> allUserNodes = builder.build();
     
-    return allUserNodes;
+    return builder.build();
   }
 }
 

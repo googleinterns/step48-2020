@@ -44,7 +44,7 @@ import com.google.sps.servlets.PotentialMatchesServlet;
 public class PotentialMatchesServletTest {
   private static final String NO_POTENTIAL_MATCH_RESULT = "NO_POTENTIAL_MATCHES";
   private static final String MATCHINFO_NEXT_MATCH_ID_FIELD = "nextPotentialMatchID";
-  private static final String USER_ID_REQUEST_PARAM = "userid";
+  private static final String USER_ID_REQUEST_URL_PARAM = "userid";
 
   private static final String USER_ENTITY = "User";
   private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
@@ -198,15 +198,13 @@ public class PotentialMatchesServletTest {
   * @param userIDToFetch The ID of the user whose next potential match is being found
   */
   private String execute(String userIDToFetch) throws IOException{
-    when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(userIDToFetch);
+    when(mockRequest.getParameter(USER_ID_REQUEST_URL_PARAM)).thenReturn(userIDToFetch);
 
     servletUnderTest.doGet(mockRequest, mockResponse);
     
     String result = responseWriter.toString();
     JSONObject jsonResponse = new JSONObject(result);
-    String output = jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
-
-    return output;
+    return jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
   }
 
   private void addTestUserEntityToDatastore(DatastoreService datastore, String userID, String name, String email, String bio, String[] friendsList) {

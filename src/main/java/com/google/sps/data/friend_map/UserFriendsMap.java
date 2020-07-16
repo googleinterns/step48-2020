@@ -29,7 +29,7 @@ import com.google.common.collect.ImmutableMap;
 */
 public class UserFriendsMap {
 
-  private ImmutableMap<String, ImmutableSet<String>> friendMap;
+  private final ImmutableMap<String, ImmutableSet<String>> friendMap;
 
   /**
   * Form a map of UserIDs to a set ID's of that user's friends.
