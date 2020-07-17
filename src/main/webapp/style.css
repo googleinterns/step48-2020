@@ -86,14 +86,14 @@ h1 {
   background-color: #b4dfe5;
   justify-content: center;
 }
-.card-container:nth-child(even) a{
+.card-container:nth-child(even) a {
   background-color: #fbe8a6;
 }
 .card-container:nth-child(odd) {
   background-color: #fbe8a6;
   justify-content: center;
 }
-.card-container:nth-child(odd) a{
+.card-container:nth-child(odd) a {
   background-color: #b4dfe5;
 }
 .friend-me-btn {
