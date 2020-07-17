@@ -15,6 +15,7 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
@@ -28,6 +29,8 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Entity;
 import com.google.sps.data.friend_map.UserNode;
 import com.google.sps.data.friend_map.UserFriendsMap;
@@ -44,12 +47,16 @@ public class PotentialMatchesServlet extends HttpServlet {
   private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
   private static final String NO_POTENTIAL_MATCH_RESULT = "NO_POTENTIAL_MATCHES";
   private static final String USER_ID_REQUEST_URL_PARAM = "userid";
+  private static final String MATCH_INFO_ENTITY = "match-info";
+  private static final String POTENTIAL_MATCHES_PROPERTY = "potential-matches";
+  private static final String FRIENDED_IDS_PROPERTY = "friended-ids";
+  private static final String PASSED_IDS_PROPERTY = "passed-ids";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String currUserID = request.getParameter(USER_ID_REQUEST_URL_PARAM);
     
-    String nextPotentialMatchID = loadUserPotentialMatch(currUserID);
+    String nextPotentialMatchID = getNextPotentialMatchID(loadUserPotentialMatch(currUserID), currUserID);
 
     MatchInformation matchInfo = new MatchInformation(nextPotentialMatchID);
     Gson gson = new Gson();
@@ -62,26 +69,48 @@ public class PotentialMatchesServlet extends HttpServlet {
   /**
   * Loads the next potential match for a user
   *
-  * <p>Currently is just loading all the possible matches and obtaining one of them.
-  *
-  * <p>TODO(#21): Obtain potential match results from datastore instead of running the 
-  * potential match finding methods repeatedly.
+  * <p>Retrieves match information from datastore or creates new match information
+  * entity for user if it had not already been stored.
   *
   * @param userID The userID of the user who's potential match is being found
   * @return The next potential match for a user
   */
-  private String loadUserPotentialMatch(String userID) {
-    ImmutableSet<UserNode> userNodes = createUserNodes();
-    UserFriendsMap friendsMap = new UserFriendsMap(userNodes);
+  private List<String> loadUserPotentialMatch(String userID) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+    Entity matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
+      new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
     
-    ImmutableSet<String> potentialMatches = PotentialMatchAlgorithm.findPotentialMatchesForUser(userID, friendsMap);
-  
-    String nextPotentialMatchID = potentialMatches.iterator().hasNext() ?
-      potentialMatches.iterator().next() : NO_POTENTIAL_MATCH_RESULT;
+    if (matchInfoEntity == null) {
+      addMatchInfoToDatastore(userID);
+      matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
+        new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
+    }
+
+    List<String> potentialMatches = (ArrayList<String>) matchInfoEntity.getProperty(POTENTIAL_MATCHES_PROPERTY);
+
+    return potentialMatches != null ? potentialMatches : new ArrayList<>();
+  }
+
+  private String getNextPotentialMatchID(List<String> potentialMatches, String userID) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+    Entity matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
+      new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
+
+    String nextPotentialMatchID;
     
-    return potentialMatches.iterator().hasNext()
-      ? potentialMatches.iterator().next()
-      : NO_POTENTIAL_MATCH_RESULT;
+    if (potentialMatches.iterator().hasNext()) {
+      nextPotentialMatchID = potentialMatches.iterator().next();
+
+      potentialMatches.remove(nextPotentialMatchID);
+
+      matchInfoEntity.setProperty(POTENTIAL_MATCHES_PROPERTY, potentialMatches);
+      datastore.put(matchInfoEntity);
+    } else {
+      nextPotentialMatchID = NO_POTENTIAL_MATCH_RESULT;
+    }
+    return nextPotentialMatchID;
   }
 
   /**
@@ -106,6 +135,30 @@ public class PotentialMatchesServlet extends HttpServlet {
     }
     
     return builder.build();
+  }
+
+  /**
+  * Creates a new match-info entity and adds it to the datastore
+  *
+  * @param userID the user ID of the user whose match information is being stored
+  */
+  private void addMatchInfoToDatastore(String userID) {
+    //Initialize user nodes and friend map
+    ImmutableSet<UserNode> userNodes = createUserNodes();
+    UserFriendsMap friendsMap = new UserFriendsMap(userNodes);
+    
+    //Run the potential matching algorithm to find all potential matches
+    ImmutableSet<String> potentialMatches = PotentialMatchAlgorithm.findPotentialMatchesForUser(userID, friendsMap);
+
+    //Add new Match Info entity to datastore
+    Entity newMatchInfo = new Entity(MATCH_INFO_ENTITY);
+    newMatchInfo.setProperty(USER_ID_PROPERTY, userID);
+    newMatchInfo.setProperty(POTENTIAL_MATCHES_PROPERTY, new ArrayList<String>(potentialMatches));
+    newMatchInfo.setProperty(FRIENDED_IDS_PROPERTY, new ArrayList<String>());
+    newMatchInfo.setProperty(PASSED_IDS_PROPERTY, new ArrayList<String>());
+    
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(newMatchInfo);
   }
 }
 
