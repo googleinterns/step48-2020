@@ -51,6 +51,8 @@ public class PotentialMatchesServlet extends HttpServlet {
   private static final String POTENTIAL_MATCHES_PROPERTY = "potential-matches";
   private static final String FRIENDED_IDS_PROPERTY = "friended-ids";
   private static final String PASSED_IDS_PROPERTY = "passed-ids";
+  
+  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -76,8 +78,6 @@ public class PotentialMatchesServlet extends HttpServlet {
   * @param userID The ID of the user who's match information is being checked/loaded into datastore
   */
   private void loadUserMatchInformation(String userID) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
     Entity matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
       new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
     
@@ -92,8 +92,6 @@ public class PotentialMatchesServlet extends HttpServlet {
   * @param userID The user whose potential match is being retrieved
   */
   private String getNextPotentialMatchID(String userID) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
     Entity matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
       new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
 
@@ -134,7 +132,6 @@ public class PotentialMatchesServlet extends HttpServlet {
     newMatchInfo.setProperty(FRIENDED_IDS_PROPERTY, new ArrayList<String>());
     newMatchInfo.setProperty(PASSED_IDS_PROPERTY, new ArrayList<String>());
     
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(newMatchInfo);
   }
 
@@ -145,7 +142,6 @@ public class PotentialMatchesServlet extends HttpServlet {
   * @return the set of user nodes for all current app users
   */
   private ImmutableSet<UserNode> createUserNodes() {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(new Query(USER_ENTITY));
     List<Entity> entityResults = results.asList(FetchOptions.Builder.withDefaults());
 
