@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+const NO_MATCH =  "NO_POTENTIAL_MATCHES"; // must be kept in sync with the PotentialMatches.java servlet
  
 // Function that is called onLoad of the body tag
 function initializeProfilePage() {
@@ -123,8 +125,7 @@ function getNextPotentialMatch() {
   deletePotentialMatchInfo();
   let currentUser = getCurrentUserId();
   fetch('/potential-matches?userid=' + currentUser).then(response => response.json()).then((pmID) => { 
-      let noMatch = "NO_POTENTIAL_MATCHES";
-      if (pmID.nextPotentialMatchID === noMatch) {
+      if (pmID.nextPotentialMatchID === NO_MATCH) {
         noPotentialMatch();
         return;
       }
