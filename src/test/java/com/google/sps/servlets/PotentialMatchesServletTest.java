@@ -245,16 +245,22 @@ public class PotentialMatchesServletTest {
     return jsonResponse.getString(MATCHINFO_NEXT_MATCH_ID_FIELD);
   }
 
-  private void datastoreAssertions(String currUserID, List<String> expectedMatchList) {
+  /**
+  * Checks if a user's match information was stored in datastore correctly
+  *
+  * @param currUserID The user ID of the user who's match information is getting checked
+  * @param expectedMatches The list of potential matches that are expected to be in datastore
+  */
+  private void datastoreAssertions(String currUserID, List<String> expectedMatches) {
     Entity userMatchEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
       new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, currUserID))).asSingleEntity();
     assertThat(userMatchEntity).isNotNull();
     assertThat((String) userMatchEntity.getProperty(USER_ID_PROPERTY))
       .isEqualTo(currUserID);
     assertThat((ArrayList<String>) userMatchEntity.getProperty(POTENTIAL_MATCHES_PROPERTY))
-      .isEqualTo(expectedMatchList);
+      .isEqualTo(expectedMatches);
   }
-
+  
   private void addTestUserEntityToDatastore(DatastoreService datastore, String userID, String name, String email, String bio, String[] friendsList) {
     Entity userEntity = new Entity(USER_ENTITY);
     userEntity.setProperty(USER_ID_PROPERTY, userID);

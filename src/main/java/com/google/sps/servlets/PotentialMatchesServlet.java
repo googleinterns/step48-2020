@@ -55,8 +55,9 @@ public class PotentialMatchesServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String currUserID = request.getParameter(USER_ID_REQUEST_URL_PARAM);
-    
-    String nextPotentialMatchID = getNextPotentialMatchID(loadUserPotentialMatch(currUserID), currUserID);
+
+    loadUserPotentialMatches(currUserID);
+    String nextPotentialMatchID = getNextPotentialMatchID(currUserID);
 
     MatchInformation matchInfo = new MatchInformation(nextPotentialMatchID);
     Gson gson = new Gson();
@@ -67,15 +68,15 @@ public class PotentialMatchesServlet extends HttpServlet {
   }
 
   /**
-  * Loads the next potential match for a user
+  * Loads the potential matches list for a specified user.
   *
   * <p>Retrieves match information from datastore or creates new match information
   * entity for user if it had not already been stored.
   *
   * @param userID The userID of the user who's potential match is being found
-  * @return The next potential match for a user
+  * @return The list of potential matches that are found
   */
-  private List<String> loadUserPotentialMatch(String userID) {
+  private void loadUserPotentialMatches(String userID) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     Entity matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
@@ -83,24 +84,25 @@ public class PotentialMatchesServlet extends HttpServlet {
     
     if (matchInfoEntity == null) {
       addMatchInfoToDatastore(userID);
-      matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
-        new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
     }
-
-    List<String> potentialMatches = (ArrayList<String>) matchInfoEntity.getProperty(POTENTIAL_MATCHES_PROPERTY);
-
-    return potentialMatches != null ? potentialMatches : new ArrayList<>();
   }
-
-  private String getNextPotentialMatchID(List<String> potentialMatches, String userID) {
+  
+  /**
+  * Given a specific user, get their next potential match for their feed page
+  *
+  * @param userID The user whose potential match is being retrieved
+  */
+  private String getNextPotentialMatchID(String userID) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     Entity matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
       new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
 
+    List<String> potentialMatches = (ArrayList<String>) matchInfoEntity.getProperty(POTENTIAL_MATCHES_PROPERTY);
+
     String nextPotentialMatchID;
     
-    if (potentialMatches.iterator().hasNext()) {
+    if (potentialMatches != null && potentialMatches.iterator().hasNext()) {
       nextPotentialMatchID = potentialMatches.iterator().next();
 
       potentialMatches.remove(nextPotentialMatchID);
@@ -111,30 +113,6 @@ public class PotentialMatchesServlet extends HttpServlet {
       nextPotentialMatchID = NO_POTENTIAL_MATCH_RESULT;
     }
     return nextPotentialMatchID;
-  }
-
-  /**
-  * Helper method that creates the set of UserNodes that will be fed into the potential
-  * matching method
-  *
-  * @return the set of user nodes for all current app users
-  */
-  private ImmutableSet<UserNode> createUserNodes() {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(new Query(USER_ENTITY));
-    List<Entity> entityResults = results.asList(FetchOptions.Builder.withDefaults());
-
-    ImmutableSet.Builder<UserNode> builder = ImmutableSet.builder();
-    for (Entity userEntity: entityResults) {
-      String userID = (String) userEntity.getProperty(USER_ID_PROPERTY);
-      ArrayList<String> friendsIds =
-        (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY);
-      UserNode userNode = new UserNode(userID,
-        friendsIds != null ? ImmutableSet.copyOf(friendsIds) : ImmutableSet.of());
-      builder.add(userNode);
-    }
-    
-    return builder.build();
   }
 
   /**
@@ -159,6 +137,30 @@ public class PotentialMatchesServlet extends HttpServlet {
     
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(newMatchInfo);
+  }
+
+  /**
+  * Helper method that creates the set of UserNodes that will be fed into the potential
+  * matching method
+  *
+  * @return the set of user nodes for all current app users
+  */
+  private ImmutableSet<UserNode> createUserNodes() {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(new Query(USER_ENTITY));
+    List<Entity> entityResults = results.asList(FetchOptions.Builder.withDefaults());
+
+    ImmutableSet.Builder<UserNode> builder = ImmutableSet.builder();
+    for (Entity userEntity: entityResults) {
+      String userID = (String) userEntity.getProperty(USER_ID_PROPERTY);
+      ArrayList<String> friendsIds =
+        (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY);
+      UserNode userNode = new UserNode(userID,
+        friendsIds != null ? ImmutableSet.copyOf(friendsIds) : ImmutableSet.of());
+      builder.add(userNode);
+    }
+    
+    return builder.build();
   }
 }
 
