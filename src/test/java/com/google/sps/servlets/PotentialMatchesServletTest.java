@@ -208,14 +208,15 @@ public class PotentialMatchesServletTest {
       TEST_USER_4_EMAIL, TEST_USER_4_BIO, testUser4FriendsList);
 
     String actualOutput_1 = execute(TEST_USER_4_ID);
-    String expected_2 = actualOutput_1.equals(TEST_USER_2_ID) ? TEST_USER_3_ID : TEST_USER_2_ID;
+
+    String expectedSecondOutput = actualOutput_1.equals(TEST_USER_2_ID) ? TEST_USER_3_ID : TEST_USER_2_ID;
 
     assertThat(actualOutput_1).isIn(Arrays.asList(TEST_USER_2_ID, TEST_USER_3_ID));
-    datastoreAssertions(TEST_USER_4_ID, Arrays.asList(expected_2));
+    datastoreAssertions(TEST_USER_4_ID, Arrays.asList(expectedSecondOutput));
 
     String actualOutput_2 = execute(TEST_USER_4_ID);
 
-    assertThat(actualOutput_2).isEqualTo(expected_2);
+    assertThat(actualOutput_2).isEqualTo(expectedSecondOutput);
     datastoreAssertions(TEST_USER_4_ID, null);
 
     String actualOutput_3 = execute(TEST_USER_4_ID);
