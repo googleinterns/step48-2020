@@ -68,7 +68,8 @@ public class PotentialMatchesServlet extends HttpServlet {
   }
 
   /**
-  * Loads the potential matches list for a specified user.
+  * Loads the potential matches list for a specified user if match information is not
+  * already in datastore.
   *
   * <p>Retrieves match information from datastore or creates new match information
   * entity for user if it had not already been stored.
