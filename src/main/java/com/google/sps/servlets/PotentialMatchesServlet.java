@@ -56,7 +56,7 @@ public class PotentialMatchesServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String currUserID = request.getParameter(USER_ID_REQUEST_URL_PARAM);
 
-    loadUserPotentialMatches(currUserID);
+    loadUserMatchInformation(currUserID);
     String nextPotentialMatchID = getNextPotentialMatchID(currUserID);
 
     MatchInformation matchInfo = new MatchInformation(nextPotentialMatchID);
@@ -68,16 +68,14 @@ public class PotentialMatchesServlet extends HttpServlet {
   }
 
   /**
-  * Loads the potential matches list for a specified user if match information is not
+  * Loads the match information for a specified user if match information is not
   * already in datastore.
   *
-  * <p>Retrieves match information from datastore or creates new match information
-  * entity for user if it had not already been stored.
+  * <p>Creates new match information entity for user if it had not already been stored.
   *
-  * @param userID The userID of the user who's potential match is being found
-  * @return The list of potential matches that are found
+  * @param userID The ID of the user who's match information is being checked/loaded into datastore
   */
-  private void loadUserPotentialMatches(String userID) {
+  private void loadUserMatchInformation(String userID) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     Entity matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
