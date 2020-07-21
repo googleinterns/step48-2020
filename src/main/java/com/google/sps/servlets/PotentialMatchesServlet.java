@@ -58,8 +58,7 @@ public class PotentialMatchesServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String currUserID = request.getParameter(USER_ID_REQUEST_URL_PARAM);
 
-    loadUserMatchInformation(currUserID);
-    String nextPotentialMatchID = getNextPotentialMatchID(currUserID);
+    String nextPotentialMatchID = advanceToNextPotentialMatch(currUserID);
 
     MatchInformation matchInfo = new MatchInformation(nextPotentialMatchID);
     Gson gson = new Gson();
@@ -76,24 +75,26 @@ public class PotentialMatchesServlet extends HttpServlet {
   * <p>Creates new match information entity for user if it had not already been stored.
   *
   * @param userID The ID of the user who's match information is being checked/loaded into datastore
+  * @return The datastore entity of the user's match information
   */
-  private void loadUserMatchInformation(String userID) {
+  private Entity loadUserMatchInformation(String userID) {
     Entity matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
       new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
     
     if (matchInfoEntity == null) {
-      addMatchInfoToDatastore(userID);
+      return addMatchInfoToDatastore(userID);
     }
+    return matchInfoEntity;
   }
   
   /**
-  * Given a specific user, get their next potential match for their feed page
+  * Given a specific user, retrieve their next potential match for their feed page
+  * and remove that potential match from their potential matches list
   *
   * @param userID The user whose potential match is being retrieved
   */
-  private String getNextPotentialMatchID(String userID) {
-    Entity matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
-      new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
+  private String advanceToNextPotentialMatch(String userID) {
+    Entity matchInfoEntity = loadUserMatchInformation(userID);
 
     List<String> potentialMatches = (ArrayList<String>) matchInfoEntity.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
@@ -116,8 +117,9 @@ public class PotentialMatchesServlet extends HttpServlet {
   * Creates a new match-info entity and adds it to the datastore
   *
   * @param userID the user ID of the user whose match information is being stored
+  * @return The newly created user match information entity
   */
-  private void addMatchInfoToDatastore(String userID) {
+  private Entity addMatchInfoToDatastore(String userID) {
     //Initialize user nodes and friend map
     ImmutableSet<UserNode> userNodes = createUserNodes();
     UserFriendsMap friendsMap = new UserFriendsMap(userNodes);
@@ -133,6 +135,8 @@ public class PotentialMatchesServlet extends HttpServlet {
     newMatchInfo.setProperty(PASSED_IDS_PROPERTY, new ArrayList<String>());
     
     datastore.put(newMatchInfo);
+
+    return newMatchInfo;
   }
 
   /**
