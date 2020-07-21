@@ -100,16 +100,17 @@ public class PotentialMatchesServlet extends HttpServlet {
 
     String nextPotentialMatchID;
     
-    if (potentialMatches != null && potentialMatches.iterator().hasNext()) {
-      nextPotentialMatchID = potentialMatches.iterator().next();
+    if (potentialMatches != null && !potentialMatches.isEmpty()) {
+      nextPotentialMatchID = potentialMatches.get(0);
 
-      potentialMatches.remove(nextPotentialMatchID);
+      matchInfoEntity.setProperty(POTENTIAL_MATCHES_PROPERTY,
+        potentialMatches.subList(1, potentialMatches.size()));
 
-      matchInfoEntity.setProperty(POTENTIAL_MATCHES_PROPERTY, potentialMatches);
       datastore.put(matchInfoEntity);
     } else {
       nextPotentialMatchID = NO_POTENTIAL_MATCH_RESULT;
     }
+    
     return nextPotentialMatchID;
   }
 
