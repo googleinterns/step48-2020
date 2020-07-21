@@ -65,11 +65,12 @@ function displayPotentialMatchInfo(pmID) {
     let carouselContainer = document.getElementById("carousel-inner");
     let numPhotos = 5; //hard coded value for now, once blobstore works, this will be the amount of images the user has uploaded
     for (let i = 0; i < numPhotos; i++) {
+      let slideshowElement;
       if (i === 0) {
-        let slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item active", name, bio);
+        slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item active", name, bio);
       }
       else {
-        let slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item", name, bio);
+        slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item", name, bio);
       }
       carouselContainer.appendChild(slideshowElement);
     }
@@ -103,11 +104,12 @@ function createSlideshowElement(blobkey, className, name, bio) {
 function addIndicators(numPhotos) {
   let indicators = document.getElementById('carousel-indicators');
   for (let i = 0; i < numPhotos; i++) {
+    let indicator;
     if (i === 0) {
-      let indicator = createIndicator(i, "active");
+      indicator = createIndicator(i, "active");
     }
     else {
-      let indicator = createIndicator(i, "");
+      indicator = createIndicator(i, "");
     }
     indicators.appendChild(indicator);
   }
@@ -165,6 +167,60 @@ function loadProfile() {
     bio = userinfo.bio;
     document.getElementById("name").value = name;
     document.getElementById("bio").value = bio;
+  });
+}
+
+//matches.html functions
+function displayMatches() {
+  let id = getCurrentUserId();
+  if (id === null) {
+      return;
+  }
+  fetch('/matches?id=' + id).then(response => response.json()).then((matches) => {
+    console.log(matches);
+    for (let i = 0; i < matches.length; i++) {
+      createCardElement(matches[i]);
+    }
+  });
+}
+
+function createCardElement(userID) {
+  fetch('/user-data?id=' + userID).then(response => response.json()).then((userinfo) => {
+    let matchContainer = document.getElementById('matches-container');
+    if (userinfo === null) {
+        return;
+    }
+    var cardDiv = document.createElement("div");
+    cardDiv.className = "col card m-5 card-container";
+    var profileImage = createImgElement("images/noBlobStoreImage2.jpg");
+    profileImage.className = "card-img-top";
+    profileImage.setAttribute("height", "300");
+    profileImage.setAttribute("width", "100");
+    var cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+    cardDiv.appendChild(profileImage);
+    var header = document.createElement("h4");
+    var name = document.createTextNode(userinfo.name);
+    header.appendChild(name);
+    cardBody.appendChild(header);
+    header.className = "card-title";
+    if (userinfo.bio) {
+      var para = document.createElement("p");
+      var bio = document.createTextNode(userinfo.bio);
+      para.appendChild(bio);
+      para.className = "card-text";
+      cardBody.appendChild(para);
+    }
+    if (userinfo.profileLink) {
+      var link = document.createElement("a");
+      link.setAttribute('href', userinfo.profileLink);
+      var text = document.createTextNode("See Profile");
+      link.appendChild(text);
+      link.className = "btn see-profile-btn";
+      cardBody.appendChild(link);
+    }
+    cardDiv.appendChild(cardBody);
+    matchContainer.appendChild(cardDiv);
   });
 }
 
