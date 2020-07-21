@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
@@ -131,9 +132,9 @@ public class PotentialMatchesServlet extends HttpServlet {
     //Add new Match Info entity to datastore
     Entity newMatchInfo = new Entity(MATCH_INFO_ENTITY);
     newMatchInfo.setProperty(USER_ID_PROPERTY, userID);
-    newMatchInfo.setProperty(POTENTIAL_MATCHES_PROPERTY, new ArrayList<String>(potentialMatches));
-    newMatchInfo.setProperty(FRIENDED_IDS_PROPERTY, new ArrayList<String>());
-    newMatchInfo.setProperty(PASSED_IDS_PROPERTY, new ArrayList<String>());
+    newMatchInfo.setProperty(POTENTIAL_MATCHES_PROPERTY, ImmutableList.copyOf(potentialMatches));
+    newMatchInfo.setProperty(FRIENDED_IDS_PROPERTY, ImmutableList.of());
+    newMatchInfo.setProperty(PASSED_IDS_PROPERTY, ImmutableList.of());
     
     datastore.put(newMatchInfo);
 
