@@ -110,7 +110,7 @@ public class PotentialMatchesServlet extends HttpServlet {
     } else {
       nextPotentialMatchID = NO_POTENTIAL_MATCH_RESULT;
     }
-    
+
     return nextPotentialMatchID;
   }
 
@@ -122,7 +122,7 @@ public class PotentialMatchesServlet extends HttpServlet {
   */
   private Entity addMatchInfoToDatastore(String userID) {
     //Initialize user nodes and friend map
-    ImmutableSet<UserNode> userNodes = createUserNodes();
+    ImmutableSet<UserNode> userNodes = getAllUserNodes();
     UserFriendsMap friendsMap = new UserFriendsMap(userNodes);
     
     //Run the potential matching algorithm to find all potential matches
@@ -141,12 +141,12 @@ public class PotentialMatchesServlet extends HttpServlet {
   }
 
   /**
-  * Helper method that creates the set of UserNodes that will be fed into the potential
+  * Helper method that gets the set of UserNodes that will be fed into the potential
   * matching method
   *
   * @return the set of user nodes for all current app users
   */
-  private ImmutableSet<UserNode> createUserNodes() {
+  private ImmutableSet<UserNode> getAllUserNodes() {
     PreparedQuery results = datastore.prepare(new Query(USER_ENTITY));
     List<Entity> entityResults = results.asList(FetchOptions.Builder.withDefaults());
 

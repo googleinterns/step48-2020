@@ -128,7 +128,7 @@ public class PotentialMatchesServletTest {
     String actualOutput = execute(TEST_USER_1_ID);
 
     assertThat(actualOutput).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
-    datastoreAssertions(TEST_USER_1_ID, null);
+    assertMatchInfoInDatastore(TEST_USER_1_ID, null);
   }
 
   /**
@@ -149,7 +149,7 @@ public class PotentialMatchesServletTest {
     String actualOutput = execute(TEST_USER_2_ID);
     
     assertThat(actualOutput).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
-    datastoreAssertions(TEST_USER_2_ID, null);
+    assertMatchInfoInDatastore(TEST_USER_2_ID, null);
   }
 
   /**
@@ -175,12 +175,12 @@ public class PotentialMatchesServletTest {
     String actualOutput_1 = execute(TEST_USER_2_ID);
 
     assertThat(actualOutput_1).isEqualTo(TEST_USER_3_ID);
-    datastoreAssertions(TEST_USER_2_ID, null);
+    assertMatchInfoInDatastore(TEST_USER_2_ID, null);
 
     String actualOutput_2 = execute(TEST_USER_2_ID);
 
     assertThat(actualOutput_2).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
-    datastoreAssertions(TEST_USER_2_ID, null);
+    assertMatchInfoInDatastore(TEST_USER_2_ID, null);
   }
 
   /**
@@ -212,17 +212,17 @@ public class PotentialMatchesServletTest {
     String expectedSecondOutput = actualOutput_1.equals(TEST_USER_2_ID) ? TEST_USER_3_ID : TEST_USER_2_ID;
 
     assertThat(actualOutput_1).isIn(Arrays.asList(TEST_USER_2_ID, TEST_USER_3_ID));
-    datastoreAssertions(TEST_USER_4_ID, Arrays.asList(expectedSecondOutput));
+    assertMatchInfoInDatastore(TEST_USER_4_ID, Arrays.asList(expectedSecondOutput));
 
     String actualOutput_2 = execute(TEST_USER_4_ID);
 
     assertThat(actualOutput_2).isEqualTo(expectedSecondOutput);
-    datastoreAssertions(TEST_USER_4_ID, null);
+    assertMatchInfoInDatastore(TEST_USER_4_ID, null);
 
     String actualOutput_3 = execute(TEST_USER_4_ID);
 
     assertThat(actualOutput_3).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
-    datastoreAssertions(TEST_USER_4_ID, null);
+    assertMatchInfoInDatastore(TEST_USER_4_ID, null);
   }
 
   /**
@@ -252,7 +252,7 @@ public class PotentialMatchesServletTest {
   * @param currUserID The user ID of the user who's match information is getting checked
   * @param expectedMatches The list of potential matches that are expected to be in datastore
   */
-  private void datastoreAssertions(String currUserID, List<String> expectedMatches) {
+  private void assertMatchInfoInDatastore(String currUserID, List<String> expectedMatches) {
     Entity userMatchEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
       new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, currUserID))).asSingleEntity();
     assertThat(userMatchEntity).isNotNull();
