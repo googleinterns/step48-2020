@@ -54,10 +54,9 @@ public class PotentialMatchesServletTest {
   private static final String NO_POTENTIAL_MATCH_RESULT = "NO_POTENTIAL_MATCHES";
   private static final String MATCHINFO_NEXT_MATCH_ID_FIELD = "nextPotentialMatchID";
   private static final String USER_ID_REQUEST_URL_PARAM = "userid";
+  
   private static final String MATCH_INFO_ENTITY = "match-info";
   private static final String POTENTIAL_MATCHES_PROPERTY = "potential-matches";
-  private static final String FRIENDED_IDS_PROPERTY = "friended-ids";
-  private static final String PASSED_IDS_PROPERTY = "passed-ids";
 
   private static final String USER_ENTITY = "User";
   private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
