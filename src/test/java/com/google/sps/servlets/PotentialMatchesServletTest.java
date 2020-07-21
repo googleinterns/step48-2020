@@ -258,7 +258,7 @@ public class PotentialMatchesServletTest {
     assertThat(userMatchEntity).isNotNull();
     assertThat((String) userMatchEntity.getProperty(USER_ID_PROPERTY))
       .isEqualTo(currUserID);
-    assertThat((ArrayList<String>) userMatchEntity.getProperty(POTENTIAL_MATCHES_PROPERTY))
+    assertThat((List<String>) userMatchEntity.getProperty(POTENTIAL_MATCHES_PROPERTY))
       .isEqualTo(expectedMatches);
   }
   

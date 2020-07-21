@@ -96,7 +96,7 @@ public class PotentialMatchesServlet extends HttpServlet {
   private String advanceToNextPotentialMatch(String userID) {
     Entity matchInfoEntity = loadUserMatchInformation(userID);
 
-    List<String> potentialMatches = (ArrayList<String>) matchInfoEntity.getProperty(POTENTIAL_MATCHES_PROPERTY);
+    List<String> potentialMatches = (List<String>) matchInfoEntity.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
     String nextPotentialMatchID;
     
@@ -152,8 +152,8 @@ public class PotentialMatchesServlet extends HttpServlet {
     ImmutableSet.Builder<UserNode> builder = ImmutableSet.builder();
     for (Entity userEntity: entityResults) {
       String userID = (String) userEntity.getProperty(USER_ID_PROPERTY);
-      ArrayList<String> friendsIds =
-        (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY);
+      List<String> friendsIds =
+        (List<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY);
       UserNode userNode = new UserNode(userID,
         friendsIds != null ? ImmutableSet.copyOf(friendsIds) : ImmutableSet.of());
       builder.add(userNode);
