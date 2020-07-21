@@ -82,10 +82,10 @@ public class PotentialMatchesServlet extends HttpServlet {
     Entity matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
       new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
     
-    if (matchInfoEntity == null) {
-      return addMatchInfoToDatastore(userID);
+    if (matchInfoEntity != null) {
+      return matchInfoEntity;
     }
-    return matchInfoEntity;
+    return addMatchInfoToDatastore(userID);
   }
   
   /**

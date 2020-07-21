@@ -171,14 +171,14 @@ public class PotentialMatchesServletTest {
     addTestUserEntityToDatastore(datastore, TEST_USER_3_ID, TEST_USER_3_NAME,
       TEST_USER_3_EMAIL, TEST_USER_3_BIO, testUser3FriendsList);
     
-    String actualOutput_1 = execute(TEST_USER_2_ID);
+    String actualOutput1 = execute(TEST_USER_2_ID);
 
-    assertThat(actualOutput_1).isEqualTo(TEST_USER_3_ID);
+    assertThat(actualOutput1).isEqualTo(TEST_USER_3_ID);
     assertMatchInfoInDatastore(TEST_USER_2_ID, null);
 
-    String actualOutput_2 = execute(TEST_USER_2_ID);
+    String actualOutput2 = execute(TEST_USER_2_ID);
 
-    assertThat(actualOutput_2).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
+    assertThat(actualOutput2).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
     assertMatchInfoInDatastore(TEST_USER_2_ID, null);
   }
 
@@ -206,21 +206,21 @@ public class PotentialMatchesServletTest {
     addTestUserEntityToDatastore(datastore, TEST_USER_4_ID, TEST_USER_4_NAME,
       TEST_USER_4_EMAIL, TEST_USER_4_BIO, testUser4FriendsList);
 
-    String actualOutput_1 = execute(TEST_USER_4_ID);
+    String actualOutput1 = execute(TEST_USER_4_ID);
 
-    String expectedSecondOutput = actualOutput_1.equals(TEST_USER_2_ID) ? TEST_USER_3_ID : TEST_USER_2_ID;
+    String expectedSecondOutput = actualOutput1.equals(TEST_USER_2_ID) ? TEST_USER_3_ID : TEST_USER_2_ID;
 
-    assertThat(actualOutput_1).isIn(Arrays.asList(TEST_USER_2_ID, TEST_USER_3_ID));
+    assertThat(actualOutput1).isIn(Arrays.asList(TEST_USER_2_ID, TEST_USER_3_ID));
     assertMatchInfoInDatastore(TEST_USER_4_ID, Arrays.asList(expectedSecondOutput));
 
-    String actualOutput_2 = execute(TEST_USER_4_ID);
+    String actualOutput2 = execute(TEST_USER_4_ID);
 
-    assertThat(actualOutput_2).isEqualTo(expectedSecondOutput);
+    assertThat(actualOutput2).isEqualTo(expectedSecondOutput);
     assertMatchInfoInDatastore(TEST_USER_4_ID, null);
 
-    String actualOutput_3 = execute(TEST_USER_4_ID);
+    String actualOutput3 = execute(TEST_USER_4_ID);
 
-    assertThat(actualOutput_3).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
+    assertThat(actualOutput3).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
     assertMatchInfoInDatastore(TEST_USER_4_ID, null);
   }
 
