@@ -13,6 +13,11 @@
 // limitations under the License.
 
 const NO_MATCH =  "NO_POTENTIAL_MATCHES"; // must be kept in sync with the PotentialMatches.java servlet
+const PROFILE_PHOTO_BLOBKEY = "profile-photo-blobkey";
+const PHOTO_2_BLOBKEY = "photo-2-blobkey";
+const PHOTO_3_BLOBKEY = "photo-3-blobkey";
+const PHOTO_4_BLOBKEY = "photo-4-blobkey";
+const PHOTO_5_BLOBKEY = "photo-5-blobkey";
  
 // Function that is called onLoad of the body tag
 function initializeProfilePage() {
@@ -167,20 +172,21 @@ function loadProfile() {
     document.getElementById("name").value = name;
     document.getElementById("bio").value = bio;
 
-    if (userinfo["profile-photo-blobkey"] !== "") {
-      setImageFromBlobstore(userinfo["profile-photo-blobkey"], "profile-photo-image");
+    // Load user images
+    if (userinfo[PROFILE_PHOTO_BLOBKEY] !== "") {
+      setImageFromBlobstore(userinfo[PROFILE_PHOTO_BLOBKEY], "profile-photo-image");
     }
-    if (userinfo["photo-2-blobkey"] !== "") {
-      setImageFromBlobstore(userinfo["photo-2-blobkey"], "photo-2-image");
+    if (userinfo[PHOTO_2_BLOBKEY] !== "") {
+      setImageFromBlobstore(userinfo[PHOTO_2_BLOBKEY], "photo-2-image");
     }
-    if (userinfo["photo-3-blobkey"] !== "") {
-      setImageFromBlobstore(userinfo["photo-3-blobkey"], "photo-3-image");
+    if (userinfo[PHOTO_3_BLOBKEY] !== "") {
+      setImageFromBlobstore(userinfo[PHOTO_3_BLOBKEY], "photo-3-image");
     }
-    if (userinfo["photo-4-blobkey"] !== "") {
-      setImageFromBlobstore(userinfo["photo-4-blobkey"], "photo-4-image");
+    if (userinfo[PHOTO_4_BLOBKEY] !== "") {
+      setImageFromBlobstore(userinfo[PHOTO_4_BLOBKEY], "photo-4-image");
     }
-    if (userinfo["photo-5-blobkey"] !== "") {
-      setImageFromBlobstore(userinfo["photo-5-blobkey"], "photo-5-image");
+    if (userinfo[PHOTO_5_BLOBKEY] !== "") {
+      setImageFromBlobstore(userinfo[PHOTO_5_BLOBKEY], "photo-5-image");
     }
   });
 }
