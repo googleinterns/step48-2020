@@ -3,14 +3,90 @@
   <head>
     <meta charset="UTF-8">
     <title>Friends of Friends</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
     <script src="facebook-login.js"></script>
   </head>
   <body>
-    <div class="fb-login-button" data-size="large" data-button-type="continue_with"
-        data-layout="default" data-auto-logout-link="true" data-use-continue-as="false"
-        data-scope="public_profile,email,user_friends"></div>
+    <div class="container-fluid">
+      <div class="content">
+        <nav class="fixed-style navbar navbar-expand-sm justify-content-centerS navbar-background-home">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link nav-text-style" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link nav-text-style" href="#meetus">Meet the Creators</a>
+            </li>
+            <li class="nav-item">
+               <div id="login" class="fb-login-button" data-size="large" data-button-type="continue_with"
+                  data-layout="default" data-auto-logout-link="true" data-use-continue-as="false"
+                  data-scope="public_profile,email,user_friends">
+               </div>
+            </li>
+          </ul>
+        </nav>
+        <div class="home-page-content-header">
+          <h1>Friends of Friends</h1>
+          <img src="images/logo.jpg" alt="logo" class="rounded-circle image-fluid" height="100" width="120">
+        </div>
+        <img src="images/friends-of-friends.png" class="image-fluid" alt="home page image">
+        <div class="home-page-content" id="about">
+          <h2>About</h2>
+          <p>
+            Friends of Friends is a friend finding app! Simply log in with Facebook,
+            and we will look at your friends lists and the friends lists of other users 
+            on the app to show you all of the users whom you have a mutual friend with! 
+            Click "Friend Me" or "Pass" on those people in order to get your matches. 
+            Coronavirus and quarantine has limited social interaction to our immediate 
+            social circle, and has made it difficult to meet new friends. Friends of 
+            Friends addresses this issue, helping users meet friends online, and by building 
+            an added aspect of trust, as you already will be friends with someone who knows 
+            your new potential friend. 
+          </p>
+        </div>
+        <div class="home-page-content" id="meetus">
+          <h2>Meet the Creators</h2>
+          <table class="table table-borderless creators-table">
+            <thead>
+              <tr>
+                <th>Jess</th>
+                <th>Alisha</th>
+                <th>Isabelle</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><img src="images/jess.jpg" class="image-fluid" alt="home page image" height="200" width="200"></td>
+                <td><img src="images/alisha.jpg" class="image-fluid" alt="home page image" height="200" width="200"></td>
+                <td><img src="images/isabelle.jpg" class="image-fluid" alt="home page image" height="200" width="200"></td>
+              </tr>
+              <tr>
+                <td>
+                  Jess worked on the backend of Friends of Friends. His work allows  users to log in with their facebook account, store their information in datastore, and 
+                  upload images that are stored with blobstore. He used javascript, java, and java servlets 
+                  for this proejct. Jess is a rising sophomore at UT-Austin and is a Computer Science Major. 
+                </td>
+                <td>
+                  Alisha worked on the frontend of the application and designed the user interface using HTML, CSS, and Javascript. Her work also 
+                  includes using javascript to pre-populate the profile, feed, and matches pages to be targeted to the current logged in user. She is a 
+                  rising Information Science and Systems Technology major at Cornell University.
+                </td>
+                <td>
+                  Isabelle was in charge of the backend algorithms for Friends of Friends. She worked on using Maps to determine which users 
+                  were potential matches for each other by comparing users Facebook Friends Lists. She also worked on determining who matches with who based 
+                  on who mutually chooses "Friend Me" on each other.She is a rising junior at Georgia Tech.  
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div> <!--content-->
+    </div> <!--container-fluid-->
   </body>
 </html>
 
