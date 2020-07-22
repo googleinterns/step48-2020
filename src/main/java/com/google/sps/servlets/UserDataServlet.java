@@ -53,9 +53,8 @@ import com.google.gson.Gson;
 
 @WebServlet("/user-data")
 public class UserDataServlet extends HttpServlet {
+  private static final boolean IMAGE_NOT_FOUND = false;
   private static final String DEFAULT_STRING = "";
-  private static final String IMAGE_NOT_FOUND = "false";
-  private static final String IMAGE_FOUND = "true";
   private static final String USER_ENTITY = "User";
   private static final String USER_BIO_PROPERTY = "bio";
   private static final String USER_EMAIL_PROPERTY = "email";
@@ -162,25 +161,25 @@ public class UserDataServlet extends HttpServlet {
   /** Method that stores the blob-keys (in Datastore) of files uploaded to Blobstore */
   private void getAndStoreBlobKeys(HttpServletRequest request, Entity userEntity) {
     // Get values determining whether or not to update/save blobkeys of any particular image
-    String profilePhotoUploaded = getStringParameter(request, USER_PROFILE_PHOTO, IMAGE_NOT_FOUND);
-    String photo2Uploaded = getStringParameter(request, USER_PHOTO_2, IMAGE_NOT_FOUND);
-    String photo3Uploaded = getStringParameter(request, USER_PHOTO_3, IMAGE_NOT_FOUND);
-    String photo4Uploaded = getStringParameter(request, USER_PHOTO_4, IMAGE_NOT_FOUND);
-    String photo5Uploaded = getStringParameter(request, USER_PHOTO_5, IMAGE_NOT_FOUND);
+    boolean profilePhotoUploaded = getBooleanParameter(request, USER_PROFILE_PHOTO, IMAGE_NOT_FOUND);
+    boolean photo2Uploaded = getBooleanParameter(request, USER_PHOTO_2, IMAGE_NOT_FOUND);
+    boolean photo3Uploaded = getBooleanParameter(request, USER_PHOTO_3, IMAGE_NOT_FOUND);
+    boolean photo4Uploaded = getBooleanParameter(request, USER_PHOTO_4, IMAGE_NOT_FOUND);
+    boolean photo5Uploaded = getBooleanParameter(request, USER_PHOTO_5, IMAGE_NOT_FOUND);
 
-    if (profilePhotoUploaded.equals(IMAGE_FOUND)) {
+    if (profilePhotoUploaded) {
       userEntity.setProperty(PROFILE_PHOTO_BLOBKEY, getUploadedFileBlobKey(request, USER_PROFILE_PHOTO));
     }
-    if (photo2Uploaded.equals(IMAGE_FOUND)) {
+    if (photo2Uploaded) {
       userEntity.setProperty(PHOTO_2_BLOBKEY, getUploadedFileBlobKey(request, USER_PHOTO_2));
     }
-    if (photo3Uploaded.equals(IMAGE_FOUND)) {
+    if (photo3Uploaded) {
       userEntity.setProperty(PHOTO_3_BLOBKEY, getUploadedFileBlobKey(request, USER_PHOTO_3));
     }
-    if (photo4Uploaded.equals(IMAGE_FOUND)) {
+    if (photo4Uploaded) {
       userEntity.setProperty(PHOTO_4_BLOBKEY, getUploadedFileBlobKey(request, USER_PHOTO_4));
     }
-    if (photo5Uploaded.equals(IMAGE_FOUND)) {
+    if (photo5Uploaded) {
       userEntity.setProperty(PHOTO_5_BLOBKEY, getUploadedFileBlobKey(request, USER_PHOTO_5));
     }
   }
@@ -230,6 +229,13 @@ public class UserDataServlet extends HttpServlet {
   private String[] getStringArrayParameter(HttpServletRequest request, String name, String[] defaultValue) {
     String[] value = request.getParameterValues(name);
     return value == null ? defaultValue : value;
+  }
+
+  /** Returns the request parameter (for booleans), or the default value if not specified */
+  private boolean getBooleanParameter(HttpServletRequest request, String name, boolean defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) return false;
+    else return value.equals("true");
   }
 
   /** Gets the blobkey of the image passed to the designated input tag in HTML */
