@@ -1,64 +1,107 @@
-.navbar-background{
-    background-color: #d2fdff;
+.navbar-background {
+  background-color: #d2fdff;
+}
+.navbar-background-home {
+  background-color: #b4dfe5;
+  font-size: 15px;
+  justify-content: center;
+  width:100%;
 }
 body {
-    background-color: hsl(19, 86%, 69%);
+  background-color: hsl(19, 86%, 69%);
 }
 h1 {
-    padding: 10px;
+  padding: 10px;
 }
 .content {
-    align-content: center;
-    color: #303c6c;
-    text-align: center;
+  align-content: center;
+  color: #303c6c;
+  text-align: center;
+}
+.home-page-content-header {
+  background-color: #b4dfe5;
+  height: 10%;
+  justify-content: center;
+  margin-bottom: 15px;
+  margin-top: 60px;
+  padding: 10px;
+}
+.creators-table {
+  color: #303c6c;
+  margin: auto;
+  width: 50%;
+}
+.fixed-style {
+  position: fixed;
+  left: 0;
+  right: 15;
+  top: 0;
+}
+#about {
+  background-color: #fbe8a6;
+}
+#meetus {
+  background-color: #d2fdff;
+}
+.home-page-content {
+  justify-content: center;
+  margin: auto;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  padding: 10px;
+  width: 50%;
 }
 .button-background {
-    background-color: #303c6c;
-    color: white;
+  background-color: #303c6c;
+  color: white;
 }
 .nav-text-style {
-    color: #303c6c;
-    font-size: 1.875em;
+  color: #303c6c;
+  font-size: 1.875em;
+}
+.my-image {
+  height: 150vh;
+  object-fit: cover;
+  width: 200vh;
 }
 #name {
-    align-content: center;
-    align-self: center;
-    margin-left: auto;
-    margin-right: auto;
-    width: 30%;
+  align-content: center;
+  align-self: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
 }
 #bio {
-    align-content: center;
-    align-self: center;
-    height: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 30%;
+  align-content: center;
+  align-self: center;
+  height: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
 }
 .image-upload {
-    justify-content: center;
+  justify-content: center;
 }
 .card-container:nth-child(even) {
-    background-color: #b4dfe5;
-    justify-content: center;
+  background-color: #b4dfe5;
+  justify-content: center;
 }
-.card-container:nth-child(even) a{
-    background-color: #fbe8a6;
+.card-container:nth-child(even) a {
+  background-color: #fbe8a6;
 }
 .card-container:nth-child(odd) {
-    background-color: #fbe8a6;
-    justify-content: center;
+  background-color: #fbe8a6;
+  justify-content: center;
 }
-.card-container:nth-child(odd) a{
-    background-color: #b4dfe5;
+.card-container:nth-child(odd) a {
+  background-color: #b4dfe5;
 }
 .friend-me-btn {
-    background-color: #b4dfe5;
+  background-color: #b4dfe5;
 }
 .pass-btn {
-    background-color: #fbe8a6;
+  background-color: #fbe8a6;
 }
 .button-container {
-    justify-content: center;
+  justify-content: center;
 }
-
