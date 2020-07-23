@@ -27,7 +27,7 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
  * Servlet that handles requests for a blob given its blobkey
  */
 @WebServlet("/blob-key")
-public class BlobServlet extends HttpServlet{
+public class BlobServlet extends HttpServlet {
   private static final String IMAGE_KEY_PARAMETER = "imageKey";
 
   private final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();

@@ -34,7 +34,7 @@ import com.google.appengine.api.images.ServingUrlOptions;
 * upload files to.
 */
 @WebServlet("/blobstore-url")
-public class BlobstoreURLServlet extends HttpServlet{
+public class BlobstoreURLServlet extends HttpServlet {
   private final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
   @Override
