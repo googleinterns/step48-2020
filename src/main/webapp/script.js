@@ -156,12 +156,12 @@ function passButtonPressed() {
 }
 
 function loadProfile() {
-  let id = getCurrentUserId();
-  if (id === null) {
+  let userID = getCurrentUserId();
+  if (userID === null) {
     return;
   }
-  console.log(id);
-  fetch('/user-data?id=' + id).then(response => response.json()).then((userinfo) => {
+  console.log(userID);
+  fetch('/user-data?id=' + userID).then(response => response.json()).then((userinfo) => {
     console.log(userinfo);
     name = userinfo.name;
     bio = userinfo.bio;
@@ -172,21 +172,21 @@ function loadProfile() {
 
 //matches.html functions
 function displayMatches() {
-  let id = getCurrentUserId();
-  if (id === null) {
+  let userID = getCurrentUserId();
+  if (userID === null) {
       return;
   }
-  fetch('/matches?id=' + id).then(response => response.json()).then((matches) => {
+  fetch('/matches?id=' + userID).then(response => response.json()).then((matches) => {
     console.log(matches);
+    let matchContainer = document.getElementById('matches-container');
     for (let i = 0; i < matches.length; i++) {
-      createCardElement(matches[i]);
+      matchContainer.appendChild(createCardElement(matches[i]));
     }
   });
 }
 
 function createCardElement(userID) {
   fetch('/user-data?id=' + userID).then(response => response.json()).then((userinfo) => {
-    let matchContainer = document.getElementById('matches-container');
     if (userinfo === null) {
         return;
     }
@@ -220,7 +220,7 @@ function createCardElement(userID) {
       cardBody.appendChild(link);
     }
     cardDiv.appendChild(cardBody);
-    matchContainer.appendChild(cardDiv);
+    return cardDiv;
   });
 }
 
