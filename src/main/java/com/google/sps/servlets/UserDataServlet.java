@@ -158,7 +158,7 @@ public class UserDataServlet extends HttpServlet {
     response.sendRedirect("/profile.html?id=" + userId);
   }
 
-  /** Method that stores the blob-keys (in Datastore) of files uploaded to Blobstore */
+  /** Stores the blob-keys (in Datastore) of files uploaded to Blobstore. */
   private void getAndStoreBlobKeys(HttpServletRequest request, Entity userEntity) {
     // Get values determining whether or not to update/save blobkeys of any particular image
     boolean profilePhotoUploaded = getBooleanParameter(request, USER_PROFILE_PHOTO_PROPERTY, IMAGE_NOT_FOUND);
@@ -262,4 +262,3 @@ public class UserDataServlet extends HttpServlet {
     return blobKey.getKeyString();
   }
 }
-
