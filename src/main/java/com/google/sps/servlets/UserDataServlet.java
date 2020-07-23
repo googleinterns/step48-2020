@@ -243,7 +243,7 @@ public class UserDataServlet extends HttpServlet {
     Map<String, List<BlobKey>> blobs = blobstore.getUploads(request);
     List<BlobKey> blobKeys = blobs.get(formInputElementName);
 
-    // User submitted form without selecting a file, so we can't get a URL. (dev server)
+    // If user submitted form without selecting a file, then we can't get a URL. (dev server)
     if (blobKeys == null || blobKeys.isEmpty()) {
       return null;
     }
@@ -251,7 +251,6 @@ public class UserDataServlet extends HttpServlet {
     // Our form only contains a single file input, so get the first index.
     BlobKey blobKey = blobKeys.get(0);
 
-    // User submitted form without selecting a file, so we can't get a URL. (live server)
     if (!testing) {
       BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
       if (blobInfo.getSize() == 0) {
