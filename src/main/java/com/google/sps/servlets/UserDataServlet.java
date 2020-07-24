@@ -191,7 +191,7 @@ public class UserDataServlet extends HttpServlet {
     return value == null ? defaultValue : value;
   }
 
-  /** Returns the request parameter (for booleans), or the default value if not specified */
+  /** Returns the request parameter (for booleans), either the boolean true or false */
   private boolean getBooleanParameter(HttpServletRequest request, String name) {
     return Boolean.valueOf(request.getParameter(name));
   }
