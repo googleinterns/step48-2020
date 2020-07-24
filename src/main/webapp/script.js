@@ -60,16 +60,17 @@ window.addEventListener("load", function(){
 
 function displayPotentialMatchInfo(pmID) {
   fetch('/user-data?id=' + pmID).then(response => response.json()).then((userinfo) => {
-    let name = userinfo.name;
-    let bio = userinfo.bio;
+    const name = userinfo.name;
+    const bio = userinfo.bio;
     let carouselContainer = document.getElementById("carousel-inner");
-    let numPhotos = 5; //hard coded value for now, once blobstore works, this will be the amount of images the user has uploaded
+    const numPhotos = 5; //hard coded value for now, once blobstore works, this will be the amount of images the user has uploaded
     for (let i = 0; i < numPhotos; i++) {
+      let slideshowElement;
       if (i === 0) {
-        let slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item active", name, bio);
+        slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item active", name, bio);
       }
       else {
-        let slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item", name, bio);
+        slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item", name, bio);
       }
       carouselContainer.appendChild(slideshowElement);
     }
@@ -103,11 +104,12 @@ function createSlideshowElement(blobkey, className, name, bio) {
 function addIndicators(numPhotos) {
   let indicators = document.getElementById('carousel-indicators');
   for (let i = 0; i < numPhotos; i++) {
+    let indicator;
     if (i === 0) {
-      let indicator = createIndicator(i, "active");
+      indicator = createIndicator(i, "active");
     }
     else {
-      let indicator = createIndicator(i, "");
+      indicator = createIndicator(i, "");
     }
     indicators.appendChild(indicator);
   }
@@ -154,13 +156,11 @@ function passButtonPressed() {
 }
 
 function loadProfile() {
-  let id = getCurrentUserId();
-  if (id === null) {
+  let userID = getCurrentUserId();
+  if (userID === null) {
     return;
   }
-  console.log(id);
-  fetch('/user-data?id=' + id).then(response => response.json()).then((userinfo) => {
-    console.log(userinfo);
+  fetch('/user-data?id=' + userID).then(response => response.json()).then((userinfo) => {
     name = userinfo.name;
     bio = userinfo.bio;
     document.getElementById("name").value = name;
@@ -168,9 +168,60 @@ function loadProfile() {
   });
 }
 
+function displayMatches() {
+  const userID = getCurrentUserId();
+  if (userID === null) {
+      return;
+  }
+  fetch('/matches?id=' + userID).then(response => response.json()).then((matches) => {
+    const matchContainer = document.getElementById('matches-container');
+    for (let i = 0; i < matches.length; i++) {
+      matchContainer.appendChild(createCardElement(matches[i]));
+    }
+  });
+}
+
+function createCardElement(userID) {
+  const cardDiv = document.createElement("div");
+  fetch('/user-data?id=' + userID).then(response => response.json()).then((userinfo) => {
+    if (userinfo === null) {
+        return;
+    }
+    cardDiv.className = "col card m-5 card-container";
+    const profileImage = createImgElement("images/noBlobStoreImage2.jpg");
+    profileImage.className = "card-img-top";
+    profileImage.setAttribute("height", "300");
+    profileImage.setAttribute("width", "100");
+    const cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+    cardDiv.appendChild(profileImage);
+    const header = document.createElement("h4");
+    const name = document.createTextNode(userinfo.name);
+    header.appendChild(name);
+    cardBody.appendChild(header);
+    header.className = "card-title";
+    if (userinfo.bio) {
+      const para = document.createElement("p");
+      const bio = document.createTextNode(userinfo.bio);
+      para.appendChild(bio);
+      para.className = "card-text";
+      cardBody.appendChild(para);
+    }
+    if (userinfo.profileLink) {
+      const link = document.createElement("a");
+      link.setAttribute('href', userinfo.profileLink);
+      const text = document.createTextNode("See Profile");
+      link.appendChild(text);
+      link.className = "btn see-profile-btn";
+      cardBody.appendChild(link);
+    }
+    cardDiv.appendChild(cardBody);
+  });
+  return cardDiv;
+}
+
 function changeImgPath(blobKey, id) {
   fetch('/blob-key?imageKey='+blobKey).then((response) => {
-    console.log(response);
     return response.blob();
   }).then((blobContent) => {
     var blobURL = URL.createObjectURL(blobContent);
