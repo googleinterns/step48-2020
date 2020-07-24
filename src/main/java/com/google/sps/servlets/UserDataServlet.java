@@ -146,28 +146,21 @@ public class UserDataServlet extends HttpServlet {
 
   /** Stores the blob-keys (in Datastore) of files uploaded to Blobstore. */
   private void getAndStoreBlobKeys(HttpServletRequest request, Entity userEntity) {
-    // Get values determining whether or not to update/save blobkeys of any particular image
-    boolean profilePhotoUploaded = getBooleanParameter(request, USER_PHOTO_1_PROPERTY);
-    boolean photo2Uploaded = getBooleanParameter(request, USER_PHOTO_2_PROPERTY);
-    boolean photo3Uploaded = getBooleanParameter(request, USER_PHOTO_3_PROPERTY);
-    boolean photo4Uploaded = getBooleanParameter(request, USER_PHOTO_4_PROPERTY);
-    boolean photo5Uploaded = getBooleanParameter(request, USER_PHOTO_5_PROPERTY);
-
     List<String> blobKeys = (ArrayList<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY);
 
-    if (profilePhotoUploaded) {
+    if (getBooleanParameter(request, USER_PHOTO_1_PROPERTY)) {
       blobKeys.set(0, getUploadedFileBlobKey(request, USER_PHOTO_1_PROPERTY));
     }
-    if (photo2Uploaded) {
+    if (getBooleanParameter(request, USER_PHOTO_2_PROPERTY)) {
       blobKeys.set(1, getUploadedFileBlobKey(request, USER_PHOTO_2_PROPERTY));
     }
-    if (photo3Uploaded) {
+    if (getBooleanParameter(request, USER_PHOTO_3_PROPERTY)) {
       blobKeys.set(2, getUploadedFileBlobKey(request, USER_PHOTO_3_PROPERTY));
     }
-    if (photo4Uploaded) {
+    if (getBooleanParameter(request, USER_PHOTO_4_PROPERTY)) {
       blobKeys.set(3, getUploadedFileBlobKey(request, USER_PHOTO_4_PROPERTY));
     }
-    if (photo5Uploaded) {
+    if (getBooleanParameter(request, USER_PHOTO_5_PROPERTY)) {
       blobKeys.set(4, getUploadedFileBlobKey(request, USER_PHOTO_5_PROPERTY));
     }
   }
