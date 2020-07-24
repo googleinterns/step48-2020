@@ -53,7 +53,7 @@ import org.mockito.MockitoAnnotations;
 /** Tests the User Data Servlet */
 @RunWith(JUnit4.class)
 public final class UserDataServletTest {
-  // These private instance variables are duplicated from the UserDataServlet for testing purposes
+  // Duplicated from UserDataServlet for testing simplicity (TODO: look into package-private)
   private static final String USER_ENTITY = "User";
   private static final String USER_BIO_PROPERTY = "bio";
   private static final String USER_BLOBKEYS_PROPERTY = "blobkeys";
