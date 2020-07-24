@@ -260,7 +260,7 @@ public class MatchDecisionsServletTest {
 
     addTestMatchInfoToDatastore(datastore, TEST_USER_1_ID, ImmutableList.of(TEST_USER_2_ID),
       ImmutableList.of(TEST_USER_3_ID), ImmutableList.of(), ImmutableList.of(TEST_USER_3_ID));
-    addTestMatchInfoToDatastore(datastore, TEST_USER_2_ID, ImmutableList.of(TEST_USER_1_ID),
+    addTestMatchInfoToDatastore(datastore, TEST_USER_2_ID, ImmutableList.of(),
       ImmutableList.of(TEST_USER_1_ID), ImmutableList.of(), ImmutableList.of());
     addTestMatchInfoToDatastore(datastore, TEST_USER_3_ID, ImmutableList.of(),
       ImmutableList.of(TEST_USER_1_ID), ImmutableList.of(), ImmutableList.of(TEST_USER_1_ID));
