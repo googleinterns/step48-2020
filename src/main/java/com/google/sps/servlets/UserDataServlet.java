@@ -68,6 +68,7 @@ public class UserDataServlet extends HttpServlet {
   static final String USER_PHOTO_4_PROPERTY = "photo-4";
   static final String USER_PHOTO_5_PROPERTY = "photo-5";
 
+  // Blobstore and Datastore instance variables are package-private so that they are visible for testing
   BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private final Gson gson = new Gson();
