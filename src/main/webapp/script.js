@@ -21,15 +21,9 @@ function initializeProfilePage() {
 }
  
 function addIdToPostRequest() {
-  document.getElementById('id-input').value = getCurrentUser();
+  document.getElementById('id-input').value = getCurrentUserId();
 }
  
-function getCurrentUser() {
-  const params = new URLSearchParams(window.location.search);
-  uid = params.get('id');
-  return uid;
-}
-
 function getCurrentUserId() {
   const params = new URLSearchParams(window.location.search);
   uid = params.get('id');
@@ -37,14 +31,14 @@ function getCurrentUserId() {
 }
 
 function updateProfileLinkForCurrentUser() {
-  let uid = getCurrentUserId();
-  var link = document.getElementById("profileLink");
+  const uid = getCurrentUserId();
+  const link = document.getElementById("profileLink");
   link.setAttribute('href', 'profile.html?id=' + uid);
 }
 
 function updateFeedLinkForCurrentUser() {
-  let uid = getCurrentUserId();
-  var link = document.getElementById("feedLink");
+  const uid = getCurrentUserId();
+  const link = document.getElementById("feedLink");
   link.setAttribute('href', 'feed.html?id=' + uid);
 }
 
@@ -60,16 +54,17 @@ window.addEventListener("load", function(){
 
 function displayPotentialMatchInfo(pmID) {
   fetch('/user-data?id=' + pmID).then(response => response.json()).then((userinfo) => {
-    let name = userinfo.name;
-    let bio = userinfo.bio;
-    let carouselContainer = document.getElementById("carousel-inner");
-    let numPhotos = 5; //hard coded value for now, once blobstore works, this will be the amount of images the user has uploaded
+    const name = userinfo.name;
+    const bio = userinfo.bio;
+    const carouselContainer = document.getElementById("carousel-inner");
+    const numPhotos = 5; //hard coded value for now, once blobstore works, this will be the amount of images the user has uploaded
     for (let i = 0; i < numPhotos; i++) {
+      let slideshowElement;
       if (i === 0) {
-        let slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item active", name, bio);
+        slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item active", name, bio);
       }
       else {
-        let slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item", name, bio);
+        slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item", name, bio);
       }
       carouselContainer.appendChild(slideshowElement);
     }
@@ -83,38 +78,39 @@ function deletePotentialMatchInfo() {
 }
 
 function createSlideshowElement(blobkey, className, name, bio) {
-  var slideshowImage = document.createElement("div"); 
+  const slideshowImage = document.createElement("div"); 
   slideshowImage.className = className;
   slideshowImage.appendChild(createImgElement(blobkey));
-  var caption = document.createElement("div");
+  const caption = document.createElement("div");
   caption.className = "carousel-caption";
-  var header = document.createElement("h3");
-  var name = document.createTextNode(name); 
-  header.appendChild(name);
+  const header = document.createElement("h3");
+  const pm_name = document.createTextNode(name); 
+  header.appendChild(pm_name);
   caption.appendChild(header);
-  var para = document.createElement("p");
-  var bio = document.createTextNode(bio);
-  para.appendChild(bio);
+  const para = document.createElement("p");
+  const pm_bio = document.createTextNode(bio);
+  para.appendChild(pm_bio);
   caption.appendChild(para);
   slideshowImage.appendChild(caption); 
   return slideshowImage;
 }
 
 function addIndicators(numPhotos) {
-  let indicators = document.getElementById('carousel-indicators');
+  const indicators = document.getElementById('carousel-indicators');
   for (let i = 0; i < numPhotos; i++) {
+    let indicator;
     if (i === 0) {
-      let indicator = createIndicator(i, "active");
+      indicator = createIndicator(i, "active");
     }
     else {
-      let indicator = createIndicator(i, "");
+      indicator = createIndicator(i, "");
     }
     indicators.appendChild(indicator);
   }
 }
 
 function createIndicator(dataSlideNumber, className) {
-  var singleIndicator = document.createElement("li");
+  const singleIndicator = document.createElement("li");
   singleIndicator.setAttribute("data-target", "#feed");
   singleIndicator.setAttribute("data-slide-to", dataSlideNumber);
   singleIndicator.className = className;
@@ -123,7 +119,7 @@ function createIndicator(dataSlideNumber, className) {
 
 function getNextPotentialMatch() {
   deletePotentialMatchInfo();
-  let currentUser = getCurrentUserId();
+  const currentUser = getCurrentUserId();
   fetch('/potential-matches?userid=' + currentUser).then(response => response.json()).then((pmID) => { 
       if (pmID.nextPotentialMatchID === NO_MATCH) {
         noPotentialMatch();
@@ -138,8 +134,8 @@ function getNextPotentialMatch() {
 function noPotentialMatch() {
   document.getElementById("pass-btn").disabled = true;
   document.getElementById("friend-btn").disabled = true;
-  let noMatchImg = createSlideshowElement("images/nomatches.png", "carousel-item active", "", "");
-  let carouselContainer = document.getElementById("carousel-inner");
+  const noMatchImg = createSlideshowElement("images/nomatches.png", "carousel-item active", "", "");
+  const carouselContainer = document.getElementById("carousel-inner");
   carouselContainer.appendChild(noMatchImg);
 }
 
@@ -154,13 +150,12 @@ function passButtonPressed() {
 }
 
 function loadProfile() {
-  let id = getCurrentUserId();
+  const id = getCurrentUserId();
   if (id === null) {
     return;
   }
   console.log(id);
   fetch('/user-data?id=' + id).then(response => response.json()).then((userinfo) => {
-    console.log(userinfo);
     name = userinfo.name;
     bio = userinfo.bio;
     document.getElementById("name").value = name;
@@ -173,7 +168,7 @@ function changeImgPath(blobKey, id) {
     console.log(response);
     return response.blob();
   }).then((blobContent) => {
-    var blobURL = URL.createObjectURL(blobContent);
+    const blobURL = URL.createObjectURL(blobContent);
     document.getElementById(id).src = blobURL;
   });  
 }
