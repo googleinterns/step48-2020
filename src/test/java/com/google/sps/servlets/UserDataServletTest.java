@@ -53,11 +53,7 @@ import org.mockito.MockitoAnnotations;
 /** Tests the User Data Servlet */
 @RunWith(JUnit4.class)
 public final class UserDataServletTest {
-  private static final String PROFILE_PHOTO_BLOBKEY = "profile-photo-blobkey";
-  private static final String PHOTO_2_BLOBKEY = "photo-2-blobkey";
-  private static final String PHOTO_3_BLOBKEY = "photo-3-blobkey";
-  private static final String PHOTO_4_BLOBKEY = "photo-4-blobkey";
-  private static final String PHOTO_5_BLOBKEY = "photo-5-blobkey";
+  // These private instance variables are duplicated from the UserDataServlet for testing purposes
   private static final String USER_ENTITY = "User";
   private static final String USER_BIO_PROPERTY = "bio";
   private static final String USER_BLOBKEYS_PROPERTY = "blobkeys";
@@ -66,11 +62,11 @@ public final class UserDataServletTest {
   private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
   private static final String USER_ID_PROPERTY = "id";
   private static final String USER_NAME_PROPERTY = "name";
-  private static final String USER_PROFILE_PHOTO = "profile-photo";
-  private static final String USER_PHOTO_2 = "photo-2";
-  private static final String USER_PHOTO_3 = "photo-3";
-  private static final String USER_PHOTO_4 = "photo-4";
-  private static final String USER_PHOTO_5 = "photo-5";
+  private static final String USER_PHOTO_1_PROPERTY = "profile-photo";
+  private static final String USER_PHOTO_2_PROPERTY = "photo-2";
+  private static final String USER_PHOTO_3_PROPERTY = "photo-3";
+  private static final String USER_PHOTO_4_PROPERTY = "photo-4";
+  private static final String USER_PHOTO_5_PROPERTY = "photo-5";
 
   // Test User info
   private static final String TEST_USER_NAME = "Tim";
@@ -79,11 +75,8 @@ public final class UserDataServletTest {
   private static final String TEST_USER_BIO = "Amazing!";
   private static final String[] TEST_USER_FRIENDS_LIST = new String[]{"321"};
   private static final String ALTERNATE_TEST_USER_NAME = "John";
-  private static final String TEST_PROFILE_PHOTO_BLOBKEY = "abc";
+  private static final String TEST_PHOTO_1_BLOBKEY = "abc";
   private static final String TEST_PHOTO_2_BLOBKEY = "def";
-  private static final String TEST_PHOTO_3_BLOBKEY = "ghi";
-  private static final String TEST_PHOTO_4_BLOBKEY = "jkl";
-  private static final String TEST_PHOTO_5_BLOBKEY = "mno";
 
   private final Gson gson = new Gson();
   // Uses a local datastore stored in memory for tests
@@ -250,7 +243,7 @@ public final class UserDataServletTest {
     when(blobstore.getUploads(mockRequest)).thenReturn(map);
 
     // Test getUploadedFileBlobKey method by calling the wrapper
-    String expected = servletUnderTest.getUploadedFileBlobKeyWrapper(mockRequest, USER_PROFILE_PHOTO, blobstore, true);
+    String expected = servletUnderTest.getUploadedFileBlobKeyWrapper(mockRequest, USER_PHOTO_1_PROPERTY, blobstore, true);
 
     // Verify that no blobkey was found, null returned
     assertThat(expected).isNull();
@@ -265,16 +258,16 @@ public final class UserDataServletTest {
   public void testGetUploadedFileBlobKeyReturnsBlobkey() throws Exception {
     // Create map that blobstore returns, and mock the call
     List<BlobKey> keys = new ArrayList<>();
-    keys.add(new BlobKey(TEST_PROFILE_PHOTO_BLOBKEY));
+    keys.add(new BlobKey(TEST_PHOTO_1_BLOBKEY));
     Map<String, List<BlobKey>> map = new HashMap<>();
-    map.put(USER_PROFILE_PHOTO, keys);
+    map.put(USER_PHOTO_1_PROPERTY, keys);
     when(blobstore.getUploads(mockRequest)).thenReturn(map);
 
     // Test getUploadedFileBlobKey method by calling the wrapper
-    String expected = servletUnderTest.getUploadedFileBlobKeyWrapper(mockRequest, USER_PROFILE_PHOTO, blobstore, true);
+    String expected = servletUnderTest.getUploadedFileBlobKeyWrapper(mockRequest, USER_PHOTO_1_PROPERTY, blobstore, true);
 
     // Verify that the correct blobkey was returned
-    assertThat(expected).isEqualTo(TEST_PROFILE_PHOTO_BLOBKEY);
+    assertThat(expected).isEqualTo(TEST_PHOTO_1_BLOBKEY);
   }
 
   /**
@@ -288,10 +281,10 @@ public final class UserDataServletTest {
     List<BlobKey> keys = new ArrayList<>();
     keys.add(new BlobKey(TEST_PHOTO_2_BLOBKEY));
     Map<String, List<BlobKey>> map = new HashMap<>();
-    map.put(USER_PROFILE_PHOTO, keys);
+    map.put(USER_PHOTO_1_PROPERTY, keys);
     when(blobstore.getUploads(mockRequest)).thenReturn(map);
     // Mock parameter request, the profile photo is uploaded
-    when(mockRequest.getParameter(USER_PROFILE_PHOTO)).thenReturn("true");
+    when(mockRequest.getParameter(USER_PHOTO_1_PROPERTY)).thenReturn("true");
 
     // Test the doPost method by calling the wrapper, provide local datastore and mock blobstore
     servletUnderTest.doPostWrapper(datastore, blobstore, mockRequest, mockResponse, true);
@@ -313,12 +306,12 @@ public final class UserDataServletTest {
   public void testPostMethodWithNoImageUploaded() throws Exception {
     // Create map that blobstore returns, and mock the call
     List<BlobKey> keys = new ArrayList<>();
-    keys.add(new BlobKey(TEST_PROFILE_PHOTO_BLOBKEY));
+    keys.add(new BlobKey(TEST_PHOTO_1_BLOBKEY));
     Map<String, List<BlobKey>> map = new HashMap<>();
-    map.put(USER_PROFILE_PHOTO, keys);
+    map.put(USER_PHOTO_1_PROPERTY, keys);
     when(blobstore.getUploads(mockRequest)).thenReturn(map);
     // Mock parameter request, the profile photo is uploaded
-    when(mockRequest.getParameter(USER_PROFILE_PHOTO)).thenReturn("false");
+    when(mockRequest.getParameter(USER_PHOTO_1_PROPERTY)).thenReturn("false");
 
     // Test the doPost method by calling the wrapper, provide local datastore and mock blobstore
     servletUnderTest.doPostWrapper(datastore, blobstore, mockRequest, mockResponse, true);
@@ -340,11 +333,6 @@ public final class UserDataServletTest {
     userEntity.setProperty(USER_EMAIL_PROPERTY, TEST_USER_EMAIL);
     userEntity.setProperty(USER_BIO_PROPERTY, TEST_USER_BIO);
     userEntity.setProperty(USER_FRIENDS_LIST_PROPERTY, Arrays.asList(TEST_USER_FRIENDS_LIST));
-    userEntity.setProperty(PROFILE_PHOTO_BLOBKEY, TEST_PROFILE_PHOTO_BLOBKEY);
-    userEntity.setProperty(PHOTO_2_BLOBKEY, TEST_PHOTO_2_BLOBKEY);
-    userEntity.setProperty(PHOTO_3_BLOBKEY, TEST_PHOTO_3_BLOBKEY);
-    userEntity.setProperty(PHOTO_4_BLOBKEY, TEST_PHOTO_4_BLOBKEY);
-    userEntity.setProperty(PHOTO_5_BLOBKEY, TEST_PHOTO_5_BLOBKEY);
     userEntity.setProperty(USER_BLOBKEYS_PROPERTY, new ArrayList<>(Arrays.asList(new String[]{"", "", "", "", ""})));
     datastore.put(userEntity);
   }
