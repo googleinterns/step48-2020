@@ -55,7 +55,7 @@ public class MatchDecisionsServlet extends HttpServlet {
   private static final String POTENTIAL_MATCH_REQUEST_PARAM = "potentialMatchID";
   private static final String DECISION_REQUEST_PARAM = "decision";
   
-  private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
