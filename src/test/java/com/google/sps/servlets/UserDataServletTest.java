@@ -60,6 +60,7 @@ public final class UserDataServletTest {
   private static final String PHOTO_5_BLOBKEY = "photo-5-blobkey";
   private static final String USER_ENTITY = "User";
   private static final String USER_BIO_PROPERTY = "bio";
+  private static final String USER_BLOBKEYS_PROPERTY = "blobkeys";
   private static final String USER_EMAIL_PROPERTY = "email";
   private static final String USER_FOUND_PROPERTY = "user-found";
   private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
@@ -300,7 +301,7 @@ public final class UserDataServletTest {
     assertThat(userEntity).isNotNull();
 
     // Verify that datastore correctly stores the profile photo blobkey
-    assertThat((String) userEntity.getProperty(PROFILE_PHOTO_BLOBKEY)).isEqualTo(TEST_PHOTO_2_BLOBKEY);
+    assertThat(((ArrayList<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY)).get(0)).isEqualTo(TEST_PHOTO_2_BLOBKEY);
   }
 
   /**
@@ -327,7 +328,7 @@ public final class UserDataServletTest {
     assertThat(userEntity).isNotNull();
 
     // Verify that datastore doesn't update the value stored in datastore
-    assertThat((String) userEntity.getProperty(PROFILE_PHOTO_BLOBKEY)).isEqualTo("");
+    assertThat(((ArrayList<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY)).get(0)).isEqualTo("");
   }
 
 
@@ -344,6 +345,7 @@ public final class UserDataServletTest {
     userEntity.setProperty(PHOTO_3_BLOBKEY, TEST_PHOTO_3_BLOBKEY);
     userEntity.setProperty(PHOTO_4_BLOBKEY, TEST_PHOTO_4_BLOBKEY);
     userEntity.setProperty(PHOTO_5_BLOBKEY, TEST_PHOTO_5_BLOBKEY);
+    userEntity.setProperty(USER_BLOBKEYS_PROPERTY, new ArrayList<>(Arrays.asList(new String[]{"", "", "", "", ""})));
     datastore.put(userEntity);
   }
 }

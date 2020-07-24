@@ -57,6 +57,7 @@ public class UserDataServlet extends HttpServlet {
   private static final String DEFAULT_STRING = "";
   private static final String USER_ENTITY = "User";
   private static final String USER_BIO_PROPERTY = "bio";
+  private static final String USER_BLOBKEYS_PROPERTY = "blobkeys";
   private static final String USER_EMAIL_PROPERTY = "email";
   private static final String USER_FOUND_PROPERTY = "user-found";
   private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
@@ -67,11 +68,6 @@ public class UserDataServlet extends HttpServlet {
   private static final String USER_PHOTO_3_PROPERTY = "photo-3";
   private static final String USER_PHOTO_4_PROPERTY = "photo-4";
   private static final String USER_PHOTO_5_PROPERTY = "photo-5";
-  private static final String PHOTO_1_BLOBKEY_PROPERTY = "profile-photo-blobkey";
-  private static final String PHOTO_2_BLOBKEY_PROPERTY = "photo-2-blobkey";
-  private static final String PHOTO_3_BLOBKEY_PROPERTY = "photo-3-blobkey";
-  private static final String PHOTO_4_BLOBKEY_PROPERTY = "photo-4-blobkey";
-  private static final String PHOTO_5_BLOBKEY_PROPERTY = "photo-5-blobkey";
 
   private boolean testing = false;
   private BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
@@ -100,11 +96,7 @@ public class UserDataServlet extends HttpServlet {
           .put(USER_FRIENDS_LIST_PROPERTY, (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY))
           .put(USER_ID_PROPERTY, userEntity.getProperty(USER_ID_PROPERTY))
           .put(USER_NAME_PROPERTY, userEntity.getProperty(USER_NAME_PROPERTY))
-          .put(PHOTO_1_BLOBKEY_PROPERTY, userEntity.getProperty(PHOTO_1_BLOBKEY_PROPERTY))
-          .put(PHOTO_2_BLOBKEY_PROPERTY, userEntity.getProperty(PHOTO_2_BLOBKEY_PROPERTY))
-          .put(PHOTO_3_BLOBKEY_PROPERTY, userEntity.getProperty(PHOTO_3_BLOBKEY_PROPERTY))
-          .put(PHOTO_4_BLOBKEY_PROPERTY, userEntity.getProperty(PHOTO_4_BLOBKEY_PROPERTY))
-          .put(PHOTO_5_BLOBKEY_PROPERTY, userEntity.getProperty(PHOTO_5_BLOBKEY_PROPERTY));
+          .put("blobkeys", (ArrayList<String>) userEntity.getProperty("blobkeys"));
     }
 
     // Send the user's json data as the response
@@ -132,11 +124,7 @@ public class UserDataServlet extends HttpServlet {
       userEntity.setProperty(USER_EMAIL_PROPERTY, userEmail);
       userEntity.setProperty(USER_BIO_PROPERTY, userBio);
       userEntity.setProperty(USER_FRIENDS_LIST_PROPERTY, Arrays.asList(friends));
-      userEntity.setProperty(PHOTO_1_BLOBKEY_PROPERTY, DEFAULT_STRING);
-      userEntity.setProperty(PHOTO_2_BLOBKEY_PROPERTY, DEFAULT_STRING);
-      userEntity.setProperty(PHOTO_3_BLOBKEY_PROPERTY, DEFAULT_STRING);
-      userEntity.setProperty(PHOTO_4_BLOBKEY_PROPERTY, DEFAULT_STRING);
-      userEntity.setProperty(PHOTO_5_BLOBKEY_PROPERTY, DEFAULT_STRING);
+      userEntity.setProperty("blobkeys", new ArrayList<>(Arrays.asList(new String[]{"", "", "", "", ""})));
     }
     else {
       // User entity needs to be updated
@@ -167,20 +155,22 @@ public class UserDataServlet extends HttpServlet {
     boolean photo4Uploaded = getBooleanParameter(request, USER_PHOTO_4_PROPERTY, IMAGE_NOT_FOUND);
     boolean photo5Uploaded = getBooleanParameter(request, USER_PHOTO_5_PROPERTY, IMAGE_NOT_FOUND);
 
+    List<String> blobKeys = (ArrayList<String>) userEntity.getProperty("blobkeys");
+
     if (profilePhotoUploaded) {
-      userEntity.setProperty(PHOTO_1_BLOBKEY_PROPERTY, getUploadedFileBlobKey(request, USER_PHOTO_1_PROPERTY));
+      blobKeys.set(0, getUploadedFileBlobKey(request, USER_PHOTO_1_PROPERTY));
     }
     if (photo2Uploaded) {
-      userEntity.setProperty(PHOTO_2_BLOBKEY_PROPERTY, getUploadedFileBlobKey(request, USER_PHOTO_2_PROPERTY));
+      blobKeys.set(1, getUploadedFileBlobKey(request, USER_PHOTO_2_PROPERTY));
     }
     if (photo3Uploaded) {
-      userEntity.setProperty(PHOTO_3_BLOBKEY_PROPERTY, getUploadedFileBlobKey(request, USER_PHOTO_3_PROPERTY));
+      blobKeys.set(2, getUploadedFileBlobKey(request, USER_PHOTO_3_PROPERTY));
     }
     if (photo4Uploaded) {
-      userEntity.setProperty(PHOTO_4_BLOBKEY_PROPERTY, getUploadedFileBlobKey(request, USER_PHOTO_4_PROPERTY));
+      blobKeys.set(3, getUploadedFileBlobKey(request, USER_PHOTO_4_PROPERTY));
     }
     if (photo5Uploaded) {
-      userEntity.setProperty(PHOTO_5_BLOBKEY_PROPERTY, getUploadedFileBlobKey(request, USER_PHOTO_5_PROPERTY));
+      blobKeys.set(4, getUploadedFileBlobKey(request, USER_PHOTO_5_PROPERTY));
     }
   }
 
