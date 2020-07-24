@@ -53,7 +53,6 @@ import com.google.gson.Gson;
 
 @WebServlet("/user-data")
 public class UserDataServlet extends HttpServlet {
-  private static final boolean IMAGE_NOT_FOUND = false;
   private static final String DEFAULT_STRING = "";
   private static final String USER_ENTITY = "User";
   private static final String USER_BIO_PROPERTY = "bio";
@@ -149,11 +148,11 @@ public class UserDataServlet extends HttpServlet {
   /** Stores the blob-keys (in Datastore) of files uploaded to Blobstore. */
   private void getAndStoreBlobKeys(HttpServletRequest request, Entity userEntity) {
     // Get values determining whether or not to update/save blobkeys of any particular image
-    boolean profilePhotoUploaded = getBooleanParameter(request, USER_PHOTO_1_PROPERTY, IMAGE_NOT_FOUND);
-    boolean photo2Uploaded = getBooleanParameter(request, USER_PHOTO_2_PROPERTY, IMAGE_NOT_FOUND);
-    boolean photo3Uploaded = getBooleanParameter(request, USER_PHOTO_3_PROPERTY, IMAGE_NOT_FOUND);
-    boolean photo4Uploaded = getBooleanParameter(request, USER_PHOTO_4_PROPERTY, IMAGE_NOT_FOUND);
-    boolean photo5Uploaded = getBooleanParameter(request, USER_PHOTO_5_PROPERTY, IMAGE_NOT_FOUND);
+    boolean profilePhotoUploaded = getBooleanParameter(request, USER_PHOTO_1_PROPERTY);
+    boolean photo2Uploaded = getBooleanParameter(request, USER_PHOTO_2_PROPERTY);
+    boolean photo3Uploaded = getBooleanParameter(request, USER_PHOTO_3_PROPERTY);
+    boolean photo4Uploaded = getBooleanParameter(request, USER_PHOTO_4_PROPERTY);
+    boolean photo5Uploaded = getBooleanParameter(request, USER_PHOTO_5_PROPERTY);
 
     List<String> blobKeys = (ArrayList<String>) userEntity.getProperty("blobkeys");
 
@@ -222,10 +221,8 @@ public class UserDataServlet extends HttpServlet {
   }
 
   /** Returns the request parameter (for booleans), or the default value if not specified */
-  private boolean getBooleanParameter(HttpServletRequest request, String name, boolean defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) return false;
-    else return value.equals("true");
+  private boolean getBooleanParameter(HttpServletRequest request, String name) {
+    return Boolean.valueOf(request.getParameter(name));
   }
 
   /** Gets the blobkey of the image passed to the designated input tag in HTML */
