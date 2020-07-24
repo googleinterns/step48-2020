@@ -104,7 +104,7 @@ public final class UserDataServletTest {
     PrintWriter writer = new PrintWriter(stringWriter);
     when(mockResponse.getWriter()).thenReturn(writer);
 
-    // Test the doGet method by calling the wrapper method
+    // Test the doGet method with local datastore
     servletUnderTest.doGet(mockRequest, mockResponse);
     writer.flush();
 
@@ -130,7 +130,7 @@ public final class UserDataServletTest {
     when(mockResponse.getWriter()).thenReturn(writer);
 
     addTestUserEntityToDatastore(datastore);
-    // Test the doGet method by calling the wrapper method
+    // Test the doGet method with local datastore
     servletUnderTest.doGet(mockRequest, mockResponse);
     writer.flush();
 
@@ -154,7 +154,7 @@ public final class UserDataServletTest {
     when(mockRequest.getParameter(UserDataServlet.USER_BIO_PROPERTY)).thenReturn(TEST_USER_BIO);
     when(mockRequest.getParameterValues(UserDataServlet.USER_FRIENDS_LIST_PROPERTY)).thenReturn(TEST_USER_FRIENDS_LIST);
 
-    // Test the doPost method by calling the wrapper method
+    // Test the doPost method with local datastore
     servletUnderTest.doPost(mockRequest, mockResponse);
 
     // Check that the mockResponse redirected property
@@ -175,7 +175,7 @@ public final class UserDataServletTest {
     when(mockRequest.getParameter(UserDataServlet.USER_BIO_PROPERTY)).thenReturn(TEST_USER_BIO);
     when(mockRequest.getParameterValues(UserDataServlet.USER_FRIENDS_LIST_PROPERTY)).thenReturn(TEST_USER_FRIENDS_LIST);
 
-    // Test the doPost method by calling the wrapper method
+    // Test the doPost method with local datastore
     servletUnderTest.doPost(mockRequest, mockResponse);
 
     // Query the local datastore for the newly created user entity
@@ -206,7 +206,7 @@ public final class UserDataServletTest {
     when(mockRequest.getParameterValues(UserDataServlet.USER_FRIENDS_LIST_PROPERTY)).thenReturn(TEST_USER_FRIENDS_LIST);
 
     addTestUserEntityToDatastore(datastore);
-    // Test the doPost method by calling the wrapper method
+    // Test the doPost method with local datastore
     servletUnderTest.doPost(mockRequest, mockResponse);
 
     // Query the local datastore for the newly created user entity
@@ -229,7 +229,7 @@ public final class UserDataServletTest {
     Map<String, List<BlobKey>> map = new HashMap<>();
     when(blobstore.getUploads(mockRequest)).thenReturn(map);
 
-    // Test getUploadedFileBlobKey method by calling the wrapper
+    // Test getUploadedFileBlobKey method with mock blobstore
     String expected = servletUnderTest.getUploadedFileBlobKey(mockRequest, UserDataServlet.USER_PHOTO_1_PROPERTY);
 
     // Verify that no blobkey was found, null returned
@@ -250,7 +250,7 @@ public final class UserDataServletTest {
     map.put(UserDataServlet.USER_PHOTO_1_PROPERTY, keys);
     when(blobstore.getUploads(mockRequest)).thenReturn(map);
 
-    // Test getUploadedFileBlobKey method by calling the wrapper
+    // Test getUploadedFileBlobKey method with mock blobstore
     String expected = servletUnderTest.getUploadedFileBlobKey(mockRequest, UserDataServlet.USER_PHOTO_1_PROPERTY);
 
     // Verify that the correct blobkey was returned
@@ -273,7 +273,7 @@ public final class UserDataServletTest {
     // Mock parameter request, the profile photo is uploaded
     when(mockRequest.getParameter(UserDataServlet.USER_PHOTO_1_PROPERTY)).thenReturn("true");
 
-    // Test the doPost method by calling the wrapper, provide local datastore and mock blobstore
+    // Test the doPost method with local datastore and mock blobstore
     servletUnderTest.doPost(mockRequest, mockResponse);
 
     // Retrieve userEntity from datastore
@@ -300,7 +300,7 @@ public final class UserDataServletTest {
     // Mock parameter request, the profile photo is uploaded
     when(mockRequest.getParameter(UserDataServlet.USER_PHOTO_1_PROPERTY)).thenReturn("false");
 
-    // Test the doPost method by calling the wrapper, provide local datastore and mock blobstore
+    // Test the doPost method with local datastore and mock blobstore
     servletUnderTest.doPost(mockRequest, mockResponse);
 
     // Retrieve userEntity from datastore
