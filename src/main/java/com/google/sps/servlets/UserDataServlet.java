@@ -53,20 +53,20 @@ import com.google.gson.Gson;
 
 @WebServlet("/user-data")
 public class UserDataServlet extends HttpServlet {
-  private static final String DEFAULT_STRING = "";
-  private static final String USER_ENTITY = "User";
-  private static final String USER_BIO_PROPERTY = "bio";
-  private static final String USER_BLOBKEYS_PROPERTY = "blobkeys";
-  private static final String USER_EMAIL_PROPERTY = "email";
-  private static final String USER_FOUND_PROPERTY = "user-found";
-  private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
-  private static final String USER_ID_PROPERTY = "id";
-  private static final String USER_NAME_PROPERTY = "name";
-  private static final String USER_PHOTO_1_PROPERTY = "profile-photo";
-  private static final String USER_PHOTO_2_PROPERTY = "photo-2";
-  private static final String USER_PHOTO_3_PROPERTY = "photo-3";
-  private static final String USER_PHOTO_4_PROPERTY = "photo-4";
-  private static final String USER_PHOTO_5_PROPERTY = "photo-5";
+  static final String DEFAULT_STRING = "";
+  static final String USER_ENTITY = "User";
+  static final String USER_BIO_PROPERTY = "bio";
+  static final String USER_BLOBKEYS_PROPERTY = "blobkeys";
+  static final String USER_EMAIL_PROPERTY = "email";
+  static final String USER_FOUND_PROPERTY = "user-found";
+  static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
+  static final String USER_ID_PROPERTY = "id";
+  static final String USER_NAME_PROPERTY = "name";
+  static final String USER_PHOTO_1_PROPERTY = "profile-photo";
+  static final String USER_PHOTO_2_PROPERTY = "photo-2";
+  static final String USER_PHOTO_3_PROPERTY = "photo-3";
+  static final String USER_PHOTO_4_PROPERTY = "photo-4";
+  static final String USER_PHOTO_5_PROPERTY = "photo-5";
 
   BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

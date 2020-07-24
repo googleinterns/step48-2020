@@ -53,21 +53,6 @@ import org.mockito.MockitoAnnotations;
 /** Tests the User Data Servlet */
 @RunWith(JUnit4.class)
 public final class UserDataServletTest {
-  // Duplicated from UserDataServlet for testing simplicity (TODO: look into package-private)
-  private static final String USER_ENTITY = "User";
-  private static final String USER_BIO_PROPERTY = "bio";
-  private static final String USER_BLOBKEYS_PROPERTY = "blobkeys";
-  private static final String USER_EMAIL_PROPERTY = "email";
-  private static final String USER_FOUND_PROPERTY = "user-found";
-  private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
-  private static final String USER_ID_PROPERTY = "id";
-  private static final String USER_NAME_PROPERTY = "name";
-  private static final String USER_PHOTO_1_PROPERTY = "profile-photo";
-  private static final String USER_PHOTO_2_PROPERTY = "photo-2";
-  private static final String USER_PHOTO_3_PROPERTY = "photo-3";
-  private static final String USER_PHOTO_4_PROPERTY = "photo-4";
-  private static final String USER_PHOTO_5_PROPERTY = "photo-5";
-
   // Test User info
   private static final String TEST_USER_NAME = "Tim";
   private static final String TEST_USER_ID = "123";
@@ -112,7 +97,7 @@ public final class UserDataServletTest {
   @Test
   public void testGetMethodWithInvalidId() throws Exception {
     // Mock the getParameter call
-    when(mockRequest.getParameter(USER_ID_PROPERTY)).thenReturn(TEST_USER_ID);
+    when(mockRequest.getParameter(UserDataServlet.USER_ID_PROPERTY)).thenReturn(TEST_USER_ID);
 
     // Store output given by mockResponse
     StringWriter stringWriter = new StringWriter();
@@ -125,7 +110,7 @@ public final class UserDataServletTest {
 
     // Check that the user wasn't found in datastore
     Map<String, Object> actual = gson.fromJson(stringWriter.toString(), Map.class);
-    assertThat(actual).containsEntry(USER_FOUND_PROPERTY, false);
+    assertThat(actual).containsEntry(UserDataServlet.USER_FOUND_PROPERTY, false);
   }
 
   /**
@@ -137,7 +122,7 @@ public final class UserDataServletTest {
   @Test
   public void testGetMethodWithValidId() throws Exception {
     // Mock the getParameter call
-    when(mockRequest.getParameter(USER_ID_PROPERTY)).thenReturn(TEST_USER_ID);
+    when(mockRequest.getParameter(UserDataServlet.USER_ID_PROPERTY)).thenReturn(TEST_USER_ID);
 
     // Store output given by mockResponse
     StringWriter stringWriter = new StringWriter();
@@ -151,8 +136,8 @@ public final class UserDataServletTest {
 
     // Check that the user was found in Datastore
     Map<String, Object> actual = gson.fromJson(stringWriter.toString(), Map.class);
-    assertThat(actual).containsEntry(USER_FOUND_PROPERTY, true);
-    assertThat(actual).containsEntry(USER_ID_PROPERTY, TEST_USER_ID);
+    assertThat(actual).containsEntry(UserDataServlet.USER_FOUND_PROPERTY, true);
+    assertThat(actual).containsEntry(UserDataServlet.USER_ID_PROPERTY, TEST_USER_ID);
   }
 
   /**
@@ -163,11 +148,11 @@ public final class UserDataServletTest {
   @Test
   public void testPostMethodRedirect() throws Exception {
     // Mock the getParameter and getParameterValues calls
-    when(mockRequest.getParameter(USER_ID_PROPERTY)).thenReturn(TEST_USER_ID);
-    when(mockRequest.getParameter(USER_NAME_PROPERTY)).thenReturn(TEST_USER_NAME);
-    when(mockRequest.getParameter(USER_EMAIL_PROPERTY)).thenReturn(TEST_USER_EMAIL);
-    when(mockRequest.getParameter(USER_BIO_PROPERTY)).thenReturn(TEST_USER_BIO);
-    when(mockRequest.getParameterValues(USER_FRIENDS_LIST_PROPERTY)).thenReturn(TEST_USER_FRIENDS_LIST);
+    when(mockRequest.getParameter(UserDataServlet.USER_ID_PROPERTY)).thenReturn(TEST_USER_ID);
+    when(mockRequest.getParameter(UserDataServlet.USER_NAME_PROPERTY)).thenReturn(TEST_USER_NAME);
+    when(mockRequest.getParameter(UserDataServlet.USER_EMAIL_PROPERTY)).thenReturn(TEST_USER_EMAIL);
+    when(mockRequest.getParameter(UserDataServlet.USER_BIO_PROPERTY)).thenReturn(TEST_USER_BIO);
+    when(mockRequest.getParameterValues(UserDataServlet.USER_FRIENDS_LIST_PROPERTY)).thenReturn(TEST_USER_FRIENDS_LIST);
 
     // Test the doPost method by calling the wrapper method
     servletUnderTest.doPost(mockRequest, mockResponse);
@@ -184,25 +169,25 @@ public final class UserDataServletTest {
   @Test
   public void testPostCreateUserInfo() throws Exception {
     // Mock the getParameter and getParameterValues calls
-    when(mockRequest.getParameter(USER_ID_PROPERTY)).thenReturn(TEST_USER_ID);
-    when(mockRequest.getParameter(USER_NAME_PROPERTY)).thenReturn(TEST_USER_NAME);
-    when(mockRequest.getParameter(USER_EMAIL_PROPERTY)).thenReturn(TEST_USER_EMAIL);
-    when(mockRequest.getParameter(USER_BIO_PROPERTY)).thenReturn(TEST_USER_BIO);
-    when(mockRequest.getParameterValues(USER_FRIENDS_LIST_PROPERTY)).thenReturn(TEST_USER_FRIENDS_LIST);
+    when(mockRequest.getParameter(UserDataServlet.USER_ID_PROPERTY)).thenReturn(TEST_USER_ID);
+    when(mockRequest.getParameter(UserDataServlet.USER_NAME_PROPERTY)).thenReturn(TEST_USER_NAME);
+    when(mockRequest.getParameter(UserDataServlet.USER_EMAIL_PROPERTY)).thenReturn(TEST_USER_EMAIL);
+    when(mockRequest.getParameter(UserDataServlet.USER_BIO_PROPERTY)).thenReturn(TEST_USER_BIO);
+    when(mockRequest.getParameterValues(UserDataServlet.USER_FRIENDS_LIST_PROPERTY)).thenReturn(TEST_USER_FRIENDS_LIST);
 
     // Test the doPost method by calling the wrapper method
     servletUnderTest.doPost(mockRequest, mockResponse);
 
     // Query the local datastore for the newly created user entity
-    Entity userEntity = datastore.prepare(new Query(USER_ENTITY)).asSingleEntity();
+    Entity userEntity = datastore.prepare(new Query(UserDataServlet.USER_ENTITY)).asSingleEntity();
     assertThat(userEntity).isNotNull();
 
     // Verify that the user entity has the correct properties
-    assertThat((String) userEntity.getProperty(USER_ID_PROPERTY)).isEqualTo(TEST_USER_ID);
-    assertThat((String) userEntity.getProperty(USER_NAME_PROPERTY)).isEqualTo(TEST_USER_NAME);
-    assertThat((String) userEntity.getProperty(USER_EMAIL_PROPERTY)).isEqualTo(TEST_USER_EMAIL);
-    assertThat((String) userEntity.getProperty(USER_BIO_PROPERTY)).isEqualTo(TEST_USER_BIO);
-    assertThat((ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY)).containsExactly(TEST_USER_FRIENDS_LIST);
+    assertThat((String) userEntity.getProperty(UserDataServlet.USER_ID_PROPERTY)).isEqualTo(TEST_USER_ID);
+    assertThat((String) userEntity.getProperty(UserDataServlet.USER_NAME_PROPERTY)).isEqualTo(TEST_USER_NAME);
+    assertThat((String) userEntity.getProperty(UserDataServlet.USER_EMAIL_PROPERTY)).isEqualTo(TEST_USER_EMAIL);
+    assertThat((String) userEntity.getProperty(UserDataServlet.USER_BIO_PROPERTY)).isEqualTo(TEST_USER_BIO);
+    assertThat((ArrayList<String>) userEntity.getProperty(UserDataServlet.USER_FRIENDS_LIST_PROPERTY)).containsExactly(TEST_USER_FRIENDS_LIST);
   }
 
   /**
@@ -214,23 +199,23 @@ public final class UserDataServletTest {
   @Test
   public void testPostUpdateUserInfo() throws Exception {
     // Mock the getParameter and getParameterValues calls
-    when(mockRequest.getParameter(USER_ID_PROPERTY)).thenReturn(TEST_USER_ID);
-    when(mockRequest.getParameter(USER_NAME_PROPERTY)).thenReturn(ALTERNATE_TEST_USER_NAME);
-    when(mockRequest.getParameter(USER_EMAIL_PROPERTY)).thenReturn(TEST_USER_EMAIL);
-    when(mockRequest.getParameter(USER_BIO_PROPERTY)).thenReturn(TEST_USER_BIO);
-    when(mockRequest.getParameterValues(USER_FRIENDS_LIST_PROPERTY)).thenReturn(TEST_USER_FRIENDS_LIST);
+    when(mockRequest.getParameter(UserDataServlet.USER_ID_PROPERTY)).thenReturn(TEST_USER_ID);
+    when(mockRequest.getParameter(UserDataServlet.USER_NAME_PROPERTY)).thenReturn(ALTERNATE_TEST_USER_NAME);
+    when(mockRequest.getParameter(UserDataServlet.USER_EMAIL_PROPERTY)).thenReturn(TEST_USER_EMAIL);
+    when(mockRequest.getParameter(UserDataServlet.USER_BIO_PROPERTY)).thenReturn(TEST_USER_BIO);
+    when(mockRequest.getParameterValues(UserDataServlet.USER_FRIENDS_LIST_PROPERTY)).thenReturn(TEST_USER_FRIENDS_LIST);
 
     addTestUserEntityToDatastore(datastore);
     // Test the doPost method by calling the wrapper method
     servletUnderTest.doPost(mockRequest, mockResponse);
 
     // Query the local datastore for the newly created user entity
-    Entity userEntity = datastore.prepare(new Query(USER_ENTITY)).asSingleEntity();
+    Entity userEntity = datastore.prepare(new Query(UserDataServlet.USER_ENTITY)).asSingleEntity();
     assertThat(userEntity).isNotNull();
 
     // Verify that the user Entity name property changed
-    assertThat((String) userEntity.getProperty(USER_ID_PROPERTY)).isEqualTo(TEST_USER_ID);
-    assertThat((String) userEntity.getProperty(USER_NAME_PROPERTY)).isEqualTo(ALTERNATE_TEST_USER_NAME);
+    assertThat((String) userEntity.getProperty(UserDataServlet.USER_ID_PROPERTY)).isEqualTo(TEST_USER_ID);
+    assertThat((String) userEntity.getProperty(UserDataServlet.USER_NAME_PROPERTY)).isEqualTo(ALTERNATE_TEST_USER_NAME);
   }
 
   /**
@@ -245,7 +230,7 @@ public final class UserDataServletTest {
     when(blobstore.getUploads(mockRequest)).thenReturn(map);
 
     // Test getUploadedFileBlobKey method by calling the wrapper
-    String expected = servletUnderTest.getUploadedFileBlobKey(mockRequest, USER_PHOTO_1_PROPERTY);
+    String expected = servletUnderTest.getUploadedFileBlobKey(mockRequest, UserDataServlet.USER_PHOTO_1_PROPERTY);
 
     // Verify that no blobkey was found, null returned
     assertThat(expected).isNull();
@@ -262,11 +247,11 @@ public final class UserDataServletTest {
     List<BlobKey> keys = new ArrayList<>();
     keys.add(new BlobKey(TEST_PHOTO_1_BLOBKEY));
     Map<String, List<BlobKey>> map = new HashMap<>();
-    map.put(USER_PHOTO_1_PROPERTY, keys);
+    map.put(UserDataServlet.USER_PHOTO_1_PROPERTY, keys);
     when(blobstore.getUploads(mockRequest)).thenReturn(map);
 
     // Test getUploadedFileBlobKey method by calling the wrapper
-    String expected = servletUnderTest.getUploadedFileBlobKey(mockRequest, USER_PHOTO_1_PROPERTY);
+    String expected = servletUnderTest.getUploadedFileBlobKey(mockRequest, UserDataServlet.USER_PHOTO_1_PROPERTY);
 
     // Verify that the correct blobkey was returned
     assertThat(expected).isEqualTo(TEST_PHOTO_1_BLOBKEY);
@@ -283,20 +268,20 @@ public final class UserDataServletTest {
     List<BlobKey> keys = new ArrayList<>();
     keys.add(new BlobKey(TEST_PHOTO_2_BLOBKEY));
     Map<String, List<BlobKey>> map = new HashMap<>();
-    map.put(USER_PHOTO_1_PROPERTY, keys);
+    map.put(UserDataServlet.USER_PHOTO_1_PROPERTY, keys);
     when(blobstore.getUploads(mockRequest)).thenReturn(map);
     // Mock parameter request, the profile photo is uploaded
-    when(mockRequest.getParameter(USER_PHOTO_1_PROPERTY)).thenReturn("true");
+    when(mockRequest.getParameter(UserDataServlet.USER_PHOTO_1_PROPERTY)).thenReturn("true");
 
     // Test the doPost method by calling the wrapper, provide local datastore and mock blobstore
     servletUnderTest.doPost(mockRequest, mockResponse);
 
     // Retrieve userEntity from datastore
-    Entity userEntity = datastore.prepare(new Query(USER_ENTITY)).asSingleEntity();
+    Entity userEntity = datastore.prepare(new Query(UserDataServlet.USER_ENTITY)).asSingleEntity();
     assertThat(userEntity).isNotNull();
 
     // Verify that datastore correctly stores the profile photo blobkey
-    assertThat(((ArrayList<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY)).get(0)).isEqualTo(TEST_PHOTO_2_BLOBKEY);
+    assertThat(((ArrayList<String>) userEntity.getProperty(UserDataServlet.USER_BLOBKEYS_PROPERTY)).get(0)).isEqualTo(TEST_PHOTO_2_BLOBKEY);
   }
 
   /**
@@ -310,32 +295,32 @@ public final class UserDataServletTest {
     List<BlobKey> keys = new ArrayList<>();
     keys.add(new BlobKey(TEST_PHOTO_1_BLOBKEY));
     Map<String, List<BlobKey>> map = new HashMap<>();
-    map.put(USER_PHOTO_1_PROPERTY, keys);
+    map.put(UserDataServlet.USER_PHOTO_1_PROPERTY, keys);
     when(blobstore.getUploads(mockRequest)).thenReturn(map);
     // Mock parameter request, the profile photo is uploaded
-    when(mockRequest.getParameter(USER_PHOTO_1_PROPERTY)).thenReturn("false");
+    when(mockRequest.getParameter(UserDataServlet.USER_PHOTO_1_PROPERTY)).thenReturn("false");
 
     // Test the doPost method by calling the wrapper, provide local datastore and mock blobstore
     servletUnderTest.doPost(mockRequest, mockResponse);
 
     // Retrieve userEntity from datastore
-    Entity userEntity = datastore.prepare(new Query(USER_ENTITY)).asSingleEntity();
+    Entity userEntity = datastore.prepare(new Query(UserDataServlet.USER_ENTITY)).asSingleEntity();
     assertThat(userEntity).isNotNull();
 
     // Verify that datastore doesn't update the value stored in datastore
-    assertThat(((ArrayList<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY)).get(0)).isEqualTo("");
+    assertThat(((ArrayList<String>) userEntity.getProperty(UserDataServlet.USER_BLOBKEYS_PROPERTY)).get(0)).isEqualTo("");
   }
 
 
   /** Helper method to add a test user to the local datastore */
   private void addTestUserEntityToDatastore(DatastoreService datastore) {
-    Entity userEntity = new Entity(USER_ENTITY);
-    userEntity.setProperty(USER_ID_PROPERTY, TEST_USER_ID);
-    userEntity.setProperty(USER_NAME_PROPERTY, TEST_USER_NAME);
-    userEntity.setProperty(USER_EMAIL_PROPERTY, TEST_USER_EMAIL);
-    userEntity.setProperty(USER_BIO_PROPERTY, TEST_USER_BIO);
-    userEntity.setProperty(USER_FRIENDS_LIST_PROPERTY, Arrays.asList(TEST_USER_FRIENDS_LIST));
-    userEntity.setProperty(USER_BLOBKEYS_PROPERTY, new ArrayList<>(Arrays.asList(new String[]{"", "", "", "", ""})));
+    Entity userEntity = new Entity(UserDataServlet.USER_ENTITY);
+    userEntity.setProperty(UserDataServlet.USER_ID_PROPERTY, TEST_USER_ID);
+    userEntity.setProperty(UserDataServlet.USER_NAME_PROPERTY, TEST_USER_NAME);
+    userEntity.setProperty(UserDataServlet.USER_EMAIL_PROPERTY, TEST_USER_EMAIL);
+    userEntity.setProperty(UserDataServlet.USER_BIO_PROPERTY, TEST_USER_BIO);
+    userEntity.setProperty(UserDataServlet.USER_FRIENDS_LIST_PROPERTY, Arrays.asList(TEST_USER_FRIENDS_LIST));
+    userEntity.setProperty(UserDataServlet.USER_BLOBKEYS_PROPERTY, new ArrayList<>(Arrays.asList(new String[]{"", "", "", "", ""})));
     datastore.put(userEntity);
   }
 }
