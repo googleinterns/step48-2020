@@ -94,7 +94,7 @@ public class UserDataServlet extends HttpServlet {
           .put(USER_FRIENDS_LIST_PROPERTY, (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY))
           .put(USER_ID_PROPERTY, userEntity.getProperty(USER_ID_PROPERTY))
           .put(USER_NAME_PROPERTY, userEntity.getProperty(USER_NAME_PROPERTY))
-          .put("blobkeys", (ArrayList<String>) userEntity.getProperty("blobkeys"));
+          .put(USER_BLOBKEYS_PROPERTY, (ArrayList<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY));
     }
 
     // Send the user's json data as the response
@@ -122,7 +122,7 @@ public class UserDataServlet extends HttpServlet {
       userEntity.setProperty(USER_EMAIL_PROPERTY, userEmail);
       userEntity.setProperty(USER_BIO_PROPERTY, userBio);
       userEntity.setProperty(USER_FRIENDS_LIST_PROPERTY, Arrays.asList(friends));
-      userEntity.setProperty("blobkeys", new ArrayList<>(Arrays.asList(new String[]{"", "", "", "", ""})));
+      userEntity.setProperty(USER_BLOBKEYS_PROPERTY, new ArrayList<>(Arrays.asList(new String[]{"", "", "", "", ""})));
     }
     else {
       // User entity needs to be updated
@@ -153,7 +153,7 @@ public class UserDataServlet extends HttpServlet {
     boolean photo4Uploaded = getBooleanParameter(request, USER_PHOTO_4_PROPERTY);
     boolean photo5Uploaded = getBooleanParameter(request, USER_PHOTO_5_PROPERTY);
 
-    List<String> blobKeys = (ArrayList<String>) userEntity.getProperty("blobkeys");
+    List<String> blobKeys = (ArrayList<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY);
 
     if (profilePhotoUploaded) {
       blobKeys.set(0, getUploadedFileBlobKey(request, USER_PHOTO_1_PROPERTY));
