@@ -89,7 +89,6 @@ public class MatchDecisionsServletTest {
     servletUnderTest = new MatchDecisionsServlet();
     datastore = DatastoreServiceFactory.getDatastoreService();
     servletUnderTest.datastore = datastore;
-
   }
 
   @After
