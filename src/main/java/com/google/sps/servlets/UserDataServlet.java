@@ -68,7 +68,6 @@ public class UserDataServlet extends HttpServlet {
   private static final String USER_PHOTO_4_PROPERTY = "photo-4";
   private static final String USER_PHOTO_5_PROPERTY = "photo-5";
 
-  private boolean testing = true;
   BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private final Gson gson = new Gson();
@@ -209,14 +208,6 @@ public class UserDataServlet extends HttpServlet {
 
     // Our form only contains a single file input, so get the first index.
     BlobKey blobKey = blobKeys.get(0);
-
-    if (!testing) {
-      BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
-      if (blobInfo.getSize() == 0) {
-        blobstore.delete(blobKey);
-        return null;
-      }
-    }
     return blobKey.getKeyString();
   }
 }
