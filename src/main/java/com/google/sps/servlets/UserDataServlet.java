@@ -68,9 +68,9 @@ public class UserDataServlet extends HttpServlet {
   private static final String USER_PHOTO_4_PROPERTY = "photo-4";
   private static final String USER_PHOTO_5_PROPERTY = "photo-5";
 
-  private boolean testing = false;
-  private BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
-  private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private boolean testing = true;
+  BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
+  DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private final Gson gson = new Gson();
 
   @Override
@@ -171,34 +171,6 @@ public class UserDataServlet extends HttpServlet {
     if (photo5Uploaded) {
       blobKeys.set(4, getUploadedFileBlobKey(request, USER_PHOTO_5_PROPERTY));
     }
-  }
-
-  /** Wrap the doGet method for jUnit testing */
-  void doGetWrapper(DatastoreService datastoreService, HttpServletRequest request, HttpServletResponse response) throws IOException {
-    datastore = datastoreService;
-    doGet(request, response);
-  }
-
-  /** Wrap the doPost method for jUnit testing */
-  void doPostWrapper(DatastoreService datastoreService, HttpServletRequest request, HttpServletResponse response) throws IOException {
-    datastore = datastoreService;
-    doPost(request, response);
-  }
-
-  /** Wrap the doPost method for testing blobstore, for jUnit testing */
-  void doPostWrapper(DatastoreService datastoreService, BlobstoreService blobstoreService,
-                  HttpServletRequest request, HttpServletResponse response, boolean isTesting) throws IOException {
-    testing = isTesting;
-    blobstore = blobstoreService;
-    datastore = datastoreService;
-    doPost(request, response);
-  }
-
-  /** Wrap the getUploadedFileBlobKey method to test how Blobstore results are handled, for jUnit testing */
-  String getUploadedFileBlobKeyWrapper(HttpServletRequest request, String formInputElementName, BlobstoreService blobstoreService, boolean isTesting) {
-    blobstore = blobstoreService;
-    testing = isTesting;
-    return getUploadedFileBlobKey(request, formInputElementName);
   }
 
   /** Method that sets the entity's value of a particular property, if the value is not the default value */
