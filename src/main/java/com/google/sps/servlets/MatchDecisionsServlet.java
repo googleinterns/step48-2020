@@ -37,8 +37,8 @@ import com.google.sps.data.PotentialMatchAlgorithm;
 import com.google.sps.data.MatchInformation;
 
 /**
-* Servlet to handle requests to update match decision information.
-*/
+ * Servlet to handle requests to update match decision information.
+ */
 @WebServlet("/match-decisions")
 public class MatchDecisionsServlet extends HttpServlet {
   private static final String MATCH_INFO_ENTITY = "match-info";
@@ -73,13 +73,13 @@ public class MatchDecisionsServlet extends HttpServlet {
   }
 
   /**
-  * Updates the match decision sets for a user's match information given their feed decision
-  * (friended or passed) on a given user.
-  *
-  * @param userMatchInfo The entity of the user's match information from datastore
-  * @param decision Whether the user decided to friend or pass on a user on their feed page
-  * @param potentialMatchID The potential match who the user made a decision on
-  */
+   * Updates the match decision sets for a user's match information given their feed decision
+   * (friended or passed) on a given user.
+   *
+   * @param userMatchInfo The entity of the user's match information from datastore
+   * @param decision Whether the user decided to friend or pass on a user on their feed page
+   * @param potentialMatchID The potential match who the user made a decision on
+   */
   private void updateMatchDecisionInfo(Entity userMatchInfo, String decision, String potentialMatchID) {
     String decisionsProperty = decision.equals(FRIENDED_DECISION) ? FRIENDED_IDS_PROPERTY : PASSED_IDS_PROPERTY;
 
@@ -87,12 +87,12 @@ public class MatchDecisionsServlet extends HttpServlet {
   }
 
   /**
-  * Checks if the two user's have matched (both had decided to friend each other), and update
-  * their match sets in datastore if they did match.
-  *
-  * @param userID1 The id of one of the users in the potential match
-  * @param userID2 The id of the other user in the potential match
-  */
+   * Checks if the two user's have matched (both had decided to friend each other), and update
+   * their match sets in datastore if they did match.
+   *
+   * @param userID1 The id of one of the users in the potential match
+   * @param userID2 The id of the other user in the potential match
+   */
   private void updateMutualMatch(String userID1, String userID2) {
     Entity matchInfo1 = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
       new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID1))).asSingleEntity();
@@ -112,13 +112,13 @@ public class MatchDecisionsServlet extends HttpServlet {
   }
 
   /**
-  * Adds an item to a list stored in datastore with null checks to avoid issues with 
-  * empty collections that had been previously stored
-  *
-  * @param userEntity The entity where the list is being updated
-  * @param property The property that is getting updated
-  * @param itemToAdd The item that is being added to the given property within the given entity
-  */
+   * Adds an item to a list stored in datastore with null checks to avoid issues with 
+   * empty collections that had been previously stored
+   *
+   * @param userEntity The entity where the list is being updated
+   * @param property The property that is getting updated
+   * @param itemToAdd The item that is being added to the given property within the given entity
+   */
   private void addItemToDatastoreList(Entity userEntity, String property, String itemToAdd) {
     List<String> propertyList = (List<String>) userEntity.getProperty(property);
 

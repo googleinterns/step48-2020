@@ -96,10 +96,10 @@ public class MatchDecisionsServletTest {
   }
   
   /**
-  * Scenario where a user chooses to friend another user as their first decision
-  *
-  * <p>Should result in the current User 1's friended list getting updated to hold just User 2.
-  */
+   * Scenario where a user chooses to friend another user as their first decision
+   *
+   * <p>Should result in the current User 1's friended list getting updated to hold just User 2.
+   */
   @Test
   public void firstFriendedDecision() throws IOException{
     when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_1_ID);
@@ -124,10 +124,10 @@ public class MatchDecisionsServletTest {
   }
 
   /**
-  * Scenario where a user chooses to pass on another user as their first decision.
-  *
-  * <p>Should result in the current User 1's passed list getting updated to hold just User 2.
-  */ 
+   * Scenario where a user chooses to pass on another user as their first decision.
+   *
+   * <p>Should result in the current User 1's passed list getting updated to hold just User 2.
+   */ 
   @Test
   public void firstPassedDecision() throws IOException{
     when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_1_ID);
@@ -152,11 +152,11 @@ public class MatchDecisionsServletTest {
   }
 
   /**
-  * Tests the case in which the potential match has not yet had their match information stored in datastore.
-  * 
-  * <p>Should still result in the same behavior as if this potential match had not made any feed decisions
-  * yet, which in this case would be the current user's friended list expanding to include the potential match.
-  */
+   * Tests the case in which the potential match has not yet had their match information stored in datastore.
+   * 
+   * <p>Should still result in the same behavior as if this potential match had not made any feed decisions
+   * yet, which in this case would be the current user's friended list expanding to include the potential match.
+   */
   @Test
   public void noMatchInfoForPotentialMatch() throws IOException{
     when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_1_ID);
@@ -179,11 +179,11 @@ public class MatchDecisionsServletTest {
   }
 
   /**
-  * Scenario where a user friends another user on their feed page resulting in a mutual match.
-  *
-  * <p>Should result in the matches lists for User 1 and User 2 getting updated to include
-  * each other.
-  */
+   * Scenario where a user friends another user on their feed page resulting in a mutual match.
+   *
+   * <p>Should result in the matches lists for User 1 and User 2 getting updated to include
+   * each other.
+   */
   @Test
   public void friendedDecisionMutualMatchFound() throws IOException{
     when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_1_ID);
@@ -213,10 +213,10 @@ public class MatchDecisionsServletTest {
   }
 
   /**
-  * Scenario where a user decides to pass on another user who had previously friended them
-  *
-  * <p>Should result in empty match lists for both users.
-  */
+   * Scenario where a user decides to pass on another user who had previously friended them
+   *
+   * <p>Should result in empty match lists for both users.
+   */
   @Test
   public void passedDecisionMutualMatchNotFound() throws IOException{
     when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_1_ID);
@@ -246,12 +246,12 @@ public class MatchDecisionsServletTest {
   }
 
   /**
-  * Scenario where a user already has a match, but friends another user which then creates a
-  * second match to add to their matches list.
-  *
-  * <p>Should result in User 1's match list getting updated to include User 2 and 3, and User 2's
-  * match list should be updated to include User 1.
-  */
+   * Scenario where a user already has a match, but friends another user which then creates a
+   * second match to add to their matches list.
+   *
+   * <p>Should result in User 1's match list getting updated to include User 2 and 3, and User 2's
+   * match list should be updated to include User 1.
+   */
   @Test
   public void secondMatchFound() throws IOException {
     when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_1_ID);
@@ -283,15 +283,15 @@ public class MatchDecisionsServletTest {
   }
 
   /**
-  * Adds a match information entity to datastore
-  *
-  * @param datastore The datastore instance the entity is being stored in
-  * @param userID The id of the user whose information is being stored
-  * @param potentialMatches The list of potential match IDs for thhis particular user
-  * @param friendedIDs The list of users who the current user friended on their feed page
-  * @param passedIDs The list of users who the current user passed on their feed page
-  * @param matchIDs The list of users who the current user matched with
-  */
+   * Adds a match information entity to datastore
+   *
+   * @param datastore The datastore instance the entity is being stored in
+   * @param userID The id of the user whose information is being stored
+   * @param potentialMatches The list of potential match IDs for thhis particular user
+   * @param friendedIDs The list of users who the current user friended on their feed page
+   * @param passedIDs The list of users who the current user passed on their feed page
+   * @param matchIDs The list of users who the current user matched with
+   */
   private void addTestMatchInfoToDatastore(DatastoreService datastore, String userID, List<String> potentialMatches,
                                               List<String> friendedIDs, List<String> passedIDs, List<String> matchIDs) {
     Entity newMatchInfo = new Entity(MATCH_INFO_ENTITY);
