@@ -18,6 +18,7 @@ const NO_MATCH =  "NO_POTENTIAL_MATCHES"; // must be kept in sync with the Poten
 function initializeProfilePage() {
   addIdToPostRequest();
   loadProfile();
+  fetchBlobstoreURL();
 }
  
 function addIdToPostRequest() {
@@ -159,6 +160,23 @@ function loadProfile() {
     bio = userinfo.bio;
     document.getElementById("name").value = name;
     document.getElementById("bio").value = bio;
+
+    // Load user images
+    if (userinfo.blobkeys[0] !== "") {
+      setImageFromBlobstore(userinfo.blobkeys[0], "profile-photo-image");
+    }
+    if (userinfo.blobkeys[1] !== "") {
+      setImageFromBlobstore(userinfo.blobkeys[1], "photo-2-image");
+    }
+    if (userinfo.blobkeys[2] !== "") {
+      setImageFromBlobstore(userinfo.blobkeys[2], "photo-3-image");
+    }
+    if (userinfo.blobkeys[3] !== "") {
+      setImageFromBlobstore(userinfo.blobkeys[3], "photo-4-image");
+    }
+    if (userinfo.blobkeys[4] !== "") {
+      setImageFromBlobstore(userinfo.blobkeys[4], "photo-5-image");
+    }
   });
 }
 
@@ -229,4 +247,37 @@ function createImgElement(imageURL) {
   imgElement.setAttribute("height", "800");
   imgElement.setAttribute("width", "1100");
   return imgElement;
+}
+
+// Set the action of the profile creation form so that information is sent to blobstore
+function fetchBlobstoreURL() {
+  fetch('/blobstore-url').then((response) => response.text()).then((imageUploadURL) => {
+    document.getElementById("user-profile-form").action = imageUploadURL;
+  });
+}
+
+// Tell the user data servlet if any images have been uploaded
+function submitProfileForm() {
+  if (document.getElementById("profile-photo").files.length != 0) {
+    document.getElementById("profile-photo-uploaded").value = "true";
+  }
+  if (document.getElementById("photo-2").files.length != 0) {
+    document.getElementById("photo-2-uploaded").value = "true";
+  }
+  if (document.getElementById("photo-3").files.length != 0) {
+    document.getElementById("photo-3-uploaded").value = "true";
+  }
+  if (document.getElementById("photo-4").files.length != 0) {
+    document.getElementById("photo-4-uploaded").value = "true";
+  }
+  if (document.getElementById("photo-5").files.length != 0) {
+    document.getElementById("photo-5-uploaded").value = "true";
+  }
+}
+
+// Function that sets the img src tag with the image corresponding to the provided blobkey
+function setImageFromBlobstore(imageBlobKey, imageId) {
+  fetch('/blob-key?imageKey=' + imageBlobKey).then((response) => response.blob()).then((blobContent) => {
+    document.getElementById(imageId).src = URL.createObjectURL(blobContent);
+  });
 }

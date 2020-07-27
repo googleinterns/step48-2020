@@ -17,10 +17,17 @@ package com.google.sps.servlets;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -29,6 +36,9 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
@@ -43,16 +53,24 @@ import com.google.gson.Gson;
 
 @WebServlet("/user-data")
 public class UserDataServlet extends HttpServlet {
-  private static final String DEFAULT_STRING = "";
-  private static final String USER_ENTITY = "User";
-  private static final String USER_BIO_PROPERTY = "bio";
-  private static final String USER_EMAIL_PROPERTY = "email";
-  private static final String USER_FOUND_PROPERTY = "user-found";
-  private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
-  private static final String USER_ID_PROPERTY = "id";
-  private static final String USER_NAME_PROPERTY = "name";
+  static final String DEFAULT_STRING = "";
+  static final String USER_ENTITY = "User";
+  static final String USER_BIO_PROPERTY = "bio";
+  static final String USER_BLOBKEYS_PROPERTY = "blobkeys";
+  static final String USER_EMAIL_PROPERTY = "email";
+  static final String USER_FOUND_PROPERTY = "user-found";
+  static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
+  static final String USER_ID_PROPERTY = "id";
+  static final String USER_NAME_PROPERTY = "name";
+  static final String USER_PHOTO_1_PROPERTY = "profile-photo";
+  static final String USER_PHOTO_2_PROPERTY = "photo-2";
+  static final String USER_PHOTO_3_PROPERTY = "photo-3";
+  static final String USER_PHOTO_4_PROPERTY = "photo-4";
+  static final String USER_PHOTO_5_PROPERTY = "photo-5";
 
-  private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  // Blobstore and Datastore instance variables are package-private so that they are visible for testing
+  BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
+  DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private final Gson gson = new Gson();
 
   @Override
@@ -76,7 +94,8 @@ public class UserDataServlet extends HttpServlet {
           .put(USER_EMAIL_PROPERTY, userEntity.getProperty(USER_EMAIL_PROPERTY))
           .put(USER_FRIENDS_LIST_PROPERTY, (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY))
           .put(USER_ID_PROPERTY, userEntity.getProperty(USER_ID_PROPERTY))
-          .put(USER_NAME_PROPERTY, userEntity.getProperty(USER_NAME_PROPERTY));
+          .put(USER_NAME_PROPERTY, userEntity.getProperty(USER_NAME_PROPERTY))
+          .put(USER_BLOBKEYS_PROPERTY, (ArrayList<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY));
     }
 
     // Send the user's json data as the response
@@ -97,13 +116,14 @@ public class UserDataServlet extends HttpServlet {
     Entity userEntity = datastore.prepare(new Query(USER_ENTITY).setFilter(
         new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userId))).asSingleEntity();
     if (userEntity == null) {
-      // User entity needs to be created
+      // User entity needs to be created, and property values need to be initialized
       userEntity = new Entity(USER_ENTITY);
       userEntity.setProperty(USER_ID_PROPERTY, userId);
       userEntity.setProperty(USER_NAME_PROPERTY, userName);
       userEntity.setProperty(USER_EMAIL_PROPERTY, userEmail);
       userEntity.setProperty(USER_BIO_PROPERTY, userBio);
       userEntity.setProperty(USER_FRIENDS_LIST_PROPERTY, Arrays.asList(friends));
+      userEntity.setProperty(USER_BLOBKEYS_PROPERTY, new ArrayList<>(Arrays.asList(new String[]{"", "", "", "", ""})));
     }
     else {
       // User entity needs to be updated
@@ -118,22 +138,32 @@ public class UserDataServlet extends HttpServlet {
         userEntity.setProperty(USER_FRIENDS_LIST_PROPERTY, Arrays.asList(friends));
       }
     }
+    getAndStoreBlobKeys(request, userEntity);
     datastore.put(userEntity);
 
     // Redirect to the profile page, and let the front-end know the current logged in user
     response.sendRedirect("/profile.html?id=" + userId);
   }
 
-  /** Wrap the doGet method for jUnit testing */
-  void doGetWrapper(DatastoreService datastoreService, HttpServletRequest request, HttpServletResponse response) throws IOException {
-    datastore = datastoreService;
-    doGet(request, response);
-  }
+  /** Stores the blob-keys (in Datastore) of files uploaded to Blobstore. */
+  private void getAndStoreBlobKeys(HttpServletRequest request, Entity userEntity) {
+    List<String> blobKeys = (ArrayList<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY);
 
-  /** Wrap the doPost method for jUnit testing */
-  void doPostWrapper(DatastoreService datastoreService, HttpServletRequest request, HttpServletResponse response) throws IOException {
-    datastore = datastoreService;
-    doPost(request, response);
+    if (getBooleanParameter(request, USER_PHOTO_1_PROPERTY)) {
+      blobKeys.set(0, getUploadedFileBlobKey(request, USER_PHOTO_1_PROPERTY));
+    }
+    if (getBooleanParameter(request, USER_PHOTO_2_PROPERTY)) {
+      blobKeys.set(1, getUploadedFileBlobKey(request, USER_PHOTO_2_PROPERTY));
+    }
+    if (getBooleanParameter(request, USER_PHOTO_3_PROPERTY)) {
+      blobKeys.set(2, getUploadedFileBlobKey(request, USER_PHOTO_3_PROPERTY));
+    }
+    if (getBooleanParameter(request, USER_PHOTO_4_PROPERTY)) {
+      blobKeys.set(3, getUploadedFileBlobKey(request, USER_PHOTO_4_PROPERTY));
+    }
+    if (getBooleanParameter(request, USER_PHOTO_5_PROPERTY)) {
+      blobKeys.set(4, getUploadedFileBlobKey(request, USER_PHOTO_5_PROPERTY));
+    }
   }
 
   /** Method that sets the entity's value of a particular property, if the value is not the default value */
@@ -154,5 +184,24 @@ public class UserDataServlet extends HttpServlet {
     String[] value = request.getParameterValues(name);
     return value == null ? defaultValue : value;
   }
-}
 
+  /** Returns the request parameter (for booleans), either the boolean true or false */
+  private boolean getBooleanParameter(HttpServletRequest request, String name) {
+    return Boolean.valueOf(request.getParameter(name));
+  }
+
+  /** Gets the blobkey of the image passed to the designated input tag in HTML */
+  public String getUploadedFileBlobKey(HttpServletRequest request, String formInputElementName) {
+    Map<String, List<BlobKey>> blobs = blobstore.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get(formInputElementName);
+
+    // If user submitted form without selecting a file, then we can't get a URL. (dev server)
+    if (blobKeys == null || blobKeys.isEmpty()) {
+      return null;
+    }
+
+    // Our form only contains a single file input, so get the first index.
+    BlobKey blobKey = blobKeys.get(0);
+    return blobKey.getKeyString();
+  }
+}
