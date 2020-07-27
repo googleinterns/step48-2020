@@ -52,6 +52,7 @@ public class PotentialMatchesServlet extends HttpServlet {
   private static final String POTENTIAL_MATCHES_PROPERTY = "potential-matches";
   private static final String FRIENDED_IDS_PROPERTY = "friended-ids";
   private static final String PASSED_IDS_PROPERTY = "passed-ids";
+  private static final String MATCHES_LIST_PROPERTY = "matches-list";
   
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -135,6 +136,7 @@ public class PotentialMatchesServlet extends HttpServlet {
     newMatchInfo.setProperty(POTENTIAL_MATCHES_PROPERTY, ImmutableList.copyOf(potentialMatches));
     newMatchInfo.setProperty(FRIENDED_IDS_PROPERTY, ImmutableList.of());
     newMatchInfo.setProperty(PASSED_IDS_PROPERTY, ImmutableList.of());
+    newMatchInfo.setProperty(MATCHES_LIST_PROPERTY, ImmutableList.of());
     
     datastore.put(newMatchInfo);
 
