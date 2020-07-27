@@ -37,7 +37,7 @@ function statusChangeCallback(response) {
         id: response.id,
         email: response.email,
       });
- 
+
       // Add friend ids to the query string
       // TODO(#17): Consider replacing this with jquery + ajax to send JSON to the backend.
       response.friends.data.forEach((friend) => userInfo.append("friends-list", friend.id));
@@ -58,5 +58,10 @@ function checkLoginState() {
   FB.getLoginStatus(function(response) {
     statusChangeCallback(response);
   });
+}
+
+// Log the user into facebook with correct permissions
+function loginFacebook() {
+  FB.login(statusChangeCallback, {scope: 'email,public_profile,user_friends', return_scopes: true});
 }
 
