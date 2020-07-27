@@ -36,7 +36,7 @@ import com.google.appengine.api.datastore.Entity;
 /**
  * Servlet that handles requests to retrieve a list of a user's matches
  */
-@WebServlet("/match-information")
+@WebServlet("/matches-list")
 public class MatchesListServlet extends HttpServlet {
   private static final String MATCH_INFO_ENTITY = "match-info";
   private static final String USER_ID_PROPERTY = "id";
