@@ -155,7 +155,7 @@ function matchButtonPressed() {
       potentialMatchID: currentPMDisplayed,
       decision: FRIENDED
   }
-  fetch('/match-decisions', {method: 'POST', body: JSON.stringify(decision)}).then((response) => {
+  fetch('/match-decisions', { method: 'POST', body: JSON.stringify(decision) }).then((response) => {
       getNextPotentialMatch();
   });
 }
@@ -166,7 +166,7 @@ function passButtonPressed() {
       potentialMatchID: currentPMDisplayed,
       decision: PASSED
   }
-  fetch('/match-decisions', {method: 'POST', body: JSON.stringify(decision)}).then((response) => {
+  fetch('/match-decisions', { method: 'POST', body: JSON.stringify(decision) }).then((response) => {
       getNextPotentialMatch();
   });
 }
