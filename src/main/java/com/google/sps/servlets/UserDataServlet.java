@@ -123,7 +123,7 @@ public class UserDataServlet extends HttpServlet {
       userEntity.setProperty(USER_EMAIL_PROPERTY, userEmail);
       userEntity.setProperty(USER_BIO_PROPERTY, userBio);
       userEntity.setProperty(USER_FRIENDS_LIST_PROPERTY, Arrays.asList(friends));
-      userEntity.setProperty(USER_BLOBKEYS_PROPERTY, new ArrayList<>(Arrays.asList(new String[]{"", "", "", "", ""})));
+      userEntity.setProperty(USER_BLOBKEYS_PROPERTY, Arrays.asList(new String[]{"", "", "", "", ""}));
     }
     else {
       // User entity needs to be updated
@@ -147,7 +147,7 @@ public class UserDataServlet extends HttpServlet {
 
   /** Stores the blob-keys (in Datastore) of files uploaded to Blobstore. */
   private void getAndStoreBlobKeys(HttpServletRequest request, Entity userEntity) {
-    List<String> blobKeys = (ArrayList<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY);
+    List<String> blobKeys = (List<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY);
 
     if (getBooleanParameter(request, USER_PHOTO_1_PROPERTY)) {
       blobKeys.set(0, getUploadedFileBlobKey(request, USER_PHOTO_1_PROPERTY));
@@ -205,3 +205,4 @@ public class UserDataServlet extends HttpServlet {
     return blobKey.getKeyString();
   }
 }
+
