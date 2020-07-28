@@ -140,6 +140,7 @@ public class MatchesListServletTest {
    * potential match for the specified user
    *
    * @param userIDToFetch The ID of the user whose next potential match is being found
+   * @return The response from the get request to MatchInformationServlet as a string
    */
   private String execute(String userIDToFetch) throws IOException {
     when(mockRequest.getParameter(USER_ID_REQUEST_URL_PARAM)).thenReturn(userIDToFetch);
