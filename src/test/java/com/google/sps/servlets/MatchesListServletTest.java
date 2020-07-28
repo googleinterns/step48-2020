@@ -121,10 +121,9 @@ public class MatchesListServletTest {
   }
 
   /**
-   * Method that calls on the MatchInformationServlet and returns the ID of the next
-   * potential match for the specified user
+   * Method that calls on the MatchInformationServlet and returns the specified user's matches
    *
-   * @param userIDToFetch The ID of the user whose next potential match is being found
+   * @param userIDToFetch The ID of the user whose matches are being found
    * @return The response from the get request to MatchInformationServlet as a string
    */
   private String execute(String userIDToFetch) throws IOException {
