@@ -99,11 +99,10 @@ public class MatchesListServletTest {
     addMatchInfoEntityToDatastore(TEST_USER_ID, ImmutableList.of(),
       ImmutableList.of(), ImmutableList.of(), ImmutableList.of());
     
-    String actualOutput = execute(TEST_USER_ID);
-    
-    List<String> actualOutputAsList = Arrays.asList(new Gson().fromJson(actualOutput, String[].class));
+    String jsonOutput = execute(TEST_USER_ID);
+    List<String> matches = Arrays.asList(new Gson().fromJson(jsonOutput, String[].class));
 
-    assertThat(actualOutputAsList).isEqualTo(EMPTY_LIST);
+    assertThat(matches).isEmpty();
   }
 
   /**
@@ -116,11 +115,10 @@ public class MatchesListServletTest {
     addMatchInfoEntityToDatastore(TEST_USER_ID, ImmutableList.of(),
       ImmutableList.of(), ImmutableList.of(), ImmutableList.of(TEST_CONNECTION_1_ID));
     
-    String actualOutput = execute(TEST_USER_ID);
-    
-    List<String> actualOutputAsList = Arrays.asList(new Gson().fromJson(actualOutput, String[].class));
+    String jsonOutput = execute(TEST_USER_ID);
+    List<String> matches = Arrays.asList(new Gson().fromJson(jsonOutput, String[].class));
 
-    assertThat(actualOutputAsList).containsExactly(TEST_CONNECTION_1_ID);
+    assertThat(matches).containsExactly(TEST_CONNECTION_1_ID);
   }
   
   /**
@@ -133,11 +131,10 @@ public class MatchesListServletTest {
     addMatchInfoEntityToDatastore(TEST_USER_ID, ImmutableList.of(), ImmutableList.of(), ImmutableList.of(),
     ImmutableList.of(TEST_CONNECTION_1_ID, TEST_CONNECTION_2_ID, TEST_CONNECTION_3_ID));
     
-    String actualOutput = execute(TEST_USER_ID);
-    
-    List<String> actualOutputAsList = Arrays.asList(new Gson().fromJson(actualOutput, String[].class));
+    String jsonOutput = execute(TEST_USER_ID);
+    List<String> matches = Arrays.asList(new Gson().fromJson(jsonOutput, String[].class));
 
-    assertThat(actualOutputAsList).containsExactly(TEST_CONNECTION_1_ID, TEST_CONNECTION_2_ID, TEST_CONNECTION_3_ID);
+    assertThat(matches).containsExactly(TEST_CONNECTION_1_ID, TEST_CONNECTION_2_ID, TEST_CONNECTION_3_ID);
   }
 
   /**
