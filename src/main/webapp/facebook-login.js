@@ -15,7 +15,7 @@
 // Javascript 'import' statements are not supported by browsers
 // Instead, inject a script tag
 function include(javascriptFile) { 
-  let script = document.createElement('script'); 
+  const script = document.createElement('script'); 
   script.src = javascriptFile; 
   script.type = 'text/javascript'; 
   script.defer = true; 
