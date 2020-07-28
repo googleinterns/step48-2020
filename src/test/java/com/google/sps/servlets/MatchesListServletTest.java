@@ -94,8 +94,8 @@ public class MatchesListServletTest {
    */
   @Test
   public void matchInfoWithEmptyList() throws Exception {
-    addMatchInfoEntityToDatastore(TEST_USER_ID, ImmutableList.of(),
-      ImmutableList.of(), ImmutableList.of(), ImmutableList.of());
+    addMatchInfoEntityToDatastore(TEST_USER_ID, /* friendedUsers= */ ImmutableList.of(),
+      /* matchedUsers= */ImmutableList.of());
     
     String jsonOutput = execute(TEST_USER_ID);
     List<String> matches = Arrays.asList(new Gson().fromJson(jsonOutput, String[].class));
@@ -110,8 +110,8 @@ public class MatchesListServletTest {
    */
   @Test
   public void matchInfoWithSingleMatch() throws Exception {
-    addMatchInfoEntityToDatastore(TEST_USER_ID, ImmutableList.of(),
-      ImmutableList.of(), ImmutableList.of(), ImmutableList.of(TEST_CONNECTION_1_ID));
+    addMatchInfoEntityToDatastore(TEST_USER_ID, /* friendedUsers= */ ImmutableList.of(TEST_CONNECTION_1_ID),
+      /* matchedUsers= */ ImmutableList.of(TEST_CONNECTION_1_ID));
     
     String jsonOutput = execute(TEST_USER_ID);
     List<String> matches = Arrays.asList(new Gson().fromJson(jsonOutput, String[].class));
@@ -126,8 +126,8 @@ public class MatchesListServletTest {
    */
   @Test
   public void matchInfoWithMultipleMatches() throws Exception {
-    addMatchInfoEntityToDatastore(TEST_USER_ID, ImmutableList.of(), ImmutableList.of(), ImmutableList.of(),
-    ImmutableList.of(TEST_CONNECTION_1_ID, TEST_CONNECTION_2_ID, TEST_CONNECTION_3_ID));
+    addMatchInfoEntityToDatastore(TEST_USER_ID, /* friendedUsers= */ ImmutableList.of(TEST_CONNECTION_1_ID, TEST_CONNECTION_2_ID, TEST_CONNECTION_3_ID),
+      /* matchedUsers= */ ImmutableList.of(TEST_CONNECTION_1_ID, TEST_CONNECTION_2_ID, TEST_CONNECTION_3_ID));
     
     String jsonOutput = execute(TEST_USER_ID);
     List<String> matches = Arrays.asList(new Gson().fromJson(jsonOutput, String[].class));
@@ -152,14 +152,13 @@ public class MatchesListServletTest {
     return responseWriter.toString();
   }
 
-  private void addMatchInfoEntityToDatastore(String userID, ImmutableList<String> potentialMatches, 
-    ImmutableList<String> friendedUsers, ImmutableList<String> passedUsers, ImmutableList<String> matchedUsers) {
+  private void addMatchInfoEntityToDatastore(String userID, ImmutableList<String> friendedUsers, ImmutableList<String> matchedUsers) {
     Entity newMatchInfoEntity = new Entity(MATCH_INFO_ENTITY);
     newMatchInfoEntity.setProperty(USER_ID_PROPERTY, userID);
-    newMatchInfoEntity.setProperty(POTENTIAL_MATCHES_PROPERTY, potentialMatches);
     newMatchInfoEntity.setProperty(FRIENDED_IDS_PROPERTY, friendedUsers);
-    newMatchInfoEntity.setProperty(PASSED_IDS_PROPERTY, passedUsers);
     newMatchInfoEntity.setProperty(MATCHES_LIST_PROPERTY, matchedUsers);
+    newMatchInfoEntity.setProperty(POTENTIAL_MATCHES_PROPERTY, ImmutableList.of());
+    newMatchInfoEntity.setProperty(PASSED_IDS_PROPERTY, ImmutableList.of());
     datastore.put(newMatchInfoEntity);
   }
 }
