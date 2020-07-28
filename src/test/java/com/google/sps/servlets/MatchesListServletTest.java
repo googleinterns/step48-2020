@@ -87,13 +87,8 @@ public class MatchesListServletTest {
     helper.tearDown();
   }
 
-  /**
-   * Tests the case in which a user's match list is empty.
-   *
-   * <p>Should return an empty list.
-   */
   @Test
-  public void matchInfoWithEmptyList() throws Exception {
+  public void hasNoMatches() throws Exception {
     addMatchInfoEntityToDatastore(TEST_USER_ID, /* friendedUsers= */ ImmutableList.of(),
       /* matchedUsers= */ImmutableList.of());
     
@@ -103,13 +98,8 @@ public class MatchesListServletTest {
     assertThat(matches).isEmpty();
   }
 
-  /**
-   * Tests the case where a user has one match in their match list
-   *
-   * <p>Should return a list with just that one match's id
-   */
   @Test
-  public void matchInfoWithSingleMatch() throws Exception {
+  public void hasSingleMatch() throws Exception {
     addMatchInfoEntityToDatastore(TEST_USER_ID, /* friendedUsers= */ ImmutableList.of(TEST_CONNECTION_1_ID),
       /* matchedUsers= */ ImmutableList.of(TEST_CONNECTION_1_ID));
     
@@ -119,13 +109,8 @@ public class MatchesListServletTest {
     assertThat(matches).containsExactly(TEST_CONNECTION_1_ID);
   }
   
-  /**
-   * Tests the case where a user has three matches in their match list
-   *
-   * <p> Should a return a list with the three matches' ids
-   */
   @Test
-  public void matchInfoWithMultipleMatches() throws Exception {
+  public void hasMultipleMatches() throws Exception {
     addMatchInfoEntityToDatastore(TEST_USER_ID, /* friendedUsers= */ ImmutableList.of(TEST_CONNECTION_1_ID, TEST_CONNECTION_2_ID, TEST_CONNECTION_3_ID),
       /* matchedUsers= */ ImmutableList.of(TEST_CONNECTION_1_ID, TEST_CONNECTION_2_ID, TEST_CONNECTION_3_ID));
     
