@@ -58,8 +58,6 @@ public class MatchesListServletTest {
   private static final String TEST_CONNECTION_2_ID = "1234";
   private static final String TEST_CONNECTION_3_ID = "9876";
 
-  private static final List<String> EMPTY_LIST = Arrays.asList();
-
   private final LocalServiceTestHelper helper =
     new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
@@ -143,22 +141,19 @@ public class MatchesListServletTest {
    *
    * @param userIDToFetch The ID of the user whose next potential match is being found
    */
-  private String execute(String userIDToFetch) throws IOException{
+  private String execute(String userIDToFetch) throws IOException {
     when(mockRequest.getParameter(USER_ID_REQUEST_URL_PARAM)).thenReturn(userIDToFetch);
-    
     responseWriter = new StringWriter();
     writer = new PrintWriter(responseWriter, true);
     when(mockResponse.getWriter()).thenReturn(writer);
 
     servletUnderTest.doGet(mockRequest, mockResponse);
-    System.out.println(responseWriter);
     
     return responseWriter.toString();
   }
 
   private void addMatchInfoEntityToDatastore(String userID, ImmutableList<String> potentialMatches, 
     ImmutableList<String> friendedUsers, ImmutableList<String> passedUsers, ImmutableList<String> matchedUsers) {
-    
     Entity newMatchInfoEntity = new Entity(MATCH_INFO_ENTITY);
     newMatchInfoEntity.setProperty(USER_ID_PROPERTY, userID);
     newMatchInfoEntity.setProperty(POTENTIAL_MATCHES_PROPERTY, potentialMatches);
