@@ -95,7 +95,7 @@ public class MatchesListServletTest {
    * <p>Should return an empty list.
    */
   @Test
-  public void matchInfoWithEmptyList() throws IOException{
+  public void matchInfoWithEmptyList() throws Exception {
     addMatchInfoEntityToDatastore(TEST_USER_ID, ImmutableList.of(),
       ImmutableList.of(), ImmutableList.of(), ImmutableList.of());
     
@@ -111,7 +111,7 @@ public class MatchesListServletTest {
    * <p>Should return a list with just that one match's id
    */
   @Test
-  public void matchInfoWithSingleMatch() throws IOException{
+  public void matchInfoWithSingleMatch() throws Exception {
     addMatchInfoEntityToDatastore(TEST_USER_ID, ImmutableList.of(),
       ImmutableList.of(), ImmutableList.of(), ImmutableList.of(TEST_CONNECTION_1_ID));
     
@@ -127,7 +127,7 @@ public class MatchesListServletTest {
    * <p> Should a return a list with the three matches' ids
    */
   @Test
-  public void matchInfoWithMultipleMatches() throws IOException{
+  public void matchInfoWithMultipleMatches() throws Exception {
     addMatchInfoEntityToDatastore(TEST_USER_ID, ImmutableList.of(), ImmutableList.of(), ImmutableList.of(),
     ImmutableList.of(TEST_CONNECTION_1_ID, TEST_CONNECTION_2_ID, TEST_CONNECTION_3_ID));
     
