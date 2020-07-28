@@ -47,8 +47,6 @@ import com.google.gson.Gson;
  * 
  * <p>A User Entity consists of the following information: a user id, name, email, bio, and friends-list.
  * These entities are stored in Datastore with their user id as the 'kind'.
- *
- * <p>TODO(#15): Add Blobstore Keys for each image that the user uploads.
  */
 
 @WebServlet("/user-data")
@@ -92,10 +90,18 @@ public class UserDataServlet extends HttpServlet {
       userDataBuilder.put(USER_FOUND_PROPERTY, true)
           .put(USER_BIO_PROPERTY, (String) userEntity.getProperty(USER_BIO_PROPERTY))
           .put(USER_EMAIL_PROPERTY, userEntity.getProperty(USER_EMAIL_PROPERTY))
-          .put(USER_FRIENDS_LIST_PROPERTY, (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY))
           .put(USER_ID_PROPERTY, userEntity.getProperty(USER_ID_PROPERTY))
           .put(USER_NAME_PROPERTY, userEntity.getProperty(USER_NAME_PROPERTY))
           .put(USER_BLOBKEYS_PROPERTY, (ArrayList<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY));
+
+      // An empty ArrayList is returned as null, make sure that an empty ArrayList is provided instead
+      ArrayList<String> userFriendsList = (ArrayList<String>) userEntity.getProperty(USER_FRIENDS_LIST_PROPERTY);
+      if (userFriendsList == null) {
+        userDataBuilder.put(USER_FRIENDS_LIST_PROPERTY, new ArrayList<String>());
+      }
+      else {
+        userDataBuilder.put(USER_FRIENDS_LIST_PROPERTY, userFriendsList);
+      }
     }
 
     // Send the user's json data as the response
