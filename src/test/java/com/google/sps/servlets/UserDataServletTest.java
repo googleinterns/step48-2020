@@ -58,6 +58,7 @@ public final class UserDataServletTest {
   private static final String TEST_USER_ID = "123";
   private static final String TEST_USER_EMAIL = "tim@gmail.com";
   private static final String TEST_USER_BIO = "Amazing!";
+  private static final String TEST_USER_LINK = "facebook.com/tim";
   private static final String[] TEST_USER_FRIENDS_LIST = new String[]{"321"};
   private static final String ALTERNATE_TEST_USER_NAME = "John";
   private static final String TEST_PHOTO_1_BLOBKEY = "abc";
@@ -319,6 +320,7 @@ public final class UserDataServletTest {
     userEntity.setProperty(UserDataServlet.USER_NAME_PROPERTY, TEST_USER_NAME);
     userEntity.setProperty(UserDataServlet.USER_EMAIL_PROPERTY, TEST_USER_EMAIL);
     userEntity.setProperty(UserDataServlet.USER_BIO_PROPERTY, TEST_USER_BIO);
+    userEntity.setProperty(UserDataServlet.USER_LINK_PROPERTY, TEST_USER_LINK);
     userEntity.setProperty(UserDataServlet.USER_FRIENDS_LIST_PROPERTY, Arrays.asList(TEST_USER_FRIENDS_LIST));
     userEntity.setProperty(UserDataServlet.USER_BLOBKEYS_PROPERTY, new ArrayList<>(Arrays.asList(new String[]{"", "", "", "", ""})));
     datastore.put(userEntity);

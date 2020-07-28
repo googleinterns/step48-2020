@@ -59,6 +59,7 @@ public class UserDataServlet extends HttpServlet {
   static final String USER_FOUND_PROPERTY = "user-found";
   static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
   static final String USER_ID_PROPERTY = "id";
+  static final String USER_LINK_PROPERTY = "link";
   static final String USER_NAME_PROPERTY = "name";
   static final String USER_PHOTO_1_PROPERTY = "profile-photo";
   static final String USER_PHOTO_2_PROPERTY = "photo-2";
@@ -91,6 +92,7 @@ public class UserDataServlet extends HttpServlet {
           .put(USER_BIO_PROPERTY, (String) userEntity.getProperty(USER_BIO_PROPERTY))
           .put(USER_EMAIL_PROPERTY, userEntity.getProperty(USER_EMAIL_PROPERTY))
           .put(USER_ID_PROPERTY, userEntity.getProperty(USER_ID_PROPERTY))
+          .put(USER_LINK_PROPERTY, userEntity.getProperty(USER_LINK_PROPERTY))
           .put(USER_NAME_PROPERTY, userEntity.getProperty(USER_NAME_PROPERTY))
           .put(USER_BLOBKEYS_PROPERTY, (ArrayList<String>) userEntity.getProperty(USER_BLOBKEYS_PROPERTY));
 
@@ -116,6 +118,7 @@ public class UserDataServlet extends HttpServlet {
     String userName = getStringParameter(request, USER_NAME_PROPERTY, DEFAULT_STRING);
     String userEmail = getStringParameter(request, USER_EMAIL_PROPERTY, DEFAULT_STRING);
     String userBio = getStringParameter(request, USER_BIO_PROPERTY, DEFAULT_STRING);
+    String userLink = getStringParameter(request, USER_LINK_PROPERTY, DEFAULT_STRING);
     String[] friends = getStringArrayParameter(request, USER_FRIENDS_LIST_PROPERTY, new String[]{});
 
     // Check if a user entity with userId already exists
@@ -128,6 +131,7 @@ public class UserDataServlet extends HttpServlet {
       userEntity.setProperty(USER_NAME_PROPERTY, userName);
       userEntity.setProperty(USER_EMAIL_PROPERTY, userEmail);
       userEntity.setProperty(USER_BIO_PROPERTY, userBio);
+      userEntity.setProperty(USER_LINK_PROPERTY, userLink);
       userEntity.setProperty(USER_FRIENDS_LIST_PROPERTY, Arrays.asList(friends));
       userEntity.setProperty(USER_BLOBKEYS_PROPERTY, new ArrayList<>(Arrays.asList(new String[]{"", "", "", "", ""})));
     }
@@ -138,6 +142,7 @@ public class UserDataServlet extends HttpServlet {
       setPropertyIfNotDefault(userEntity, USER_NAME_PROPERTY, userName, DEFAULT_STRING);
       setPropertyIfNotDefault(userEntity, USER_EMAIL_PROPERTY, userEmail, DEFAULT_STRING);
       setPropertyIfNotDefault(userEntity, USER_BIO_PROPERTY, userBio, DEFAULT_STRING);
+      setPropertyIfNotDefault(userEntity, USER_LINK_PROPERTY, userLink, DEFAULT_STRING);
 
       // If the friends-list property wasn't given, don't override the current friends list
       if (friends.length != 0) {
