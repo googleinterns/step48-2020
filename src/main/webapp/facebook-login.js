@@ -15,7 +15,7 @@
 // Javascript 'import' statements are not supported by browsers
 // Instead, inject a script tag
 function include(javascriptFile) { 
-  let script = document.createElement('script'); 
+  const script = document.createElement('script'); 
   script.src = javascriptFile; 
   script.type = 'text/javascript'; 
   script.defer = true; 
@@ -58,5 +58,10 @@ function checkLoginState() {
   FB.getLoginStatus(function(response) {
     statusChangeCallback(response);
   });
+}
+
+// Log the user into facebook with correct permissions
+function loginFacebook() {
+  FB.login(statusChangeCallback, {scope: 'email,public_profile,user_friends', return_scopes: true});
 }
 
