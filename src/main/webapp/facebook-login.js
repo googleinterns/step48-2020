@@ -28,16 +28,16 @@ function statusChangeCallback(response) {
   if (response.status === 'connected') {
     // User is logged in with Facebook
     // TODO(#16): Redirect user to the correct page depending on whether their profile is complete.
-    // TODO(#18): Fix bug where facebook login only redirects upon page reload.
     // For now, redirect to the profile page
     // Query Facebook Graph API for user information
-    FB.api('/me?fields=id,name,email,friends', function(response) {
+    FB.api('/me?fields=id,name,email,friends,link', function(response) {
       let userInfo = new URLSearchParams({
         name: response.name,
         id: response.id,
         email: response.email,
+        link: response.link,
       });
- 
+
       // Add friend ids to the query string
       // TODO(#17): Consider replacing this with jquery + ajax to send JSON to the backend.
       response.friends.data.forEach((friend) => userInfo.append("friends-list", friend.id));
