@@ -61,20 +61,17 @@ function displayPotentialMatchInfo(pmID) {
     let numPhotos = 0;
     for (let i = 0; i < userinfo.blobkeys.length; i++) {
       let slideshowElement;
-      if (i === 0 && userinfo.blobkeys[i] != "") {
+      if (userinfo.blobkeys[i] != "") {
         numPhotos++;
-        slideshowElement = createSlideshowElement(userinfo.blobkeys[i], "carousel-item active", name, bio, false);
-        carouselContainer.appendChild(slideshowElement);
-      }
-      else if (userinfo.blobkeys[i] != "") {
-        numPhotos++;
-        slideshowElement = createSlideshowElement(userinfo.blobkeys[i], "carousel-item", name, bio, false);
+        const imageElement = createImageFromBlobstore(userinfo.blobkeys[i]);
+        slideshowElement = createSlideshowElement(imageElement, "carousel-item" + (i === 0 ? " active" : ""), name, bio);
         carouselContainer.appendChild(slideshowElement);
       }
     }
     if (numPhotos === 0) {
-      const noImageElement = createSlideshowElement("images/no_image.png", "carousel-item active", name, bio, true);
-      carouselContainer.appendChild(noImageElement);
+      const noImageElement = createImgElement("images/no_image.png");
+      const noImageSlideshowElement = createSlideshowElement(noImageElement, "carousel-item active", name, bio);
+      carouselContainer.appendChild(noImageSlideshowElement);
     }
     addIndicators(numPhotos);
   });
@@ -85,15 +82,10 @@ function deletePotentialMatchInfo() {
   document.getElementById("carousel-indicators").innerHTML = '';
 }
 
-function createSlideshowElement(blobkey, className, name, bio, noMatch) {
+function createSlideshowElement(image, className, name, bio) {
   const slideshowImage = document.createElement("div"); 
   slideshowImage.className = className;
-  if (noMatch) {
-    slideshowImage.appendChild(createImgElement(blobkey));
-  }
-  else {
-    slideshowImage.appendChild(createImageFromBlobstore(blobkey));
-  }
+  slideshowImage.appendChild(image);
   const caption = document.createElement("div");
   caption.className = "carousel-caption";
   const header = document.createElement("h3");
@@ -147,7 +139,8 @@ function getNextPotentialMatch() {
 function noPotentialMatch() {
   document.getElementById("pass-btn").disabled = true;
   document.getElementById("friend-btn").disabled = true;
-  const noMatchImg = createSlideshowElement("images/nomatches.png", "carousel-item active", "", "", true);
+  const noPotentialMatchImage = createImgElement("images/nomatches.png")
+  const noMatchImg = createSlideshowElement(noPotentialMatchImage, "carousel-item active", "", "");
   const carouselContainer = document.getElementById("carousel-inner");
   carouselContainer.appendChild(noMatchImg);
 }
@@ -215,18 +208,7 @@ function createCardElement(userID) {
         return;
     }
     cardDiv.className = "col card m-5 card-container";
-    let profileImage;
-    let foundImage = false;
-    for (let i = 0; i < userinfo.blobkeys.length; i++) {
-      if (userinfo.blobkeys[i] != "") {
-        foundImage = true;
-        profileImage = createImageFromBlobstore(userinfo.blobkeys[i]);
-        break;
-      }
-    }
-    if (!foundImage) {
-      profileImage = createImgElement("images/no_image.png");
-    }
+    let profileImage = getFirstAvailableImage(userinfo.blobkeys);
     profileImage.className = "card-img-top";
     profileImage.setAttribute("height", "300");
     profileImage.setAttribute("width", "100");
@@ -256,6 +238,15 @@ function createCardElement(userID) {
     cardDiv.appendChild(cardBody);
   });
   return cardDiv;
+}
+
+function getFirstAvailableImage(blobkeyList) {
+  for (let i = 0; i < blobkeyList.length; i++) {
+    if (blobkeyList[i] !== "") {
+      return(createImageFromBlobstore(userinfo.blobkeys[i]));
+      }
+    }
+    return(createImgElement("images/no_image.png"));
 }
 
 function changeImgPath(blobKey, id) {
