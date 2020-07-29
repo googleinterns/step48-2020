@@ -60,11 +60,10 @@ function displayPotentialMatchInfo(pmID) {
     const carouselContainer = document.getElementById("carousel-inner");
     let numPhotos = 0;
     for (let i = 0; i < userinfo.blobkeys.length; i++) {
-      let slideshowElement;
       if (userinfo.blobkeys[i] != "") {
         numPhotos++;
         const imageElement = createImageFromBlobstore(userinfo.blobkeys[i]);
-        slideshowElement = createSlideshowElement(imageElement, "carousel-item" + (i === 0 ? " active" : ""), name, bio);
+        let slideshowElement = createSlideshowElement(imageElement, "carousel-item" + (i === 0 ? " active" : ""), name, bio);
         carouselContainer.appendChild(slideshowElement);
       }
     }
@@ -243,10 +242,10 @@ function createCardElement(userID) {
 function getFirstAvailableImage(blobkeyList) {
   for (let i = 0; i < blobkeyList.length; i++) {
     if (blobkeyList[i] !== "") {
-      return(createImageFromBlobstore(userinfo.blobkeys[i]));
+      return createImageFromBlobstore(userinfo.blobkeys[i]);
       }
-    }
-    return(createImgElement("images/no_image.png"));
+  }
+  return createImgElement("images/no_image.png");
 }
 
 function changeImgPath(blobKey, id) {
