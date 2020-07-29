@@ -61,16 +61,19 @@ function displayPotentialMatchInfo(pmID) {
     const name = userinfo.name;
     const bio = userinfo.bio;
     const carouselContainer = document.getElementById("carousel-inner");
-    const numPhotos = 5; //hard coded value for now, once blobstore works, this will be the amount of images the user has uploaded
-    for (let i = 0; i < numPhotos; i++) {
-      let slideshowElement;
-      if (i === 0) {
-        slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item active", name, bio);
+    let numPhotos = 0;
+    for (let i = 0; i < userinfo.blobkeys.length; i++) {
+      if (userinfo.blobkeys[i] !== "") {
+        numPhotos++;
+        const imageElement = createImageFromBlobstore(userinfo.blobkeys[i]);
+        let slideshowElement = createSlideshowElement(imageElement, "carousel-item" + (i === 0 ? " active" : ""), name, bio);
+        carouselContainer.appendChild(slideshowElement);
       }
-      else {
-        slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item", name, bio);
-      }
-      carouselContainer.appendChild(slideshowElement);
+    }
+    if (numPhotos === 0) {
+      const noImageElement = createImgElement("images/no_image.png");
+      const noImageSlideshowElement = createSlideshowElement(noImageElement, "carousel-item active", name, bio);
+      carouselContainer.appendChild(noImageSlideshowElement);
     }
     addIndicators(numPhotos);
   });
@@ -81,10 +84,10 @@ function deletePotentialMatchInfo() {
   document.getElementById("carousel-indicators").innerHTML = '';
 }
 
-function createSlideshowElement(blobkey, className, name, bio) {
+function createSlideshowElement(image, className, name, bio) {
   const slideshowImage = document.createElement("div"); 
   slideshowImage.className = className;
-  slideshowImage.appendChild(createImgElement(blobkey));
+  slideshowImage.appendChild(image);
   const caption = document.createElement("div");
   caption.className = "carousel-caption";
   const header = document.createElement("h3");
@@ -139,7 +142,8 @@ function getNextPotentialMatch() {
 function noPotentialMatch() {
   document.getElementById("pass-btn").disabled = true;
   document.getElementById("friend-btn").disabled = true;
-  const noMatchImg = createSlideshowElement("images/nomatches.png", "carousel-item active", "", "");
+  const noPotentialMatchImage = createImgElement("images/nomatches.png")
+  const noMatchImg = createSlideshowElement(noPotentialMatchImage, "carousel-item active", "", "");
   const carouselContainer = document.getElementById("carousel-inner");
   carouselContainer.appendChild(noMatchImg);
 }
@@ -176,6 +180,7 @@ function loadProfile() {
     bio = userinfo.bio;
     document.getElementById("name").value = name;
     document.getElementById("bio").value = bio;
+    console.log(userinfo);
 
     // Load user images
     if (userinfo.blobkeys[0] !== "") {
@@ -203,6 +208,7 @@ function displayMatches() {
   }
   fetch('/matches?id=' + userID).then(response => response.json()).then((matches) => {
     const matchContainer = document.getElementById('matches-container');
+    console.log("matches = " + matches);
     for (let i = 0; i < matches.length; i++) {
       matchContainer.appendChild(createCardElement(matches[i]));
     }
@@ -212,11 +218,12 @@ function displayMatches() {
 function createCardElement(userID) {
   const cardDiv = document.createElement("div");
   fetch('/user-data?id=' + userID).then(response => response.json()).then((userinfo) => {
+    console.log(userinfo);
     if (userinfo === null) {
         return;
     }
     cardDiv.className = "col card m-5 card-container";
-    const profileImage = createImgElement("images/noBlobStoreImage2.jpg");
+    let profileImage = getFirstAvailableImage(userinfo.blobkeys);
     profileImage.className = "card-img-top";
     profileImage.setAttribute("height", "300");
     profileImage.setAttribute("width", "100");
@@ -246,6 +253,15 @@ function createCardElement(userID) {
     cardDiv.appendChild(cardBody);
   });
   return cardDiv;
+}
+
+function getFirstAvailableImage(blobkeyList) {
+  for (let i = 0; i < blobkeyList.length; i++) {
+    if (blobkeyList[i] !== "") {
+      return createImageFromBlobstore(userinfo.blobkeys[i]);
+      }
+  }
+  return createImgElement("images/no_image.png");
 }
 
 function changeImgPath(blobKey, id) {
@@ -296,4 +312,15 @@ function setImageFromBlobstore(imageBlobKey, imageId) {
   fetch('/blob-key?imageKey=' + imageBlobKey).then((response) => response.blob()).then((blobContent) => {
     document.getElementById(imageId).src = URL.createObjectURL(blobContent);
   });
+}
+
+//Function that creates an image element that corresponds to the provided blobkey and returns it
+function createImageFromBlobstore(imageBlobKey) {
+  const imgElement = document.createElement('img');
+  fetch('/blob-key?imageKey=' + imageBlobKey).then((response) => response.blob()).then((blobContent) => {
+    imgElement.src = URL.createObjectURL(blobContent);
+  });
+  imgElement.setAttribute("height", "800");
+  imgElement.setAttribute("width", "1100");
+  return imgElement;
 }
