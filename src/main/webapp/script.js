@@ -58,16 +58,23 @@ function displayPotentialMatchInfo(pmID) {
     const name = userinfo.name;
     const bio = userinfo.bio;
     const carouselContainer = document.getElementById("carousel-inner");
-    const numPhotos = 5; //hard coded value for now, once blobstore works, this will be the amount of images the user has uploaded
-    for (let i = 0; i < numPhotos; i++) {
+    let numPhotos = 0;
+    for (let i = 0; i < userinfo.blobkeys.length; i++) {
       let slideshowElement;
-      if (i === 0) {
-        slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item active", name, bio);
+      if (i === 0 && userinfo.blobkeys[i] != "") {
+        numPhotos++;
+        slideshowElement = createSlideshowElement(userinfo.blobkeys[i], "carousel-item active", name, bio, false);
+        carouselContainer.appendChild(slideshowElement);
       }
-      else {
-        slideshowElement = createSlideshowElement("images/noBlobStoreImage.jpg", "carousel-item", name, bio);
+      else if (userinfo.blobkeys[i] != "") {
+        numPhotos++;
+        slideshowElement = createSlideshowElement(userinfo.blobkeys[i], "carousel-item", name, bio, false);
+        carouselContainer.appendChild(slideshowElement);
       }
-      carouselContainer.appendChild(slideshowElement);
+    }
+    if (numPhotos === 0) {
+      const noImageElement = createSlideshowElement("images/no_image.png", "carousel-item active", name, bio, true);
+      carouselContainer.appendChild(noImageElement);
     }
     addIndicators(numPhotos);
   });
@@ -78,10 +85,15 @@ function deletePotentialMatchInfo() {
   document.getElementById("carousel-indicators").innerHTML = '';
 }
 
-function createSlideshowElement(blobkey, className, name, bio) {
+function createSlideshowElement(blobkey, className, name, bio, noMatch) {
   const slideshowImage = document.createElement("div"); 
   slideshowImage.className = className;
-  slideshowImage.appendChild(createImgElement(blobkey));
+  if (noMatch) {
+    slideshowImage.appendChild(createImgElement(blobkey));
+  }
+  else {
+    slideshowImage.appendChild(createImageFromBlobstore(blobkey));
+  }
   const caption = document.createElement("div");
   caption.className = "carousel-caption";
   const header = document.createElement("h3");
@@ -122,20 +134,20 @@ function getNextPotentialMatch() {
   deletePotentialMatchInfo();
   const currentUser = getCurrentUserId();
   fetch('/potential-matches?userid=' + currentUser).then(response => response.json()).then((pmID) => { 
-      if (pmID.nextPotentialMatchID === NO_MATCH) {
-        noPotentialMatch();
-        return;
-      }
-      document.getElementById("pass-btn").disabled = false;
-      document.getElementById("friend-btn").disabled = false;
-      displayPotentialMatchInfo(pmID.nextPotentialMatchID);
+    if (pmID.nextPotentialMatchID === NO_MATCH) {
+      noPotentialMatch();
+      return;
+    }
+    document.getElementById("pass-btn").disabled = false;
+    document.getElementById("friend-btn").disabled = false;
+    displayPotentialMatchInfo(pmID.nextPotentialMatchID);
   }); 
 }
 
 function noPotentialMatch() {
   document.getElementById("pass-btn").disabled = true;
   document.getElementById("friend-btn").disabled = true;
-  const noMatchImg = createSlideshowElement("images/nomatches.png", "carousel-item active", "", "");
+  const noMatchImg = createSlideshowElement("images/nomatches.png", "carousel-item active", "", "", true);
   const carouselContainer = document.getElementById("carousel-inner");
   carouselContainer.appendChild(noMatchImg);
 }
@@ -160,6 +172,7 @@ function loadProfile() {
     bio = userinfo.bio;
     document.getElementById("name").value = name;
     document.getElementById("bio").value = bio;
+    console.log(userinfo);
 
     // Load user images
     if (userinfo.blobkeys[0] !== "") {
@@ -187,6 +200,7 @@ function displayMatches() {
   }
   fetch('/matches?id=' + userID).then(response => response.json()).then((matches) => {
     const matchContainer = document.getElementById('matches-container');
+    console.log("matches = " + matches);
     for (let i = 0; i < matches.length; i++) {
       matchContainer.appendChild(createCardElement(matches[i]));
     }
@@ -196,11 +210,23 @@ function displayMatches() {
 function createCardElement(userID) {
   const cardDiv = document.createElement("div");
   fetch('/user-data?id=' + userID).then(response => response.json()).then((userinfo) => {
+    console.log(userinfo);
     if (userinfo === null) {
         return;
     }
     cardDiv.className = "col card m-5 card-container";
-    const profileImage = createImgElement("images/noBlobStoreImage2.jpg");
+    let profileImage;
+    let foundImage = false;
+    for (let i = 0; i < userinfo.blobkeys.length; i++) {
+      if (userinfo.blobkeys[i] != "") {
+        foundImage = true;
+        profileImage = createImageFromBlobstore(userinfo.blobkeys[i]);
+        break;
+      }
+    }
+    if (!foundImage) {
+      profileImage = createImgElement("images/no_image.png");
+    }
     profileImage.className = "card-img-top";
     profileImage.setAttribute("height", "300");
     profileImage.setAttribute("width", "100");
@@ -280,4 +306,15 @@ function setImageFromBlobstore(imageBlobKey, imageId) {
   fetch('/blob-key?imageKey=' + imageBlobKey).then((response) => response.blob()).then((blobContent) => {
     document.getElementById(imageId).src = URL.createObjectURL(blobContent);
   });
+}
+
+//Function that creates an image element that corresponds to the provided blobkey and returns it
+function createImageFromBlobstore(imageBlobKey) {
+  const imgElement = document.createElement('img');
+  fetch('/blob-key?imageKey=' + imageBlobKey).then((response) => response.blob()).then((blobContent) => {
+    imgElement.src = URL.createObjectURL(blobContent);
+  });
+  imgElement.setAttribute("height", "800");
+  imgElement.setAttribute("width", "1100");
+  return imgElement;
 }
