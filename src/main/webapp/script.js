@@ -13,6 +13,9 @@
 // limitations under the License.
 
 const NO_MATCH =  "NO_POTENTIAL_MATCHES"; // must be kept in sync with the PotentialMatches.java servlet
+const FRIENDED = "FRIENDED";
+const PASSED = "PASSED";
+let currentPMDisplayed;
  
 // Function that is called onLoad of the body tag
 function initializeProfilePage() {
@@ -125,13 +128,14 @@ function getNextPotentialMatch() {
   deletePotentialMatchInfo();
   const currentUser = getCurrentUserId();
   fetch('/potential-matches?userid=' + currentUser).then(response => response.json()).then((pmID) => { 
-    if (pmID.nextPotentialMatchID === NO_MATCH) {
-      noPotentialMatch();
-      return;
-    }
-    document.getElementById("pass-btn").disabled = false;
-    document.getElementById("friend-btn").disabled = false;
-    displayPotentialMatchInfo(pmID.nextPotentialMatchID);
+      if (pmID.nextPotentialMatchID === NO_MATCH) {
+        noPotentialMatch();
+        return;
+      }
+      document.getElementById("pass-btn").disabled = false;
+      document.getElementById("friend-btn").disabled = false;
+      displayPotentialMatchInfo(pmID.nextPotentialMatchID);
+      currentPMdisplayed = pmID.nextPotentialMatchID;
   }); 
 }
 
@@ -145,13 +149,25 @@ function noPotentialMatch() {
 }
 
 function matchButtonPressed() {
-  // TODO: send match info to matching servlet
-  getNextPotentialMatch();  
+  const decision = {
+      userid: getCurrentUserId(),
+      potentialMatchID: currentPMDisplayed,
+      decision: FRIENDED
+  }
+  fetch('/match-decisions', { method: 'POST', body: JSON.stringify(decision) }).then((response) => {
+      getNextPotentialMatch();
+  });
 }
 
 function passButtonPressed() {
-  // TODO: send pass info to matching servlet
-  getNextPotentialMatch();
+  const decision = {
+      userid: getCurrentUserId(),
+      potentialMatchID: currentPMDisplayed,
+      decision: PASSED
+  }
+  fetch('/match-decisions', { method: 'POST', body: JSON.stringify(decision) }).then((response) => {
+      getNextPotentialMatch();
+  });
 }
 
 function loadProfile() {
