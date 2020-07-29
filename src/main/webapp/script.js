@@ -60,7 +60,7 @@ function displayPotentialMatchInfo(pmID) {
     const carouselContainer = document.getElementById("carousel-inner");
     let numPhotos = 0;
     for (let i = 0; i < userinfo.blobkeys.length; i++) {
-      if (userinfo.blobkeys[i] != "") {
+      if (userinfo.blobkeys[i] !== "") {
         numPhotos++;
         const imageElement = createImageFromBlobstore(userinfo.blobkeys[i]);
         let slideshowElement = createSlideshowElement(imageElement, "carousel-item" + (i === 0 ? " active" : ""), name, bio);
