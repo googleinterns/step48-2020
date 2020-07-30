@@ -67,11 +67,10 @@ public class MutualFriendsServlet extends HttpServlet {
     List<String> userFriendsList1 = (List<String>) userEntity1.getProperty(UserDataServlet.USER_FRIENDS_LIST_PROPERTY);
     List<String> userFriendsList2 = (List<String>) userEntity2.getProperty(UserDataServlet.USER_FRIENDS_LIST_PROPERTY);
 
-    Set<String> userFriendsSet1 = userFriendsList1 == null ? ImmutableSet.of() : ImmutableSet.copyOf(userFriendsList1);
-    Set<String> userFriendsSet2 = userFriendsList2 == null ? ImmutableSet.of() : ImmutableSet.copyOf(userFriendsList2);
+    ImmutableSet<String> userFriendsSet1 = userFriendsList1 == null ? ImmutableSet.of() : ImmutableSet.copyOf(userFriendsList1);
+    ImmutableSet<String> userFriendsSet2 = userFriendsList2 == null ? ImmutableSet.of() : ImmutableSet.copyOf(userFriendsList2);
 
-    Set<String> mutualFriendsSet = Sets.intersection(userFriendsSet1, userFriendsSet2);
-    List<String> mutualFriendsList = ImmutableList.copyOf(mutualFriendsSet);
+    ImmutableList<String> mutualFriendsList = ImmutableList.copyOf(Sets.intersection(userFriendsSet1, userFriendsSet2));
 
     Gson gson = new Gson();
     String json = gson.toJson(mutualFriendsList);
