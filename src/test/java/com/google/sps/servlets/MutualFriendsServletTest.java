@@ -43,16 +43,6 @@ import com.google.gson.Gson;
 
 @RunWith(JUnit4.class)
 public class MutualFriendsServletTest {
-  private static final String USER_ENTITY = "User";
-  private static final String USER_ID_PROPERTY = "id";
-  private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
-  private static final String USER_NAME_PROPERTY = "name";
-  private static final String USER_EMAIL_PROPERTY = "email";
-  private static final String USER_BIO_PROPERTY = "bio";
-
-  private static final String USER_ID_1_REQUEST_URL_PARAM = "userid1";
-  private static final String USER_ID_2_REQUEST_URL_PARAM = "userid2";
-
   private static final String TEST_USER_1_ID = "1111";
   private static final String TEST_USER_2_ID = "1776";
   private static final String TEST_USER_3_ID = "1234";
@@ -152,8 +142,8 @@ public class MutualFriendsServletTest {
    * @return The response from the get request to MutualFriendsServlet as a string
    */
   private String execute(String userID1, String userID2) throws IOException {
-    when(mockRequest.getParameter(USER_ID_1_REQUEST_URL_PARAM)).thenReturn(userID1);
-    when(mockRequest.getParameter(USER_ID_2_REQUEST_URL_PARAM)).thenReturn(userID2);
+    when(mockRequest.getParameter(MutualFriendsServlet.USER_ID_1_REQUEST_URL_PARAM)).thenReturn(userID1);
+    when(mockRequest.getParameter(MutualFriendsServlet.USER_ID_2_REQUEST_URL_PARAM)).thenReturn(userID2);
     responseWriter = new StringWriter();
     writer = new PrintWriter(responseWriter, true);
     when(mockResponse.getWriter()).thenReturn(writer);
@@ -164,12 +154,12 @@ public class MutualFriendsServletTest {
   }
 
   private void addTestUserEntityToDatastore(String userID, String[] friendsList) {
-    Entity userEntity = new Entity(USER_ENTITY);
-    userEntity.setProperty(USER_ID_PROPERTY, userID);
-    userEntity.setProperty(USER_FRIENDS_LIST_PROPERTY, Arrays.asList(friendsList));
-    userEntity.setProperty(USER_NAME_PROPERTY, "");
-    userEntity.setProperty(USER_EMAIL_PROPERTY, "");
-    userEntity.setProperty(USER_BIO_PROPERTY, "");
+    Entity userEntity = new Entity(UserDataServlet.USER_ENTITY);
+    userEntity.setProperty(UserDataServlet.USER_ID_PROPERTY, userID);
+    userEntity.setProperty(UserDataServlet.USER_FRIENDS_LIST_PROPERTY, Arrays.asList(friendsList));
+    userEntity.setProperty(UserDataServlet.USER_NAME_PROPERTY, "");
+    userEntity.setProperty(UserDataServlet.USER_EMAIL_PROPERTY, "");
+    userEntity.setProperty(UserDataServlet.USER_BIO_PROPERTY, "");
     datastore.put(userEntity);
   }
 }

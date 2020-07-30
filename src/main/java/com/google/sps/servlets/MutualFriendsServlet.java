@@ -41,11 +41,8 @@ import com.google.appengine.api.datastore.Entity;
  */
 @WebServlet("/mutual-friends")
 public class MutualFriendsServlet extends HttpServlet {
-  private static final String USER_ENTITY = "User";
-  private static final String USER_ID_PROPERTY = "id";
-  private static final String USER_FRIENDS_LIST_PROPERTY = "friends-list";
-  private static final String USER_ID_1_REQUEST_URL_PARAM = "userid1";
-  private static final String USER_ID_2_REQUEST_URL_PARAM = "userid2";
+  static final String USER_ID_1_REQUEST_URL_PARAM = "userid1";
+  static final String USER_ID_2_REQUEST_URL_PARAM = "userid2";
 
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -54,13 +51,13 @@ public class MutualFriendsServlet extends HttpServlet {
     String userID1 = (String) request.getParameter(USER_ID_1_REQUEST_URL_PARAM);
     String userID2 = (String) request.getParameter(USER_ID_2_REQUEST_URL_PARAM);
 
-    Entity userEntity1 = datastore.prepare(new Query(USER_ENTITY).setFilter(
-      new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID1))).asSingleEntity();
-    Entity userEntity2 = datastore.prepare(new Query(USER_ENTITY).setFilter(
-      new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID2))).asSingleEntity();
+    Entity userEntity1 = datastore.prepare(new Query(UserDataServlet.USER_ENTITY).setFilter(
+      new FilterPredicate(UserDataServlet.USER_ID_PROPERTY, FilterOperator.EQUAL, userID1))).asSingleEntity();
+    Entity userEntity2 = datastore.prepare(new Query(UserDataServlet.USER_ENTITY).setFilter(
+      new FilterPredicate(UserDataServlet.USER_ID_PROPERTY, FilterOperator.EQUAL, userID2))).asSingleEntity();
 
-    List<String> userFriendsList1 = (List<String>) userEntity1.getProperty(USER_FRIENDS_LIST_PROPERTY);
-    List<String> userFriendsList2 = (List<String>) userEntity2.getProperty(USER_FRIENDS_LIST_PROPERTY);
+    List<String> userFriendsList1 = (List<String>) userEntity1.getProperty(UserDataServlet.USER_FRIENDS_LIST_PROPERTY);
+    List<String> userFriendsList2 = (List<String>) userEntity2.getProperty(UserDataServlet.USER_FRIENDS_LIST_PROPERTY);
 
     Set<String> userFriendsSet1 = userFriendsList1 == null ? ImmutableSet.of() : ImmutableSet.copyOf(userFriendsList1);
     Set<String> userFriendsSet2 = userFriendsList2 == null ? ImmutableSet.of() : ImmutableSet.copyOf(userFriendsList2);
