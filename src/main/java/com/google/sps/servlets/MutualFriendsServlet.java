@@ -51,10 +51,18 @@ public class MutualFriendsServlet extends HttpServlet {
     String userID1 = (String) request.getParameter(USER_ID_1_REQUEST_URL_PARAM);
     String userID2 = (String) request.getParameter(USER_ID_2_REQUEST_URL_PARAM);
 
-    Entity userEntity1 = datastore.prepare(new Query(UserDataServlet.USER_ENTITY).setFilter(
-      new FilterPredicate(UserDataServlet.USER_ID_PROPERTY, FilterOperator.EQUAL, userID1))).asSingleEntity();
-    Entity userEntity2 = datastore.prepare(new Query(UserDataServlet.USER_ENTITY).setFilter(
-      new FilterPredicate(UserDataServlet.USER_ID_PROPERTY, FilterOperator.EQUAL, userID2))).asSingleEntity();
+    Entity userEntity1 = datastore
+      .prepare(
+          new Query(UserDataServlet.USER_ENTITY)
+            .setFilter(
+              new FilterPredicate(UserDataServlet.USER_ID_PROPERTY, FilterOperator.EQUAL, userID1)))
+      .asSingleEntity();
+    Entity userEntity2 = datastore
+      .prepare(
+          new Query(UserDataServlet.USER_ENTITY)
+            .setFilter(
+              new FilterPredicate(UserDataServlet.USER_ID_PROPERTY, FilterOperator.EQUAL, userID2)))
+      .asSingleEntity();
 
     List<String> userFriendsList1 = (List<String>) userEntity1.getProperty(UserDataServlet.USER_FRIENDS_LIST_PROPERTY);
     List<String> userFriendsList2 = (List<String>) userEntity2.getProperty(UserDataServlet.USER_FRIENDS_LIST_PROPERTY);
