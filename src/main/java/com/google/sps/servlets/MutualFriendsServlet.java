@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.common.collect.Sets;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
@@ -65,7 +66,7 @@ public class MutualFriendsServlet extends HttpServlet {
     Set<String> userFriendsSet2 = userFriendsList2 == null ? ImmutableSet.of() : ImmutableSet.copyOf(userFriendsList2);
 
     Set<String> mutualFriendsSet = Sets.intersection(userFriendsSet1, userFriendsSet2);
-    List<String> mutualFriendsList = new ArrayList<>(mutualFriendsSet);
+    List<String> mutualFriendsList = ImmutableList.copyOf(mutualFriendsSet);
 
     Gson gson = new Gson();
     String json = gson.toJson(mutualFriendsList);

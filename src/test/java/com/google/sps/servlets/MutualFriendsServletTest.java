@@ -39,7 +39,6 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 
 @RunWith(JUnit4.class)
