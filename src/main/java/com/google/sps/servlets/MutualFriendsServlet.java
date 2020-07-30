@@ -44,6 +44,8 @@ public class MutualFriendsServlet extends HttpServlet {
   static final String USER_ID_1_REQUEST_URL_PARAM = "userid1";
   static final String USER_ID_2_REQUEST_URL_PARAM = "userid2";
 
+  private final Gson gson = new Gson();
+
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   @Override
@@ -72,7 +74,6 @@ public class MutualFriendsServlet extends HttpServlet {
 
     ImmutableList<String> mutualFriendsList = ImmutableList.copyOf(Sets.intersection(userFriendsSet1, userFriendsSet2));
 
-    Gson gson = new Gson();
     String json = gson.toJson(mutualFriendsList);
 
     response.setContentType("application/json");
