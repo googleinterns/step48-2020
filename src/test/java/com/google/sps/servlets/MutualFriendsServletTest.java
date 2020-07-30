@@ -80,8 +80,8 @@ public class MutualFriendsServletTest {
 
   @Test
   public void noMutualFriendsEmptyFriendsLists() throws Exception {
-    addTestUserEntityToDatastore(TEST_USER_1_ID, /* friendsList= */ new String[]{});
-    addTestUserEntityToDatastore(TEST_USER_2_ID, /* friendsList= */ new String[]{});
+    addTestUserEntityToDatastore(TEST_USER_1_ID);
+    addTestUserEntityToDatastore(TEST_USER_2_ID);
 
     String jsonOutput = execute(TEST_USER_1_ID, TEST_USER_2_ID);
     List<String> mutualFriends = Arrays.asList(new Gson().fromJson(jsonOutput, String[].class));
@@ -91,8 +91,8 @@ public class MutualFriendsServletTest {
 
   @Test
   public void noMutualFriendsOneEmptyFriendsList() throws Exception {
-    addTestUserEntityToDatastore(TEST_USER_1_ID, /* friendsList= */ new String[]{TEST_USER_3_ID, TEST_USER_4_ID});
-    addTestUserEntityToDatastore(TEST_USER_2_ID, /* friendsList= */ new String[]{});
+    addTestUserEntityToDatastore(TEST_USER_1_ID, /* friendsList= */ TEST_USER_3_ID, TEST_USER_4_ID);
+    addTestUserEntityToDatastore(TEST_USER_2_ID);
 
     String jsonOutput = execute(TEST_USER_1_ID, TEST_USER_2_ID);
     List<String> mutualFriends = Arrays.asList(new Gson().fromJson(jsonOutput, String[].class));
@@ -102,8 +102,8 @@ public class MutualFriendsServletTest {
 
   @Test
   public void noMutualFriendsFilledLists() throws Exception {
-    addTestUserEntityToDatastore(TEST_USER_1_ID, /* friendsList= */ new String[]{TEST_USER_3_ID, TEST_USER_4_ID});
-    addTestUserEntityToDatastore(TEST_USER_2_ID, /* friendsList= */ new String[]{TEST_USER_5_ID});
+    addTestUserEntityToDatastore(TEST_USER_1_ID, /* friendsList= */ TEST_USER_3_ID, TEST_USER_4_ID);
+    addTestUserEntityToDatastore(TEST_USER_2_ID, /* friendsList= */ TEST_USER_5_ID);
 
     String jsonOutput = execute(TEST_USER_1_ID, TEST_USER_2_ID);
     List<String> mutualFriends = Arrays.asList(new Gson().fromJson(jsonOutput, String[].class));
@@ -113,8 +113,8 @@ public class MutualFriendsServletTest {
 
   @Test
   public void singleMutualFriend() throws Exception {
-    addTestUserEntityToDatastore(TEST_USER_1_ID, /* friendsList= */ new String[]{TEST_USER_3_ID});
-    addTestUserEntityToDatastore(TEST_USER_2_ID, /* friendsList= */ new String[]{TEST_USER_3_ID});
+    addTestUserEntityToDatastore(TEST_USER_1_ID, /* friendsList= */ TEST_USER_3_ID);
+    addTestUserEntityToDatastore(TEST_USER_2_ID, /* friendsList= */ TEST_USER_3_ID);
 
     String jsonOutput = execute(TEST_USER_1_ID, TEST_USER_2_ID);
     List<String> mutualFriends = Arrays.asList(new Gson().fromJson(jsonOutput, String[].class));
@@ -124,13 +124,23 @@ public class MutualFriendsServletTest {
 
   @Test
   public void multipleMutualFriends() throws Exception {
-    addTestUserEntityToDatastore(TEST_USER_1_ID, /* friendsList= */ new String[]{TEST_USER_3_ID, TEST_USER_4_ID, TEST_USER_5_ID});
-    addTestUserEntityToDatastore(TEST_USER_2_ID, /* friendsList= */ new String[]{TEST_USER_3_ID, TEST_USER_4_ID});
+    addTestUserEntityToDatastore(TEST_USER_1_ID, /* friendsList= */ TEST_USER_3_ID, TEST_USER_4_ID, TEST_USER_5_ID);
+    addTestUserEntityToDatastore(TEST_USER_2_ID, /* friendsList= */ TEST_USER_3_ID, TEST_USER_4_ID);
 
     String jsonOutput = execute(TEST_USER_1_ID, TEST_USER_2_ID);
     List<String> mutualFriends = Arrays.asList(new Gson().fromJson(jsonOutput, String[].class));
 
     assertThat(mutualFriends).containsExactly(TEST_USER_3_ID, TEST_USER_4_ID);
+  }
+
+  private void addTestUserEntityToDatastore(String userID, String... friendsList) {
+    Entity userEntity = new Entity(UserDataServlet.USER_ENTITY);
+    userEntity.setProperty(UserDataServlet.USER_ID_PROPERTY, userID);
+    userEntity.setProperty(UserDataServlet.USER_FRIENDS_LIST_PROPERTY, Arrays.asList(friendsList));
+    userEntity.setProperty(UserDataServlet.USER_NAME_PROPERTY, "");
+    userEntity.setProperty(UserDataServlet.USER_EMAIL_PROPERTY, "");
+    userEntity.setProperty(UserDataServlet.USER_BIO_PROPERTY, "");
+    datastore.put(userEntity);
   }
 
   /**
@@ -151,16 +161,6 @@ public class MutualFriendsServletTest {
     servletUnderTest.doGet(mockRequest, mockResponse);
     
     return responseWriter.toString();
-  }
-
-  private void addTestUserEntityToDatastore(String userID, String[] friendsList) {
-    Entity userEntity = new Entity(UserDataServlet.USER_ENTITY);
-    userEntity.setProperty(UserDataServlet.USER_ID_PROPERTY, userID);
-    userEntity.setProperty(UserDataServlet.USER_FRIENDS_LIST_PROPERTY, Arrays.asList(friendsList));
-    userEntity.setProperty(UserDataServlet.USER_NAME_PROPERTY, "");
-    userEntity.setProperty(UserDataServlet.USER_EMAIL_PROPERTY, "");
-    userEntity.setProperty(UserDataServlet.USER_BIO_PROPERTY, "");
-    datastore.put(userEntity);
   }
 }
 
