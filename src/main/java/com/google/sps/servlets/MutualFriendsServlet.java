@@ -17,6 +17,7 @@ package com.google.sps.servlets;
 import java.io.IOException;
 import java.util.Set;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -63,10 +64,11 @@ public class MutualFriendsServlet extends HttpServlet {
     Set<String> userFriendsSet1 = userFriendsList1 == null ? ImmutableSet.of() : ImmutableSet.copyOf(userFriendsList1);
     Set<String> userFriendsSet2 = userFriendsList2 == null ? ImmutableSet.of() : ImmutableSet.copyOf(userFriendsList2);
 
-    Set<String> mutualFriends = Sets.intersection(userFriendsSet1, userFriendsSet2);
+    Set<String> mutualFriendsSet = Sets.intersection(userFriendsSet1, userFriendsSet2);
+    List<String> mutualFriendsList = new ArrayList<>(mutualFriendsSet);
 
     Gson gson = new Gson();
-    String json = gson.toJson(mutualFriends);
+    String json = gson.toJson(mutualFriendsList);
 
     response.setContentType("application/json");
     response.getWriter().print(json);
