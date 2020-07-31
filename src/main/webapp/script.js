@@ -58,11 +58,13 @@ window.addEventListener("load", function(){
 function getMutualFriends(pmID) {
   currentUser = getCurrentUserId();
   fetch('/mutual-friends?userid1=' + currentUser + '&userid2=' + pmID).then(response => response.json()).then((mutualFriends) => {
+    console.log(mutualFriends);
     return mutualFriends;
   });
 }
 
 function displayPotentialMatchInfo(pmID) {
+  console.log(currentPMDisplayed);
   fetch('/user-data?id=' + pmID).then(response => response.json()).then((userinfo) => {
     const name = userinfo.name;
     const bio = userinfo.bio;
@@ -146,7 +148,8 @@ function getNextPotentialMatch() {
       document.getElementById("pass-btn").disabled = false;
       document.getElementById("friend-btn").disabled = false;
       displayPotentialMatchInfo(pmID.nextPotentialMatchID);
-      currentPMdisplayed = pmID.nextPotentialMatchID;
+      currentPMDisplayed = pmID.nextPotentialMatchID;
+      console.log(currentPMisplayed);
   }); 
 }
 
@@ -160,23 +163,15 @@ function noPotentialMatch() {
 }
 
 function matchButtonPressed() {
-  const decision = {
-      userid: getCurrentUserId(),
-      potentialMatchID: currentPMDisplayed,
-      decision: FRIENDED
-  }
-  fetch('/match-decisions', { method: 'POST', body: JSON.stringify(decision) }).then((response) => {
+  const userid = getCurrentUserId();
+  fetch('/match-decisions?userid=' + userid + "&potentialMatchID=" + currentPMDisplayed + "&decision=" + FRIENDED, { method: 'POST' }).then((response) => {
       getNextPotentialMatch();
   });
 }
 
 function passButtonPressed() {
-  const decision = {
-      userid: getCurrentUserId(),
-      potentialMatchID: currentPMDisplayed,
-      decision: PASSED
-  }
-  fetch('/match-decisions', { method: 'POST', body: JSON.stringify(decision) }).then((response) => {
+  const userid = getCurrentuserId();
+  fetch('/match-decisions?userid=' + userid + "&potentialMatchID=" + currentPMDisplayed + "&decision=" + PASSED, { method: 'POST' }).then((response) => {
       getNextPotentialMatch();
   });
 }
