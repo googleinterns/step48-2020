@@ -125,7 +125,7 @@ public class MatchDecisionsServletTest {
     List<String> resultingPotentialMatchesList = (List<String>) matchInfoEntity.getProperty(POTENTIAL_MATCHES_PROPERTY);
     
     assertThat(actualFriendedList).containsExactly(TEST_USER_2_ID);
-    assertThat(resultingPotentialMatchesList).isEqualTo(null);
+    assertThat(resultingPotentialMatchesList).isNull();
   }
 
   /**
@@ -156,7 +156,7 @@ public class MatchDecisionsServletTest {
     List<String> resultingPotentialMatchesList = (List<String>) matchInfoEntity.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
     assertThat(actualPassedList).containsExactly(TEST_USER_2_ID);
-    assertThat(resultingPotentialMatchesList).isEqualTo(null);
+    assertThat(resultingPotentialMatchesList).isNull();
   }
 
   /**
@@ -186,7 +186,7 @@ public class MatchDecisionsServletTest {
     List<String> resultingPotentialMatchesList = (List<String>) matchInfoEntity.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
     assertThat(actualFriendedList).containsExactly(TEST_USER_2_ID);
-    assertThat(resultingPotentialMatchesList).isEqualTo(null);     
+    assertThat(resultingPotentialMatchesList).isNull();     
   }
 
   /**
@@ -222,9 +222,9 @@ public class MatchDecisionsServletTest {
     List<String> resultingPotentialMatchesList2 = (List<String>) matchInfoEntity2.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
     assertThat(actualMatchesList1).containsExactly(TEST_USER_2_ID);
-    assertThat(resultingPotentialMatchesList1).isEqualTo(null);  
+    assertThat(resultingPotentialMatchesList1).isNull();  
     assertThat(actualMatchesList2).containsExactly(TEST_USER_1_ID);
-    assertThat(resultingPotentialMatchesList2).isEqualTo(null);  
+    assertThat(resultingPotentialMatchesList2).isNull(); 
   }
 
   /**
@@ -259,9 +259,9 @@ public class MatchDecisionsServletTest {
     List<String> resultingPotentialMatchesList2 = (List<String>) matchInfoEntity1.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
     assertThat(actualMatchesList1).isEqualTo(null);
-    assertThat(resultingPotentialMatchesList1).isEqualTo(null);  
+    assertThat(resultingPotentialMatchesList1).isNull();  
     assertThat(actualMatchesList2).isEqualTo(null);
-    assertThat(resultingPotentialMatchesList2).isEqualTo(null);  
+    assertThat(resultingPotentialMatchesList2).isNull(); 
   }
 
   /**
@@ -300,9 +300,9 @@ public class MatchDecisionsServletTest {
     List<String> resultingPotentialMatchesList2 = (List<String>) matchInfoEntity1.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
     assertThat(actualMatchesList1).containsExactly(TEST_USER_2_ID, TEST_USER_3_ID);
-    assertThat(resultingPotentialMatchesList1).isEqualTo(null);  
+    assertThat(resultingPotentialMatchesList1).isNull(); 
     assertThat(actualMatchesList2).containsExactly(TEST_USER_1_ID);
-    assertThat(resultingPotentialMatchesList2).isEqualTo(null);  
+    assertThat(resultingPotentialMatchesList2).isNull(); 
   }
 
   /**
@@ -337,9 +337,9 @@ public class MatchDecisionsServletTest {
     List<String> actualMatchesList2 = (List<String>) matchInfoEntity2.getProperty(MATCHES_LIST_PROPERTY);
     List<String> resultingPotentialMatchesList2 = (List<String>) matchInfoEntity2.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
-    assertThat(actualMatchesList1).isEqualTo(null);
+    assertThat(actualMatchesList1).isNull();
     assertThat(resultingPotentialMatchesList1).containsExactly(TEST_USER_3_ID);  
-    assertThat(actualMatchesList2).isEqualTo(null);
+    assertThat(actualMatchesList2).isNull();
     assertThat(resultingPotentialMatchesList2).containsExactly(TEST_USER_1_ID);   
   }
 
@@ -379,7 +379,7 @@ public class MatchDecisionsServletTest {
     assertThat(actualMatchesList1).containsExactly(TEST_USER_2_ID);
     assertThat(resultingPotentialMatchesList1).containsExactly(TEST_USER_3_ID, TEST_USER_4_ID);  
     assertThat(actualMatchesList2).containsExactly(TEST_USER_1_ID);
-    assertThat(resultingPotentialMatchesList2).isEqualTo(null); 
+    assertThat(resultingPotentialMatchesList2).isNull();
   }
 
   /**
