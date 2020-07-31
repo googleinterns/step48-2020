@@ -90,8 +90,7 @@ public class PotentialMatchesServlet extends HttpServlet {
   }
   
   /**
-  * Given a specific user, retrieve their next potential match for their feed page
-  * and remove that potential match from their potential matches list
+  * Given a specific user, retrieve their next potential match for their feed page.
   *
   * @param userID The user whose potential match is being retrieved
   */
@@ -104,11 +103,6 @@ public class PotentialMatchesServlet extends HttpServlet {
     
     if (potentialMatches != null && !potentialMatches.isEmpty()) {
       nextPotentialMatchID = potentialMatches.get(0);
-
-      matchInfoEntity.setProperty(POTENTIAL_MATCHES_PROPERTY,
-        potentialMatches.subList(1, potentialMatches.size()));
-
-      datastore.put(matchInfoEntity);
     } else {
       nextPotentialMatchID = NO_POTENTIAL_MATCH_RESULT;
     }

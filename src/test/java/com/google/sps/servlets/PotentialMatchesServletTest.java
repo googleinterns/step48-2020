@@ -127,7 +127,6 @@ public class PotentialMatchesServletTest {
     String actualOutput = execute(TEST_USER_1_ID);
 
     assertThat(actualOutput).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
-    assertMatchInfoInDatastore(TEST_USER_1_ID, null);
   }
 
   /**
@@ -148,15 +147,13 @@ public class PotentialMatchesServletTest {
     String actualOutput = execute(TEST_USER_2_ID);
     
     assertThat(actualOutput).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
-    assertMatchInfoInDatastore(TEST_USER_2_ID, null);
   }
 
   /**
   * Tests scenario with three users where User 1 is friends with User 2 and User 3,
   * and User 2 and 3 are only friends with User 1. 
   *
-  * <p>This should return that the first potential match for User 2 is User 3, and
-  * then it should show that there is no second potential match.
+  * <p>This should return that the first potential match for User 2 is User 3.
   */
   @Test
   public void threeUsersOneMutualConnection() throws Exception {
@@ -174,21 +171,13 @@ public class PotentialMatchesServletTest {
     String actualOutput1 = execute(TEST_USER_2_ID);
 
     assertThat(actualOutput1).isEqualTo(TEST_USER_3_ID);
-    assertMatchInfoInDatastore(TEST_USER_2_ID, null);
-
-    String actualOutput2 = execute(TEST_USER_2_ID);
-
-    assertThat(actualOutput2).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
-    assertMatchInfoInDatastore(TEST_USER_2_ID, null);
   }
 
   /**
   * Tests scenario with four users where User 1 is friends with User 2, 3, and 4.
   * Users 2, 3, and 4 are only friends with User 1.
   *
-  * <p>This should return that the first potential match for User 4 is either User 2 or 3 and
-  * that the second one is the other of the two, and then it should show that there is no
-  * third potential match.
+  * <p>This should return that the first potential match for User 4 is either User 2 or 3.
   */
   @Test
   public void fourUsersOneMutualConnection() throws Exception {
@@ -206,22 +195,9 @@ public class PotentialMatchesServletTest {
     addTestUserEntityToDatastore(datastore, TEST_USER_4_ID, TEST_USER_4_NAME,
       TEST_USER_4_EMAIL, TEST_USER_4_BIO, testUser4FriendsList);
 
-    String actualOutput1 = execute(TEST_USER_4_ID);
+    String actualOutput = execute(TEST_USER_4_ID);
 
-    String expectedSecondOutput = actualOutput1.equals(TEST_USER_2_ID) ? TEST_USER_3_ID : TEST_USER_2_ID;
-
-    assertThat(actualOutput1).isIn(Arrays.asList(TEST_USER_2_ID, TEST_USER_3_ID));
-    assertMatchInfoInDatastore(TEST_USER_4_ID, Arrays.asList(expectedSecondOutput));
-
-    String actualOutput2 = execute(TEST_USER_4_ID);
-
-    assertThat(actualOutput2).isEqualTo(expectedSecondOutput);
-    assertMatchInfoInDatastore(TEST_USER_4_ID, null);
-
-    String actualOutput3 = execute(TEST_USER_4_ID);
-
-    assertThat(actualOutput3).isEqualTo(NO_POTENTIAL_MATCH_RESULT);
-    assertMatchInfoInDatastore(TEST_USER_4_ID, null);
+    assertThat(actualOutput).isIn(Arrays.asList(TEST_USER_2_ID, TEST_USER_3_ID));
   }
 
   /**

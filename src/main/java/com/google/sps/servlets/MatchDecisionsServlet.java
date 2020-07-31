@@ -83,6 +83,12 @@ public class MatchDecisionsServlet extends HttpServlet {
   private void updateMatchDecisionInfo(Entity userMatchInfo, String decision, String potentialMatchID) {
     String decisionsProperty = decision.equals(FRIENDED_DECISION) ? FRIENDED_IDS_PROPERTY : PASSED_IDS_PROPERTY;
 
+    List<String> potentialMatches = (List<String>) userMatchInfo.getProperty(POTENTIAL_MATCHES_PROPERTY);
+    potentialMatches.remove(potentialMatchID);
+
+    userMatchInfo.setProperty(POTENTIAL_MATCHES_PROPERTY,
+        ImmutableList.copyOf(potentialMatches));
+
     addItemToDatastoreList(userMatchInfo, decisionsProperty, potentialMatchID);
   }
 

@@ -67,6 +67,7 @@ public class MatchDecisionsServletTest {
   private static final String TEST_USER_1_ID = "5555";
   private static final String TEST_USER_2_ID = "1776";
   private static final String TEST_USER_3_ID = "1234";
+  private static final String TEST_USER_4_ID = "4545";
 
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
@@ -99,7 +100,8 @@ public class MatchDecisionsServletTest {
   /**
    * Scenario where a user chooses to friend another user as their first decision
    *
-   * <p>Should result in the current User 1's friended list getting updated to hold just User 2.
+   * <p>Should result in the current User 1's friended list getting updated to hold just User 2,
+   * and User 1's potential match list should end up being empty.
    */
   @Test
   public void firstFriendedDecision() throws IOException{
@@ -120,14 +122,17 @@ public class MatchDecisionsServletTest {
     assertThat(matchInfoEntity).isNotNull();
 
     List<String> actualFriendedList = (List<String>) matchInfoEntity.getProperty(FRIENDED_IDS_PROPERTY);
+    List<String> resultingPotentialMatchesList = (List<String>) matchInfoEntity.getProperty(POTENTIAL_MATCHES_PROPERTY);
     
     assertThat(actualFriendedList).containsExactly(TEST_USER_2_ID);
+    assertThat(resultingPotentialMatchesList).isEqualTo(null);
   }
 
   /**
    * Scenario where a user chooses to pass on another user as their first decision.
    *
-   * <p>Should result in the current User 1's passed list getting updated to hold just User 2.
+   * <p>Should result in the current User 1's passed list getting updated to hold just User 2,
+   * and User 1's potential match list should end up being empty.
    */ 
   @Test
   public void firstPassedDecision() throws IOException{
@@ -148,15 +153,18 @@ public class MatchDecisionsServletTest {
     assertThat(matchInfoEntity).isNotNull();
 
     List<String> actualPassedList = (List<String>) matchInfoEntity.getProperty(PASSED_IDS_PROPERTY);
+    List<String> resultingPotentialMatchesList = (List<String>) matchInfoEntity.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
     assertThat(actualPassedList).containsExactly(TEST_USER_2_ID);
+    assertThat(resultingPotentialMatchesList).isEqualTo(null);
   }
 
   /**
    * Tests the case in which the potential match has not yet had their match information stored in datastore.
    * 
    * <p>Should still result in the same behavior as if this potential match had not made any feed decisions
-   * yet, which in this case would be the current user's friended list expanding to include the potential match.
+   * yet, which in this case would be the current user's friended list expanding to include the potential match and
+   * the potential match's id being removed from the current user's potential match list.
    */
   @Test
   public void noMatchInfoForPotentialMatch() throws IOException{
@@ -175,8 +183,10 @@ public class MatchDecisionsServletTest {
     assertThat(matchInfoEntity).isNotNull();
 
     List<String> actualFriendedList = (List<String>) matchInfoEntity.getProperty(FRIENDED_IDS_PROPERTY);
+    List<String> resultingPotentialMatchesList = (List<String>) matchInfoEntity.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
     assertThat(actualFriendedList).containsExactly(TEST_USER_2_ID);
+    assertThat(resultingPotentialMatchesList).isEqualTo(null);     
   }
 
   /**
@@ -207,10 +217,14 @@ public class MatchDecisionsServletTest {
     assertThat(matchInfoEntity2).isNotNull();
 
     List<String> actualMatchesList1 = (List<String>) matchInfoEntity1.getProperty(MATCHES_LIST_PROPERTY);
+    List<String> resultingPotentialMatchesList1 = (List<String>) matchInfoEntity1.getProperty(POTENTIAL_MATCHES_PROPERTY);
     List<String> actualMatchesList2 = (List<String>) matchInfoEntity2.getProperty(MATCHES_LIST_PROPERTY);
+    List<String> resultingPotentialMatchesList2 = (List<String>) matchInfoEntity2.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
     assertThat(actualMatchesList1).containsExactly(TEST_USER_2_ID);
+    assertThat(resultingPotentialMatchesList1).isEqualTo(null);  
     assertThat(actualMatchesList2).containsExactly(TEST_USER_1_ID);
+    assertThat(resultingPotentialMatchesList2).isEqualTo(null);  
   }
 
   /**
@@ -240,10 +254,14 @@ public class MatchDecisionsServletTest {
     assertThat(matchInfoEntity2).isNotNull();
 
     List<String> actualMatchesList1 = (List<String>) matchInfoEntity1.getProperty(MATCHES_LIST_PROPERTY);
-    List<String> actualMatchesList2 = (List<String>) matchInfoEntity1.getProperty(MATCHES_LIST_PROPERTY);
+    List<String> resultingPotentialMatchesList1 = (List<String>) matchInfoEntity1.getProperty(POTENTIAL_MATCHES_PROPERTY);
+    List<String> actualMatchesList2 = (List<String>) matchInfoEntity2.getProperty(MATCHES_LIST_PROPERTY);
+    List<String> resultingPotentialMatchesList2 = (List<String>) matchInfoEntity1.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
     assertThat(actualMatchesList1).isEqualTo(null);
+    assertThat(resultingPotentialMatchesList1).isEqualTo(null);  
     assertThat(actualMatchesList2).isEqualTo(null);
+    assertThat(resultingPotentialMatchesList2).isEqualTo(null);  
   }
 
   /**
@@ -277,10 +295,91 @@ public class MatchDecisionsServletTest {
     assertThat(matchInfoEntity2).isNotNull();
 
     List<String> actualMatchesList1 = (List<String>) matchInfoEntity1.getProperty(MATCHES_LIST_PROPERTY);
+    List<String> resultingPotentialMatchesList1 = (List<String>) matchInfoEntity1.getProperty(POTENTIAL_MATCHES_PROPERTY);
     List<String> actualMatchesList2 = (List<String>) matchInfoEntity2.getProperty(MATCHES_LIST_PROPERTY);
+    List<String> resultingPotentialMatchesList2 = (List<String>) matchInfoEntity1.getProperty(POTENTIAL_MATCHES_PROPERTY);
 
     assertThat(actualMatchesList1).containsExactly(TEST_USER_2_ID, TEST_USER_3_ID);
+    assertThat(resultingPotentialMatchesList1).isEqualTo(null);  
     assertThat(actualMatchesList2).containsExactly(TEST_USER_1_ID);
+    assertThat(resultingPotentialMatchesList2).isEqualTo(null);  
+  }
+
+  /**
+   * Scenario where a user friends a potential match when they had multiple potential matches.
+   * 
+   * <p>Should result in the current User 1's friended list getting updated to hold just User 2,
+   * and User 1's potential match list just contain User 3's id.
+   */
+  @Test
+  public void noMatchesLongerPotentialMatchesList() throws IOException {
+    when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_1_ID);
+    when(mockRequest.getParameter(POTENTIAL_MATCH_REQUEST_PARAM)).thenReturn(TEST_USER_2_ID);
+    when(mockRequest.getParameter(DECISION_REQUEST_PARAM)).thenReturn(FRIENDED_DECISION);
+
+    addTestMatchInfoToDatastore(datastore, TEST_USER_1_ID, ImmutableList.of(TEST_USER_2_ID, TEST_USER_3_ID),
+      ImmutableList.of(), ImmutableList.of(), ImmutableList.of());
+    addTestMatchInfoToDatastore(datastore, TEST_USER_2_ID, ImmutableList.of(TEST_USER_1_ID),
+      ImmutableList.of(), ImmutableList.of(), ImmutableList.of());
+
+    servletUnderTest.doPost(mockRequest, mockResponse);
+
+    Entity matchInfoEntity1 = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
+      new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, TEST_USER_1_ID))).asSingleEntity();   
+    Entity matchInfoEntity2 = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
+      new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, TEST_USER_2_ID))).asSingleEntity();  
+
+    assertThat(matchInfoEntity1).isNotNull();
+    assertThat(matchInfoEntity2).isNotNull();
+
+    List<String> actualMatchesList1 = (List<String>) matchInfoEntity1.getProperty(MATCHES_LIST_PROPERTY);
+    List<String> resultingPotentialMatchesList1 = (List<String>) matchInfoEntity1.getProperty(POTENTIAL_MATCHES_PROPERTY);
+    List<String> actualMatchesList2 = (List<String>) matchInfoEntity2.getProperty(MATCHES_LIST_PROPERTY);
+    List<String> resultingPotentialMatchesList2 = (List<String>) matchInfoEntity2.getProperty(POTENTIAL_MATCHES_PROPERTY);
+
+    assertThat(actualMatchesList1).isEqualTo(null);
+    assertThat(resultingPotentialMatchesList1).containsExactly(TEST_USER_3_ID);  
+    assertThat(actualMatchesList2).isEqualTo(null);
+    assertThat(resultingPotentialMatchesList2).containsExactly(TEST_USER_1_ID);   
+  }
+
+  /**
+   * Scenario where a user friends another user on their feed page resulting in a mutual match,
+   * and the user still has potential matches left.
+   *
+   * <p>Should result in the matches lists for User 1 and User 2 getting updated to include
+   * each other, and User 1's potential match list should then just contain Users 3 & 4.
+   */
+  @Test
+  public void matchFoundLongerPotentialMatchesList() throws IOException {
+    when(mockRequest.getParameter(USER_ID_REQUEST_PARAM)).thenReturn(TEST_USER_1_ID);
+    when(mockRequest.getParameter(POTENTIAL_MATCH_REQUEST_PARAM)).thenReturn(TEST_USER_2_ID);
+    when(mockRequest.getParameter(DECISION_REQUEST_PARAM)).thenReturn(FRIENDED_DECISION);
+
+    addTestMatchInfoToDatastore(datastore, TEST_USER_1_ID, ImmutableList.of(TEST_USER_2_ID, TEST_USER_3_ID, TEST_USER_4_ID),
+      ImmutableList.of(), ImmutableList.of(), ImmutableList.of());
+    addTestMatchInfoToDatastore(datastore, TEST_USER_2_ID, ImmutableList.of(),
+      ImmutableList.of(TEST_USER_1_ID), ImmutableList.of(), ImmutableList.of());
+
+    servletUnderTest.doPost(mockRequest, mockResponse);
+
+    Entity matchInfoEntity1 = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
+      new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, TEST_USER_1_ID))).asSingleEntity();   
+    Entity matchInfoEntity2 = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
+      new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, TEST_USER_2_ID))).asSingleEntity();  
+
+    assertThat(matchInfoEntity1).isNotNull();
+    assertThat(matchInfoEntity2).isNotNull();
+
+    List<String> actualMatchesList1 = (List<String>) matchInfoEntity1.getProperty(MATCHES_LIST_PROPERTY);
+    List<String> resultingPotentialMatchesList1 = (List<String>) matchInfoEntity1.getProperty(POTENTIAL_MATCHES_PROPERTY);
+    List<String> actualMatchesList2 = (List<String>) matchInfoEntity2.getProperty(MATCHES_LIST_PROPERTY);
+    List<String> resultingPotentialMatchesList2 = (List<String>) matchInfoEntity2.getProperty(POTENTIAL_MATCHES_PROPERTY);
+
+    assertThat(actualMatchesList1).containsExactly(TEST_USER_2_ID);
+    assertThat(resultingPotentialMatchesList1).containsExactly(TEST_USER_3_ID, TEST_USER_4_ID);  
+    assertThat(actualMatchesList2).containsExactly(TEST_USER_1_ID);
+    assertThat(resultingPotentialMatchesList2).isEqualTo(null); 
   }
 
   /**
