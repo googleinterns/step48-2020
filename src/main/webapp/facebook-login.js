@@ -62,6 +62,6 @@ function checkLoginState() {
 
 // Log the user into facebook with correct permissions
 function loginFacebook() {
-  FB.login(statusChangeCallback, {scope: 'email,public_profile,user_friends', return_scopes: true});
+  FB.login(statusChangeCallback, {scope: 'email,public_profile,user_friends,user_link', return_scopes: true});
 }
 
