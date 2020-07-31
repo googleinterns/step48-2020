@@ -217,7 +217,7 @@ function displayMatches() {
   if (userID === null) {
       return;
   }
-  fetch('/matches?id=' + userID).then(response => response.json()).then((matches) => {
+  fetch('/matches-list?id=' + userID).then(response => response.json()).then((matches) => {
     const matchContainer = document.getElementById('matches-container');
     console.log("matches = " + matches);
     for (let i = 0; i < matches.length; i++) {
