@@ -46,8 +46,7 @@ function updateFeedLinkForCurrentUser() {
   link.setAttribute('href', 'feed.html?id=' + uid);
 }
 
-function updateMatchesLinkForCurrentUser() {
-  let uid = getCurrentUserId();
+function updateMatchesLinkForCurrentUser(userid) {
   var link = document.getElementById("matchesLink");
   link.setAttribute('href', 'matches.html?id=' + uid);
 }
@@ -56,17 +55,25 @@ window.addEventListener("load", function(){
   function a(a,b){var c=/^(?:file):/,d=new XMLHttpRequest,e=0;d.onreadystatechange=function(){4==d.readyState&&(e=d.status),c.test(location.href)&&d.responseText&&(e=200),4==d.readyState&&200==e&&(a.outerHTML=d.responseText)};try{d.open("GET",b,!0),d.send()}catch(f){}}var b,c=document.getElementsByTagName("*");for(b in c)c[b].hasAttribute&&c[b].hasAttribute("data-include")&&a(c[b],c[b].getAttribute("data-include"));
 });
 
+function getMutualFriends(pmID) {
+  currentUser = getCurrentUserId();
+  fetch('/mutual-friends?userid1=' + currentUser + '&userid2=' + pmID).then(response => response.json()).then((mutualFriends) => {
+    return mutualFriends;
+  });
+}
+
 function displayPotentialMatchInfo(pmID) {
   fetch('/user-data?id=' + pmID).then(response => response.json()).then((userinfo) => {
     const name = userinfo.name;
     const bio = userinfo.bio;
+    const mutualFriends = getMutualFriends(pmID)
     const carouselContainer = document.getElementById("carousel-inner");
     let numPhotos = 0;
     for (let i = 0; i < userinfo.blobkeys.length; i++) {
       if (userinfo.blobkeys[i] !== "") {
         numPhotos++;
         const imageElement = createImageFromBlobstore(userinfo.blobkeys[i]);
-        let slideshowElement = createSlideshowElement(imageElement, "carousel-item" + (i === 0 ? " active" : ""), name, bio);
+        let slideshowElement = createSlideshowElement(imageElement, "carousel-item" + (i === 0 ? " active" : ""), name, bio, mutualFriends);
         carouselContainer.appendChild(slideshowElement);
       }
     }
@@ -84,7 +91,7 @@ function deletePotentialMatchInfo() {
   document.getElementById("carousel-indicators").innerHTML = '';
 }
 
-function createSlideshowElement(image, className, name, bio) {
+function createSlideshowElement(image, className, name, bio, mutualFriends) {
   const slideshowImage = document.createElement("div"); 
   slideshowImage.className = className;
   slideshowImage.appendChild(image);
@@ -98,6 +105,10 @@ function createSlideshowElement(image, className, name, bio) {
   const pm_bio = document.createTextNode(bio);
   para.appendChild(pm_bio);
   caption.appendChild(para);
+  const para2 = document.createElement("p");
+  const mutual_friends = document.createTextNode("Mutual Friends: " + mutualFriends);
+  para2.appendChild(mutual_friends);
+  caption.appendChild(para2);
   slideshowImage.appendChild(caption); 
   return slideshowImage;
 }
@@ -210,12 +221,13 @@ function displayMatches() {
     const matchContainer = document.getElementById('matches-container');
     console.log("matches = " + matches);
     for (let i = 0; i < matches.length; i++) {
-      matchContainer.appendChild(createCardElement(matches[i]));
+      const mutualFriends = getMutualFriends(matches[i]);
+      matchContainer.appendChild(createCardElement(matches[i]), mutualFriends);
     }
   });
 }
 
-function createCardElement(userID) {
+function createCardElement(userID, mutualFriends) {
   const cardDiv = document.createElement("div");
   fetch('/user-data?id=' + userID).then(response => response.json()).then((userinfo) => {
     console.log(userinfo);
@@ -238,7 +250,9 @@ function createCardElement(userID) {
     if (userinfo.bio) {
       const para = document.createElement("p");
       const bio = document.createTextNode(userinfo.bio);
+      const mutual_friends = document.createTextNode("Mutual Friends: " + mutualFriends);
       para.appendChild(bio);
+      para.appendChild(mutual_friends);
       para.className = "card-text";
       cardBody.appendChild(para);
     }
