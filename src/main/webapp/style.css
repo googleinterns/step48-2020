@@ -105,3 +105,7 @@ h1 {
 .button-container {
   justify-content: center;
 }
+.login-button {
+  font-weight: 900;
+  margin-top: 5px;
+}
