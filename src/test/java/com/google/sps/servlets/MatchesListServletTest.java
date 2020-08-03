@@ -50,7 +50,7 @@ public class MatchesListServletTest {
   private static final String FRIENDED_IDS_PROPERTY = "friended-ids";
   private static final String PASSED_IDS_PROPERTY = "passed-ids";
   private static final String MATCHES_LIST_PROPERTY = "matches-list";
-  private static final String USER_ID_REQUEST_URL_PARAM = "userid";
+  private static final String USER_ID_REQUEST_URL_PARAM = "id";
 
   //Test user ids
   private static final String TEST_USER_ID = "5555";

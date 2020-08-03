@@ -44,6 +44,10 @@ public class MutualFriendsServlet extends HttpServlet {
   static final String USER_ID_1_REQUEST_URL_PARAM = "userid1";
   static final String USER_ID_2_REQUEST_URL_PARAM = "userid2";
 
+  static final String USER_ENTITY = "User";
+  static final String USER_ID_PROPERTY = "id";
+  static final String USER_NAME_PROPERTY = "name";
+
   private final Gson gson = new Gson();
 
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -72,12 +76,26 @@ public class MutualFriendsServlet extends HttpServlet {
     ImmutableSet<String> userFriendsSet1 = userFriendsList1 == null ? ImmutableSet.of() : ImmutableSet.copyOf(userFriendsList1);
     ImmutableSet<String> userFriendsSet2 = userFriendsList2 == null ? ImmutableSet.of() : ImmutableSet.copyOf(userFriendsList2);
 
-    ImmutableList<String> mutualFriendsList = ImmutableList.copyOf(Sets.intersection(userFriendsSet1, userFriendsSet2));
+    ImmutableList<String> mutualFriendsIDList = ImmutableList.copyOf(Sets.intersection(userFriendsSet1, userFriendsSet2));
 
-    String json = gson.toJson(mutualFriendsList);
+    ImmutableList<String> mutualFriendsNameList = mutualFriendsIDList
+      .stream()
+      .map(id -> getNameFromDatastore(id))
+      .collect(ImmutableList.toImmutableList());
+
+    String json = gson.toJson(mutualFriendsNameList);
 
     response.setContentType("application/json");
     response.getWriter().print(json);
+  }
+
+  private String getNameFromDatastore(String userID) {
+    Entity userEntity = datastore.prepare(new Query(USER_ENTITY).setFilter(
+      new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
+    
+    String name = (String) userEntity.getProperty(USER_NAME_PROPERTY);
+
+    return name;
   }
 }
 
