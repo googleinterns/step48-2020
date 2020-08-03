@@ -46,7 +46,10 @@ function updateFeedLinkForCurrentUser() {
   link.setAttribute('href', 'feed.html?id=' + uid);
 }
 
-function updateMatchesLinkForCurrentUser(userid) {
+//This function sets the matches url to also contain the url of the 
+//current user
+function updateMatchesLinkForCurrentUser() {
+  const uid = getCurrentUserId();
   const link = document.getElementById("matchesLink");
   link.setAttribute('href', 'matches.html?id=' + uid);
 }
@@ -56,7 +59,7 @@ window.addEventListener("load", function(){
 });
 
 function getMutualFriends(pmID) {
-  currentUser = getCurrentUserId();
+  const currentUser = getCurrentUserId();
   fetch('/mutual-friends?userid1=' + currentUser + '&userid2=' + pmID).then(response => response.json()).then((mutualFriends) => {
     console.log(mutualFriends);
     return mutualFriends;
@@ -100,16 +103,16 @@ function createSlideshowElement(image, className, name, bio, mutualFriends) {
   const caption = document.createElement("div");
   caption.className = "carousel-caption";
   const header = document.createElement("h3");
-  const pm_name = document.createTextNode(name); 
-  header.appendChild(pm_name);
+  const pmName = document.createTextNode(name); 
+  header.appendChild(pmName);
   caption.appendChild(header);
   const para = document.createElement("p");
-  const pm_bio = document.createTextNode(bio);
-  para.appendChild(pm_bio);
+  const pmBio = document.createTextNode(bio);
+  para.appendChild(pmBio);
   caption.appendChild(para);
   const para2 = document.createElement("p");
-  const mutual_friends = document.createTextNode("Mutual Friends: " + mutualFriends);
-  para2.appendChild(mutual_friends);
+  const mutualFriends = document.createTextNode("Mutual Friends: " + mutualFriends);
+  para2.appendChild(mutualFriends);
   caption.appendChild(para2);
   slideshowImage.appendChild(caption); 
   return slideshowImage;
@@ -149,7 +152,6 @@ function getNextPotentialMatch() {
       document.getElementById("friend-btn").disabled = false;
       displayPotentialMatchInfo(pmID.nextPotentialMatchID);
       currentPMDisplayed = pmID.nextPotentialMatchID;
-      console.log(currentPMisplayed);
   }); 
 }
 
@@ -164,14 +166,16 @@ function noPotentialMatch() {
 
 function matchButtonPressed() {
   const userid = getCurrentUserId();
-  fetch('/match-decisions?userid=' + userid + "&potentialMatchID=" + currentPMDisplayed + "&decision=" + FRIENDED, { method: 'POST' }).then((response) => {
+  fetch('/match-decisions?userid=' + userid + "&potentialMatchID=" + 
+    currentPMDisplayed + "&decision=" + FRIENDED, { method: 'POST' }).then((response) => {
       getNextPotentialMatch();
   });
 }
 
 function passButtonPressed() {
   const userid = getCurrentUserId();
-  fetch('/match-decisions?userid=' + userid + "&potentialMatchID=" + currentPMDisplayed + "&decision=" + PASSED, { method: 'POST' }).then((response) => {
+  fetch('/match-decisions?userid=' + userid + "&potentialMatchID=" + currentPMDisplayed 
+    + "&decision=" + PASSED, { method: 'POST' }).then((response) => {
       getNextPotentialMatch();
   });
 }
@@ -244,9 +248,9 @@ function createCardElement(userID, mutualFriends) {
     if (userinfo.bio) {
       const para = document.createElement("p");
       const bio = document.createTextNode(userinfo.bio);
-      const mutual_friends = document.createTextNode("Mutual Friends: " + mutualFriends);
+      const mutualFriends = document.createTextNode("Mutual Friends: " + mutualFriends);
       para.appendChild(bio);
-      para.appendChild(mutual_friends);
+      para.appendChild(mutualFriends);
       para.className = "card-text";
       cardBody.appendChild(para);
     }
