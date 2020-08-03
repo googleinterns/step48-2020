@@ -44,13 +44,14 @@ public class MatchesListServlet extends HttpServlet {
   private static final String FRIENDED_IDS_PROPERTY = "friended-ids";
   private static final String PASSED_IDS_PROPERTY = "passed-ids";
   private static final String MATCHES_LIST_PROPERTY = "matches-list";
-  private static final String USER_ID_REQUEST_URL_PARAM = "userid";
+  private static final String USER_ID_REQUEST_URL_PARAM = "id";
   
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String userID = (String) request.getParameter(USER_ID_REQUEST_URL_PARAM);
+    System.out.println(userID);
     
     Entity matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
       new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
