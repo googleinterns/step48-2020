@@ -51,7 +51,6 @@ public class MatchesListServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String userID = (String) request.getParameter(USER_ID_REQUEST_URL_PARAM);
-    System.out.println(userID);
     
     Entity matchInfoEntity = datastore.prepare(new Query(MATCH_INFO_ENTITY).setFilter(
       new FilterPredicate(USER_ID_PROPERTY, FilterOperator.EQUAL, userID))).asSingleEntity();
