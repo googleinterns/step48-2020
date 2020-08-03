@@ -59,6 +59,7 @@ window.addEventListener("load", function(){
 });
 
 function getMutualFriends(pmID, callback) {
+  console.log(pmID);
   const currentUser = getCurrentUserId();
   fetch('/mutual-friends?userid1=' + currentUser + '&userid2=' + pmID).then(response => response.json()).then(callback);
 }
@@ -217,13 +218,13 @@ function displayMatches() {
   fetch('/matches-list?id=' + userID).then(response => response.json()).then((matches) => {
     const matchContainer = document.getElementById('matches-container');
     for (let i = 0; i < matches.length; i++) {
-      const mutualFriends = getMutualFriends(matches[i]);
-      matchContainer.appendChild(createCardElement(matches[i]), mutualFriends);
+      console.log(matches[i]);
+      matchContainer.appendChild(createCardElement(matches[i]));
     }
   });
 }
 
-function createCardElement(userID, mutualFriends) {
+function createCardElement(userID) {
   const cardDiv = document.createElement("div");
   fetch('/user-data?id=' + userID).then(response => response.json()).then((userinfo) => {
     console.log(userinfo);
@@ -245,16 +246,14 @@ function createCardElement(userID, mutualFriends) {
     header.className = "card-title";
     if (userinfo.bio) {
       const para = document.createElement("p");
-      const bio = document.createTextNode(userinfo.bio);
-      const mutualFriends = document.createTextNode("Mutual Friends: " + mutualFriends);
+      const bio = document.createTextNode(userinfo.bio + "\n");
       para.appendChild(bio);
-      para.appendChild(mutualFriends);
       para.className = "card-text";
       cardBody.appendChild(para);
     }
-    if (userinfo.profileLink) {
+    if (userinfo.link) {
       const link = document.createElement("a");
-      link.setAttribute('href', userinfo.profileLink);
+      link.setAttribute('href', userinfo.link);
       const text = document.createTextNode("See Profile");
       link.appendChild(text);
       link.className = "btn see-profile-btn";
@@ -268,7 +267,7 @@ function createCardElement(userID, mutualFriends) {
 function getFirstAvailableImage(blobkeyList) {
   for (let i = 0; i < blobkeyList.length; i++) {
     if (blobkeyList[i] !== "") {
-      return createImageFromBlobstore(userinfo.blobkeys[i]);
+      return createImageFromBlobstore(blobkeyList[i]);
       }
   }
   return createImgElement("images/no_image.png");
