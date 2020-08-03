@@ -170,7 +170,7 @@ function matchButtonPressed() {
 }
 
 function passButtonPressed() {
-  const userid = getCurrentuserId();
+  const userid = getCurrentUserId();
   fetch('/match-decisions?userid=' + userid + "&potentialMatchID=" + currentPMDisplayed + "&decision=" + PASSED, { method: 'POST' }).then((response) => {
       getNextPotentialMatch();
   });
@@ -214,7 +214,6 @@ function displayMatches() {
   }
   fetch('/matches-list?id=' + userID).then(response => response.json()).then((matches) => {
     const matchContainer = document.getElementById('matches-container');
-    console.log("matches = " + matches);
     for (let i = 0; i < matches.length; i++) {
       const mutualFriends = getMutualFriends(matches[i]);
       matchContainer.appendChild(createCardElement(matches[i]), mutualFriends);
