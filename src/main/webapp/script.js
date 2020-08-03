@@ -47,7 +47,7 @@ function updateFeedLinkForCurrentUser() {
 }
 
 function updateMatchesLinkForCurrentUser(userid) {
-  var link = document.getElementById("matchesLink");
+  const link = document.getElementById("matchesLink");
   link.setAttribute('href', 'matches.html?id=' + uid);
 }
 
@@ -75,7 +75,7 @@ function displayPotentialMatchInfo(pmID) {
       if (userinfo.blobkeys[i] !== "") {
         numPhotos++;
         const imageElement = createImageFromBlobstore(userinfo.blobkeys[i]);
-        let slideshowElement = createSlideshowElement(imageElement, "carousel-item" + (i === 0 ? " active" : ""), name, bio, mutualFriends);
+        const slideshowElement = createSlideshowElement(imageElement, "carousel-item" + (i === 0 ? " active" : ""), name, bio, mutualFriends);
         carouselContainer.appendChild(slideshowElement);
       }
     }
