@@ -59,7 +59,6 @@ window.addEventListener("load", function(){
 });
 
 function getMutualFriends(pmID, callback) {
-  console.log(pmID);
   const currentUser = getCurrentUserId();
   fetch('/mutual-friends?userid1=' + currentUser + '&userid2=' + pmID).then(response => response.json()).then(callback);
 }
@@ -218,7 +217,6 @@ function displayMatches() {
   fetch('/matches-list?id=' + userID).then(response => response.json()).then((matches) => {
     const matchContainer = document.getElementById('matches-container');
     for (let i = 0; i < matches.length; i++) {
-      console.log(matches[i]);
       matchContainer.appendChild(createCardElement(matches[i]));
     }
   });
