@@ -81,7 +81,7 @@ function displayPotentialMatchInfo(pmID) {
       }
       if (numPhotos === 0) {
         const noImageElement = createImgElement("images/no_image.png");
-        const noImageSlideshowElement = createSlideshowElement(noImageElement, "carousel-item active", name, bio);
+        const noImageSlideshowElement = createSlideshowElement(noImageElement, "carousel-item active", name, bio, mutualFriends);
         carouselContainer.appendChild(noImageSlideshowElement);
       }
       addIndicators(numPhotos);
